@@ -1,4 +1,4 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:vic_19/bottomNav/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,21 +22,21 @@ class _BottomMenuState extends State<BottomMenu> {
             // Icons.analytics_outlined,
             Icons.table_chart_rounded,
             // Icons.assessment_outlined,
-            size: 40,
+            size: 30,
             color: Colors.white,
           ),
           Icon(
             // Icons.menu,
             // Icons.home_rounded,
             Icons.public_rounded,
-            size: 40,
+            size: 30,
             color: Colors.white,
           ),
           Icon(
             // Icons.add_chart,
             // Icons.article_outlined,
             Icons.list_alt_rounded,
-            size: 40,
+            size: 30,
             color: Colors.white,
           ),
           // Icon(Icons.add_shopping_cart,size: 40,),
@@ -48,7 +48,9 @@ class _BottomMenuState extends State<BottomMenu> {
         },
         buttonBackgroundColor: color2,
         backgroundColor: color1,
-        color: color5,
+        height: size.height*0.07,
+
+        color: color1,
         // animationCurve: Curves.easeInBack,
         animationDuration: const Duration(milliseconds: 300),
       ),

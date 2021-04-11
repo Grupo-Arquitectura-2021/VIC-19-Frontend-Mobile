@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vic_19/Pages/BottomMenu.dart';
-
+import 'PaletteColor.dart';
 void main() {
   runApp(MyApp());
 }
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Vic-19',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          scaffoldBackgroundColor: Colors.black, primaryColor: Colors.black
+          scaffoldBackgroundColor: color1, primaryColor: Colors.black
       ),
       home: BottomMenu(),
     );
