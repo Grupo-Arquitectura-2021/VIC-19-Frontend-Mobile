@@ -19,7 +19,8 @@ class _BottomMenuState extends State<BottomMenu> {
         index: _selectedIndex,
         items: [
           Icon(
-            Icons.analytics_outlined,
+            // Icons.analytics_outlined,
+            Icons.table_chart_rounded,
             // Icons.assessment_outlined,
             size: 40,
             color: Colors.white,
