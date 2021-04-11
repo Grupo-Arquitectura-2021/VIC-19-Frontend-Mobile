@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../Colors.dart';
+import '../PaletteColor.dart';
 
 class BottomMenu extends StatefulWidget {
   @override
@@ -49,7 +49,7 @@ class _BottomMenuState extends State<BottomMenu> {
         buttonBackgroundColor: color2,
         backgroundColor: color1,
         color: color5,
-        animationCurve: Curves.easeInBack,
+        // animationCurve: Curves.easeInBack,
         animationDuration: const Duration(milliseconds: 300),
       ),
       body: Container(
