@@ -11,6 +11,7 @@ class CurvedNavigationBar extends StatefulWidget {
   final Color color;
   final Color buttonBackgroundColor;
   final Color backgroundColor;
+  final bool lock;
   final ValueChanged<int> onTap;
   final _LetIndexPage letIndexChange;
   final Curve animationCurve;
@@ -24,6 +25,7 @@ class CurvedNavigationBar extends StatefulWidget {
     this.color = Colors.white,
     this.buttonBackgroundColor,
     this.backgroundColor = Colors.blueAccent,
+    this.lock=false,
     this.onTap,
     _LetIndexPage letIndexChange,
     this.animationCurve = Curves.easeOut,
@@ -147,7 +149,7 @@ class CurvedNavigationBarState extends State<CurvedNavigationBar>
                 child: Row(
                     children: widget.items.map((item) {
                   return NavButton(
-                    onTap: _buttonTap,
+                    onTap: !widget.lock?_buttonTap:(a){},
                     position: _pos,
                     length: _length,
                     index: widget.items.indexOf(item),
