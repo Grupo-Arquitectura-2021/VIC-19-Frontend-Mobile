@@ -8,3 +8,4 @@ var color4 = Color(0xFFF06543);
 var color5 = Color(0xFFB1B8BD);
 var color6 = Color(0xFF247BA0);
 var color7=Colors.black;
+var color8= Color(0xff25272d);
