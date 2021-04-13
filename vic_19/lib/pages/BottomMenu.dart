@@ -2,6 +2,7 @@ import 'package:vic_19/Pages/Map.dart';
 import 'package:vic_19/components/bottomNav/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vic_19/pages/TablesPage.dart';
 
 import '../PaletteColor.dart';
 
@@ -19,7 +20,7 @@ class _BottomMenuState extends State<BottomMenu> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    pages=[MapPage(),MapPage(),MapPage()];
+    pages=[TablesPage(),MapPage(),MapPage()];
   }
   @override
   Widget build(BuildContext context) {
