@@ -39,8 +39,8 @@ class LineChartWidget extends StatelessWidget {
           }
         ),
         borderData: FlBorderData(
-          show: false,
-          border: Border.all(color: color7,width: 3)
+          show: true,
+          border: Border.all(color: color5.withOpacity(0.5),width: 2)
         ),
         lineBarsData: [
           LineChartBarData(

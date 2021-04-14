@@ -12,6 +12,7 @@ import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 import 'package:vic_19/components/general/Loading.dart';
+import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
@@ -34,6 +35,7 @@ class _MapPageState extends State<MapPage> {
   ScrollController _scrollController;
   bool graphics=false;
   String title="";
+  List<String> _dataList;
   @override
   void initState() {
     super.initState();
@@ -115,7 +117,18 @@ class _MapPageState extends State<MapPage> {
                         SizedBox(
                           height: size.height,
                           width:size.width,
-
+                          child: Column(
+                            children: [
+                              SizedBox(height: 40,),
+                              Container(
+                                height: size.height*0.4,
+                                width: size.width,
+                                padding: EdgeInsets.all(30),
+                                // color: color6,
+                                child: LineChartWidget(_dataList),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
