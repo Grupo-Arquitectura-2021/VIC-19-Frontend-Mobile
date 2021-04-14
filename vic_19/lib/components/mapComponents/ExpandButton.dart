@@ -17,7 +17,7 @@ class ExpandButton extends StatelessWidget {
               padding: EdgeInsets.all(0),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(_height*0.2),
-                  side: BorderSide(color: color5,width: 1)
+                  side: BorderSide(color: color5.withOpacity(0),width: 1)
               ),
               color: color5.withOpacity(0.5),
               child:  Center(

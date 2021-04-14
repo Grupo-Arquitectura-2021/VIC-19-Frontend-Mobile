@@ -21,14 +21,14 @@ class GraphicsButton extends StatelessWidget {
           padding: EdgeInsets.all(0),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(_height*0.2),
-              side: BorderSide(color: color3,width: 1)
+              side: BorderSide(color: color3.withOpacity(0),width: 1)
           ),
-          color: color8,
+          color: color3.withOpacity(0.7),
           child:  Center(
             child:
             Icon(
               Icons.bar_chart,
-              color: color3,
+              color: color1,
               size: _width*0.8,
             ),
           ),

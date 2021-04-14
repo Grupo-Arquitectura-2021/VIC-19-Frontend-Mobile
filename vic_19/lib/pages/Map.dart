@@ -31,7 +31,7 @@ class _MapPageState extends State<MapPage> {
   Set <Marker> markers;
   int tipo=1;
   List<bool> filters=[true,false,false];
-  ScrollController _scrollController=ScrollController();
+  ScrollController _scrollController;
   bool graphics=false;
   String title="";
   @override
@@ -40,6 +40,7 @@ class _MapPageState extends State<MapPage> {
     rootBundle.loadString('assets/map_style.txt').then((string) {
       _mapStyle = string;
     });
+    _scrollController=ScrollController();
 
   }
   @override
@@ -101,6 +102,7 @@ class _MapPageState extends State<MapPage> {
                                        myLocationEnabled: false,
                                        rotateGesturesEnabled: false,
                                        tiltGesturesEnabled: false,
+
 
 
                                        onMapCreated: (GoogleMapController controller){
@@ -173,7 +175,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Positioned(
                     right: size.width*0.03,
-                    bottom: size.height*0.09,
+                    bottom: size.height*0.085,
                     child: AnimatedOpacity(
                         opacity: title!=""&&!graphics?1:0,
                         duration: Duration(milliseconds: 300),
