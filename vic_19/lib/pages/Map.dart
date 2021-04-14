@@ -38,6 +38,7 @@ class _MapPageState extends State<MapPage> {
   String title="";
   var point=List<LatLng>();
   var polygon=Set<Polyline>();
+  List<String> _data=['p','p1','p2','p3','p4','p5'];
   @override
   void initState() {
     super.initState();
@@ -149,6 +150,7 @@ class _MapPageState extends State<MapPage> {
                           child: Column(
                             children: [
                               SizedBox(height: 40,),
+                              LineChartWidget(_data),
                             ],
                           ),
                         )
