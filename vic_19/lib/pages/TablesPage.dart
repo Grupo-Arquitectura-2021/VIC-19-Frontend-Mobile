@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
+import 'package:vic_19/components/tables/BasicTable.dart';
 
 import '../PaletteColor.dart';
 class TablesPage extends StatefulWidget {
@@ -26,6 +27,12 @@ class _TablesPageState extends State<TablesPage> {
                   child: LineChartWidget(_dataList),
                 ),
                 SizedBox(height: 30,),
+                Container(
+                  alignment: Alignment.center,
+                  width: size.width,
+                  padding: EdgeInsets.all(10),
+                  child: BasicTableWidget(),
+                ),
                 // LineChartWidget(_dataList),
               ],
             ),

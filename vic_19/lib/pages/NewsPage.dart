@@ -48,11 +48,6 @@ class _NewsPageState extends State<NewsPage> {
               return GestureDetector(
                 onTap: (){
                   _showMyDialog(idNews);
-                  // print("touch");
-                  // setState(() {
-                  //   SpecificNews(idNews);
-                  // });
-                  // SpecificNews(idNews);
                 },
                 child: Card(
                   color: color1,
