@@ -46,6 +46,10 @@ class MapGraphicsOkState extends MapState{
   @override
   List<Object> get props=>[];
 }
+class MapMainMapOkState extends MapState{
+  @override
+  List<Object> get props=>[];
+}
 
 class MapCitiesOkState extends MapState{
   double _zoom;

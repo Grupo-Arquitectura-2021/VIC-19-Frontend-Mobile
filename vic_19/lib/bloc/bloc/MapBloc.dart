@@ -59,6 +59,14 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
        print(e);
      }
    }
+   else if (event is MapMainMapEvent){
+     try{
+       yield MapMainMapOkState();
+     }
+     catch(e){
+
+     }
+   }
 
   }
 }

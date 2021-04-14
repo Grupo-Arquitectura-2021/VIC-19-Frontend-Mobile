@@ -37,6 +37,12 @@ class MapGraphicsEvent extends MapEvent{
   @override
   List<Object> get props => [];
 }
+class MapMainMapEvent extends MapEvent{
+
+
+  @override
+  List<Object> get props => [];
+}
 class MapExpandEvent extends MapEvent{
   MapExpandEvent();
   @override

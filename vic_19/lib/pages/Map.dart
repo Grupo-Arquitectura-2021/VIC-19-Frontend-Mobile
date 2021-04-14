@@ -32,7 +32,7 @@ class _MapPageState extends State<MapPage> {
   int tipo=1;
   List<bool> filters=[true,false,false];
   ScrollController _scrollController=ScrollController();
-  bool graphics=true;
+  bool graphics=false;
   String title="";
   @override
   void initState() {
@@ -45,13 +45,8 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     size=Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height);
-    return BlocProvider(
-        create:(context)=>MapBLoc(MapRepository()),
-        child: BlocBuilder<MapBLoc,MapState>(
+    return BlocBuilder<MapBLoc,MapState>(
           builder: (context,state){
-            if (state is MapInitialState){
-            BlocProvider.of<MapBLoc>(context).add(GetCountriesEvent(context));
-            }
             if(state is MaploadCountriesOkState){
               markers=state.props[1];
               mapController.animateCamera(CameraUpdate.zoomTo(state.props[0]));
@@ -64,11 +59,16 @@ class _MapPageState extends State<MapPage> {
             if(state is MapSelectCountryState){
               Country country=state.props[0];
               title=country.name;
-              graphics=false;
             }
             if(state is MapGraphicsOkState){
                 _scrollController.animateTo(_scrollController.position.maxScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
                 graphics=true;
+
+            }
+            if(state is MapMainMapOkState){
+              _scrollController.animateTo(_scrollController.position.minScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
+              graphics=false;
+
             }
             return Container(
               child: Stack(
@@ -84,28 +84,31 @@ class _MapPageState extends State<MapPage> {
                           height: size.height,
                           width:size.width,
                           child:
-                                  GoogleMap(
-                                      scrollGesturesEnabled: false,
-                                      zoomControlsEnabled: false,
-                                      zoomGesturesEnabled: false,
-                                      initialCameraPosition: _kGooglePlex,
-                                      markers: markers,
-                                      trafficEnabled: false,
-                                      buildingsEnabled: false ,
-                                      compassEnabled: false,
-                                      indoorViewEnabled: false,
-                                      liteModeEnabled: false,
-                                      mapToolbarEnabled: false,
-                                      myLocationButtonEnabled: false,
-                                      myLocationEnabled: false,
-                                      rotateGesturesEnabled: false,
-                                      tiltGesturesEnabled: false,
+                                 Stack(
+                                   children: [GoogleMap(
+                                       scrollGesturesEnabled: false,
+                                       zoomControlsEnabled: false,
+                                       zoomGesturesEnabled: false,
+                                       initialCameraPosition: _kGooglePlex,
+                                       markers: markers,
+                                       trafficEnabled: false,
+                                       buildingsEnabled: false ,
+                                       compassEnabled: false,
+                                       indoorViewEnabled: false,
+                                       liteModeEnabled: false,
+                                       mapToolbarEnabled: false,
+                                       myLocationButtonEnabled: false,
+                                       myLocationEnabled: false,
+                                       rotateGesturesEnabled: false,
+                                       tiltGesturesEnabled: false,
 
 
-                                      onMapCreated: (GoogleMapController controller){
-                                        mapController=controller;
-                                        mapController.setMapStyle(_mapStyle);
-                                      }),
+                                       onMapCreated: (GoogleMapController controller){
+                                         mapController=controller;
+                                         mapController.setMapStyle(_mapStyle);
+                                         BlocProvider.of<MapBLoc>(context).add(GetCountriesEvent(context));
+                                       }),mapController==null?Container(width: size.width,height: size.height,color:color1):Container()],
+                                 ),
                         ),
                         SizedBox(
                           height: size.height,
@@ -115,45 +118,49 @@ class _MapPageState extends State<MapPage> {
                       ],
                     ),
                   ),
-                  !graphics?Positioned(
-                      top: MediaQuery.of(context).padding.top+size.height*0.12,
-                      child: SizedBox(
-                        width: size.width,
-                        height: size.height*0.05,
-                        child: ScrollConfiguration(
-                          behavior: ScrollBehavior(),
-                          child: GlowingOverscrollIndicator(
-                            color: color1,
-                            axisDirection: AxisDirection.left,
-                            child: ListView(
-                              padding: EdgeInsets.symmetric(horizontal: size.width*0.05),
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                Container(
-                                  width: tipo==1?size.width-size.width*0.1:(size.width*0.35*4-size.width*0.1),
-                                  child:
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: tipo==1?[
-                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0])]:[
-                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0]),
-                                      SizedBox(width: size.width*0.05,),
+                    Positioned(
+                        top: MediaQuery.of(context).padding.top+size.height*0.12,
+                        child: AnimatedOpacity(
+                            opacity: graphics?0:1,
+                            duration: Duration(milliseconds: 500),
+                            child: SizedBox(
+                          width: size.width,
+                          height: size.height*0.05,
+                          child: ScrollConfiguration(
+                            behavior: ScrollBehavior(),
+                            child: GlowingOverscrollIndicator(
+                              color: color1,
+                              axisDirection: AxisDirection.left,
+                              child: ListView(
+                                padding: EdgeInsets.symmetric(horizontal: size.width*0.05),
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  Container(
+                                    width: tipo==1?size.width-size.width*0.1:(size.width*0.35*4-size.width*0.1),
+                                    child:
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: tipo==1?[
+                                        FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0])]:[
+                                        FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0]),
+                                        SizedBox(width: size.width*0.05,),
 
-                                      FilterButton(50, 10,"Hospitales", 1, color6, Icons.local_hospital,filters[1]),
-                                      SizedBox(width: size.width*0.05,),
+                                        FilterButton(50, 10,"Hospitales", 1, color6, Icons.local_hospital,filters[1]),
+                                        SizedBox(width: size.width*0.05,),
 
-                                      FilterButton(50, 10,"Farmacias", 2, color3, Icons.local_pharmacy,filters[2]),
-                                      SizedBox(width: size.width*0.05,),
+                                        FilterButton(50, 10,"Farmacias", 2, color3, Icons.local_pharmacy,filters[2]),
+                                        SizedBox(width: size.width*0.05,),
 
-                                      FilterButton(50, 10,"Albergues", 3, color2, Icons.local_hotel,filters[3])],
-                                  ),
-                                )
-                              ],
+                                        FilterButton(50, 10,"Albergues", 3, color2, Icons.local_hotel,filters[3])],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
+                          )
                         )
-                      )
-                  ):Container(),
+                  ),
+                    ),
                   Positioned(
                       top: 0,
                       child: Container(
@@ -164,23 +171,28 @@ class _MapPageState extends State<MapPage> {
                           )
                       )
                   ),
-                  !graphics?Positioned(
+                  Positioned(
                     right: size.width*0.03,
                     bottom: size.height*0.09,
-                    child: GraphicsButton(50,50),
-                  ):Container(),
-                  !graphics?Positioned(
+                    child: AnimatedOpacity(
+                        opacity: title!=""&&!graphics?1:0,
+                        duration: Duration(milliseconds: 300),
+                        child: GraphicsButton(size.height*0.05,size.height*0.05)),
+                  ),
+                  Positioned(
                     left: size.width*0.03,
                     bottom: size.height*0.115,
-                    child: ExpandButton(50,50),
-                  ):Container(),
-                  state is MapLoadingMarkersState?Loading():Container()
+                    child: AnimatedOpacity(
+                        opacity: title!=""&&!graphics?1:0,
+                        duration: Duration(milliseconds: 300),
+                        child: ExpandButton(size.height*0.05,size.height*0.05)),
+                  ),
+                  state is MapLoadingMarkersState || state is MapInitialState?Loading():Container()
                 ],
               ),
             );
           },
-        ),
-    );
+        );
   }
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-16.2256651,-65.0455838),
