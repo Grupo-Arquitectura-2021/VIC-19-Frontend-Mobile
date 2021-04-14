@@ -11,6 +11,7 @@ class LineChartWidget extends StatelessWidget {
   final List<Color>lineOne=[color2];
   final List<Color>lineTwo=[color3];
   final List<Color>lineThree=[color4];
+  List<String> _titles;
   @override
   Widget build(BuildContext context) {
     return LineChart(
