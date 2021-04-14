@@ -14,10 +14,10 @@ class GetCountriesEvent extends MapEvent{
   List<Object> get props => [_context];
 
 }
-class SelectCountryEvent extends MapEvent{
+class SelectLocationEvent extends MapEvent{
   Location _location;
 
-  SelectCountryEvent(this._location);
+  SelectLocationEvent(this._location);
 
   @override
   List<Object> get props => [_location];

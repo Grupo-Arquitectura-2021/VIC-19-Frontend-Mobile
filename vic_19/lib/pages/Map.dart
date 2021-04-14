@@ -3,22 +3,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geojson/geojson.dart' as geoL;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
-import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 import 'package:vic_19/components/general/Loading.dart';
-import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
 import 'package:vic_19/components/mapComponents/TitleMap.dart';
 import 'package:vic_19/util/BoliviaMap.dart';
-import 'package:vic_19/util/MapUtils.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
 class MapPage extends StatefulWidget {
@@ -36,8 +34,7 @@ class _MapPageState extends State<MapPage> {
   ScrollController _scrollController;
   bool graphics=false;
   String title="";
-  var point=List<LatLng>();
-  var polygon=Set<Polyline>();
+  double zoom=5;
   @override
   void initState() {
     super.initState();
@@ -45,31 +42,10 @@ class _MapPageState extends State<MapPage> {
       _mapStyle = string;
     });
     _scrollController=ScrollController();
-    addPoints();
-    List< Polyline > addPolygon = [
-      Polyline(
-        polylineId: PolylineId( 'India' ),
-        points: point,
-        width: 1,
-
-        color: color4
-      ),
-    ];
-    polygon.addAll( addPolygon );
-
     super.initState();
   }
 
-  void addPoints()
-  {
-    for( var i=0 ; i < BoliviaMap.CHUQ.length ; i++ )
-    {
-      var ltlng= LatLng(
-          double.parse(BoliviaMap.CHUQ[ i ][ 1 ].toStringAsFixed(5)), double.parse(BoliviaMap.CHUQ[ i ][ 0].toStringAsFixed(5)) );
-      point.add( ltlng );
-    }
-    print(point);
-  }
+
   @override
   Widget build(BuildContext context) {
     size=Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height);
@@ -78,6 +54,7 @@ class _MapPageState extends State<MapPage> {
             print(state);
             if(state is MaploadMarkersOkState){
               markers=state.props[1];
+              zoom=state.props[0];
               mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
                 target: state.props[3],
 
@@ -120,6 +97,12 @@ class _MapPageState extends State<MapPage> {
                                  Stack(
                                    children: [GoogleMap(
                                        zoomControlsEnabled: false,
+                                       minMaxZoomPreference: MinMaxZoomPreference(zoom-0.5,zoom+0.5),
+                                       cameraTargetBounds: CameraTargetBounds(
+                                         LatLngBounds
+                                           (northeast: LatLng(-10.2256651,-59.0455838),southwest: LatLng(-20.2256651,-68.0455838))
+                                       ),
+
                                        initialCameraPosition: _kGooglePlex,
                                        markers: markers,
                                        trafficEnabled: false,
@@ -132,7 +115,6 @@ class _MapPageState extends State<MapPage> {
                                        myLocationEnabled: false,
                                        rotateGesturesEnabled: false,
                                        tiltGesturesEnabled: false,
-                                       polylines: polygon,
 
 
 
@@ -170,11 +152,11 @@ class _MapPageState extends State<MapPage> {
                               scrollDirection: Axis.horizontal,
                               children: [
                                 Container(
-                                  width: type==0?size.width-size.width*0.1:(size.width*0.35*4-size.width*0.05),
+                                  width: type==0||type==1?size.width-size.width*0.1:(size.width*0.35*4-size.width*0.05),
                                   child:
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: type==0?[
+                                    children: type==0||type==1?[
                                       FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0])]:[
                                       FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0]),
                                       SizedBox(width: size.width*0.05,),

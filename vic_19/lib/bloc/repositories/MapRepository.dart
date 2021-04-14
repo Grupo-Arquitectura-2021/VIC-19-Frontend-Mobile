@@ -77,19 +77,36 @@ class MapRepository {
     _centerMap = value;
   }
 
+  Future<void> getMunicipality(context)async {
+    await Future.delayed(Duration(seconds: 2));
+    List<Location> municipality=[Location(1,"La Paz",-16.08354782509485, -68.06967003644534),
+      Location(2,"El Alto",-17.08354782509485, -68.06967003644534),
+      Location(3,"Palca",-18.08354782509485, -68.06967003644534),
+      Location(4,"Mecapaca",-19.08354782509485, -68.06967003644534),
+      Location(5,"Achocalla",-16.08354782509485, -68.06967003644534),
+      Location(6,"Viacha",-17.58354782509485, -68.06967003644534),
+      Location(7,"Laja",-18.58354782509485, -68.06967003644534),
+      Location(8,"Pucarani",-16.58354782509485, -68.06967003644534),];
+    locations=municipality;
+    zoom=7;
+    type=1;
+    centerMap=LatLng(-16.08354782509485, -68.06967003644534);
+    markers=await addMarkers(municipality, Icons.location_on, color4,context);
+
+  }
   Future<void> getCities(context)async {
     await Future.delayed(Duration(seconds: 2));
     List<Location> cities=[Location(1,"La Paz",-16.08354782509485, -68.06967003644534),
-      Location(2,"Oruro",-18.358081865080415, -67.95256482218397),
-      Location(3,"Potosi",-20.25680123243468, -67.12895296863799),
-      Location(4,"Cochabamba",-17.198275410380212, -64.55790819645144),
+      Location(2,"Oruro",-19.358081865080415, -67.95256482218397),
+      Location(3,"Potosi",-21.25680123243468, -67.12895296863799),
+      Location(4,"Cochabamba",-17.198275410380212, -65.05790819645144),
       Location(5,"Chuquisaca",-19.79806384524433, -64.37655968335869),
       Location(6,"Tarija",-21.60047499330198, -64.14467146894596),
       Location(7,"Pando",-11.597779067996576, -66.78552003036548),
       Location(8,"Beni",-14.001738953430753, -64.82698706230555),
       Location(9,"Santa Cruz",-17.709650631754297, -61.05660654016773)];
     locations=cities;
-    zoom=6;
+    zoom=5.5;
     type=1;
     centerMap=LatLng(-16.2256651,-63.5455838);
     markers=await addMarkers(cities, Icons.location_on, color4,context);
@@ -132,11 +149,9 @@ class MapRepository {
           flat: false,
           draggable: false,
           onTap: () {
-            if(type==0){
               _idlocation=l.idLocation;
-              print(context);
-              BlocProvider.of<MapBLoc>(context).add(SelectCountryEvent(l));
-            }
+              BlocProvider.of<MapBLoc>(context).add(SelectLocationEvent(l));
+
           }));
     }
     return markerAux;
@@ -152,7 +167,7 @@ class MapRepository {
 
         break;
       case 2:
-        await getCountries(context);
+        await getMunicipality(context);
         break;
     }
 
@@ -166,11 +181,7 @@ class MapRepository {
         if(filters[i]==true){
           switch(i){
             case 0:
-              switch(type){
-                case 0:
                     markers=await addMarkers(locations, Icons.location_on, color4,context);
-                  break;
-              }
               break;
 
           }
