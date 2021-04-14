@@ -1,11 +1,11 @@
-class Country{
-  int _idCountry;
+class Location{
+  int _idLocation;
   String _name;
   double _lat;
   double _lon;
 
 
-  Country(this._idCountry,this._name, this._lat, this._lon);
+  Location(this._idLocation,this._name, this._lat, this._lon);
 
   double get lon => _lon;
 
@@ -19,10 +19,10 @@ class Country{
     _lat = value;
   }
 
-  int get idCountry => _idCountry;
+  int get idLocation => _idLocation;
 
-  set idCountry(int value) {
-    _idCountry = value;
+  set idLocation(int value) {
+    _idLocation = value;
   }
 
   String get name => _name;

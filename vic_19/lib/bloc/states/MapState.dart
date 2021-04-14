@@ -1,7 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:vic_19/Model/Country.dart';
+import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 
 abstract class MapState extends Equatable{
@@ -14,22 +14,24 @@ class MapLoadingMarkersState extends MapState{
   @override
   List<Object> get props=>[];
 }
-class MaploadCountriesOkState extends MapState{
+class MaploadMarkersOkState extends MapState{
   double _zoom;
   var _markers;
-  MaploadCountriesOkState(this._zoom, this._markers);
+  int _type;
+  LatLng _centerMap;
+  MaploadMarkersOkState(this._zoom, this._markers,this._type,this._centerMap);
 
   @override
-  List<Object> get props=>[_zoom,_markers];
+  List<Object> get props=>[_zoom,_markers,_type,_centerMap];
 
 }
 class MapSelectCountryState extends MapState{
-  Country _country;
+  Location _locations;
 
-  MapSelectCountryState(this._country);
+  MapSelectCountryState(this._locations);
 
   @override
-  List<Object> get props=>[_country];
+  List<Object> get props=>[_locations];
 }
 class MapFilterOkState extends MapState{
   Set<Marker> _markers;

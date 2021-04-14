@@ -15,6 +15,7 @@ class _NewsPageState extends State<NewsPage> {
         height: size.height,
         child: ListView.builder(
           itemCount: _news.length,
+            scrollDirection: Axis.vertical,
             itemBuilder: (context,index){
               return Card(
                 color: color3,

@@ -1,7 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:vic_19/Model/Country.dart';
+import 'package:vic_19/Model/Location.dart';
 
 abstract class MapEvent extends Equatable{
 }
@@ -15,12 +15,12 @@ class GetCountriesEvent extends MapEvent{
 
 }
 class SelectCountryEvent extends MapEvent{
-  Country _country;
+  Location _location;
 
-  SelectCountryEvent(this._country);
+  SelectCountryEvent(this._location);
 
   @override
-  List<Object> get props => [_country];
+  List<Object> get props => [_location];
 
 }
 class SelectFilterEvent extends MapEvent{
@@ -39,12 +39,12 @@ class MapGraphicsEvent extends MapEvent{
 }
 class MapMainMapEvent extends MapEvent{
 
-
   @override
   List<Object> get props => [];
 }
 class MapExpandEvent extends MapEvent{
-  MapExpandEvent();
+  BuildContext _context;
+  MapExpandEvent(this._context);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [_context];
 }

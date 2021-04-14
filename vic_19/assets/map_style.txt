@@ -146,10 +146,10 @@
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#ffffff"
       },
       {
-        "weight": 1.5
+        "visibility": "on"
       }
     ]
   },

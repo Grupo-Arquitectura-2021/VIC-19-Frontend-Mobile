@@ -41,18 +41,10 @@ class _BottomMenuState extends State<BottomMenu> {
         {
           return Stack(
               children: [
-              ScrollConfiguration(
-              behavior: ScrollBehavior(),
-          child: GlowingOverscrollIndicator(
-            axisDirection: AxisDirection.right,
-            color: color1.withOpacity(0),
-
-            child: IndexedStack(
+                IndexedStack(
                 index:_selectedIndex,
                 children: pages
             ),
-          ),
-        ),
             Positioned(
               bottom: 0,
               child: Container(

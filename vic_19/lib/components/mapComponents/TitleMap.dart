@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:vic_19/Model/Country.dart';
+import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 class TitleMap extends StatelessWidget {
   double _width;

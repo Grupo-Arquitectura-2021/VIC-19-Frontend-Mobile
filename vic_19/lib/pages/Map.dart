@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
-import 'package:vic_19/Model/Country.dart';
+import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
@@ -17,6 +17,7 @@ import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
 import 'package:vic_19/components/mapComponents/TitleMap.dart';
+import 'package:vic_19/util/BoliviaMap.dart';
 import 'package:vic_19/util/MapUtils.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
@@ -30,12 +31,13 @@ class _MapPageState extends State<MapPage> {
   GoogleMapController mapController;
   Size size;
   Set <Marker> markers;
-  int tipo=1;
-  List<bool> filters=[true,false,false];
+  int type=0;
+  List<bool> filters=[true,false,false,false];
   ScrollController _scrollController;
   bool graphics=false;
   String title="";
-  List<String> _dataList;
+  var point=List<LatLng>();
+  var polygon=Set<Polyline>();
   @override
   void initState() {
     super.initState();
@@ -43,24 +45,52 @@ class _MapPageState extends State<MapPage> {
       _mapStyle = string;
     });
     _scrollController=ScrollController();
+    addPoints();
+    List< Polyline > addPolygon = [
+      Polyline(
+        polylineId: PolylineId( 'India' ),
+        points: point,
+        width: 1,
 
+        color: color4
+      ),
+    ];
+    polygon.addAll( addPolygon );
+
+    super.initState();
+  }
+
+  void addPoints()
+  {
+    for( var i=0 ; i < BoliviaMap.CHUQ.length ; i++ )
+    {
+      var ltlng= LatLng(
+          double.parse(BoliviaMap.CHUQ[ i ][ 1 ].toStringAsFixed(5)), double.parse(BoliviaMap.CHUQ[ i ][ 0].toStringAsFixed(5)) );
+      point.add( ltlng );
+    }
+    print(point);
   }
   @override
   Widget build(BuildContext context) {
     size=Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height);
     return BlocBuilder<MapBLoc,MapState>(
           builder: (context,state){
-            if(state is MaploadCountriesOkState){
+            print(state);
+            if(state is MaploadMarkersOkState){
               markers=state.props[1];
-              mapController.animateCamera(CameraUpdate.zoomTo(state.props[0]));
-              tipo=1;
+              mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+                target: state.props[3],
+
+                zoom: state.props[0],
+              )));
+              type=state.props[2];
             }
             if(state is MapFilterOkState){
               markers=state.props[0];
               filters=state.props[1];
             }
             if(state is MapSelectCountryState){
-              Country country=state.props[0];
+              Location country=state.props[0];
               title=country.name;
             }
             if(state is MapGraphicsOkState){
@@ -89,9 +119,7 @@ class _MapPageState extends State<MapPage> {
                           child:
                                  Stack(
                                    children: [GoogleMap(
-                                       scrollGesturesEnabled: false,
                                        zoomControlsEnabled: false,
-                                       zoomGesturesEnabled: false,
                                        initialCameraPosition: _kGooglePlex,
                                        markers: markers,
                                        trafficEnabled: false,
@@ -104,6 +132,7 @@ class _MapPageState extends State<MapPage> {
                                        myLocationEnabled: false,
                                        rotateGesturesEnabled: false,
                                        tiltGesturesEnabled: false,
+                                       polylines: polygon,
 
 
 
@@ -120,13 +149,6 @@ class _MapPageState extends State<MapPage> {
                           child: Column(
                             children: [
                               SizedBox(height: 40,),
-                              Container(
-                                height: size.height*0.4,
-                                width: size.width,
-                                padding: EdgeInsets.all(30),
-                                // color: color6,
-                                child: LineChartWidget(_dataList),
-                              ),
                             ],
                           ),
                         )
@@ -142,35 +164,31 @@ class _MapPageState extends State<MapPage> {
                           width: size.width,
                           height: size.height*0.05,
                           child: ScrollConfiguration(
-                            behavior: ScrollBehavior(),
-                            child: GlowingOverscrollIndicator(
-                              color: color1,
-                              axisDirection: AxisDirection.left,
-                              child: ListView(
-                                padding: EdgeInsets.symmetric(horizontal: size.width*0.05),
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Container(
-                                    width: tipo==1?size.width-size.width*0.1:(size.width*0.35*4-size.width*0.1),
-                                    child:
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: tipo==1?[
-                                        FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0])]:[
-                                        FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0]),
-                                        SizedBox(width: size.width*0.05,),
+                            behavior: MyBehavior(),
+                            child: ListView(
+                              padding: EdgeInsets.symmetric(horizontal: size.width*0.05),
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Container(
+                                  width: type==0?size.width-size.width*0.1:(size.width*0.35*4-size.width*0.05),
+                                  child:
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: type==0?[
+                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0])]:[
+                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0]),
+                                      SizedBox(width: size.width*0.05,),
 
-                                        FilterButton(50, 10,"Hospitales", 1, color6, Icons.local_hospital,filters[1]),
-                                        SizedBox(width: size.width*0.05,),
+                                      FilterButton(size.width*0.3, 10,"Hospitales", 1, color6, Icons.local_hospital,filters[1]),
+                                      SizedBox(width: size.width*0.05,),
 
-                                        FilterButton(50, 10,"Farmacias", 2, color3, Icons.local_pharmacy,filters[2]),
-                                        SizedBox(width: size.width*0.05,),
+                                      FilterButton(size.width*0.3, 10,"Farmacias", 2, color3, Icons.local_pharmacy,filters[2]),
+                                      SizedBox(width: size.width*0.05,),
 
-                                        FilterButton(50, 10,"Albergues", 3, color2, Icons.local_hotel,filters[3])],
-                                    ),
-                                  )
-                                ],
-                              ),
+                                      FilterButton(size.width*0.3, 10,"Albergues", 3, color2, Icons.local_hotel,filters[3])],
+                                  ),
+                                )
+                              ],
                             ),
                           )
                         )

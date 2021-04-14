@@ -18,7 +18,7 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
        yield MapLoadingMarkersState();
        print(event.props[0]);
        await _mapR.getCountries(event.props[0]);
-       yield MaploadCountriesOkState( _mapR.zoom, _mapR.markers);
+       yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap);
      }
      catch(e){
        print(e);
@@ -54,7 +54,8 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
    else if(event is MapExpandEvent){
      try{
        yield MapLoadingMarkersState();
-       yield MapGraphicsOkState();
+       await _mapR.expandMap(event.props[0]);
+       yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap);
      }
      catch(e){
        print(e);
