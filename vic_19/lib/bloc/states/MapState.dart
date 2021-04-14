@@ -59,3 +59,11 @@ class MapCitiesOkState extends MapState{
   @override
   List<Object> get props=>[_zoom,_markers];
 }
+class MapLoadCitiesOkState extends MapState{
+  double _zoom;
+  var _markers;
+  MapLoadCitiesOkState(this._zoom, this._markers);
+  @override
+  List<Object> get props=>[_zoom,_markers];
+
+}

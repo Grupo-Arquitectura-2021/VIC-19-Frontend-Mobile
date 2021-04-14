@@ -29,8 +29,9 @@ class FilterButton extends StatelessWidget {
           side: BorderSide(color: _color,width: 1)
         ),
         color: color8,
-        child:  Container(
+        child:  AnimatedContainer(
           width: _width,
+              duration: Duration(milliseconds: 200),
               decoration: BoxDecoration(
               borderRadius:  BorderRadius.circular(_height*0.5),
               color:_active?_color.withOpacity(0.5):color8,

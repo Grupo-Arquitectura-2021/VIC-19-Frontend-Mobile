@@ -53,6 +53,7 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
    }
    else if(event is MapExpandEvent){
      try{
+       yield MapLoadingMarkersState();
        yield MapGraphicsOkState();
      }
      catch(e){

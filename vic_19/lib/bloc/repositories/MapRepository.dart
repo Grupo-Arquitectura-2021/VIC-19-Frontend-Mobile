@@ -69,6 +69,20 @@ class MapRepository {
     _markers = value;
   }
 
+  Future<void> getCities(context)async {
+    await Future.delayed(Duration(seconds: 2));
+    List<Country> paises=[Country(1,"Bolivia",-17.4364322,-64.9581047),
+      Country(2,"Brasil",-11.6570027,-60.4375673),
+      Country(3,"Peru",-14.134636, -70.929510),
+      Country(4,"Chile",-23.664653, -69.362242),
+      Country(5,"Paraguay",-22.9604184,-59.6220523),
+      Country(6,"Argentina",-26.5972821,-63.175)];
+    countries=paises;
+    zoom=5;
+    markers=await addMarkers(paises, Icons.location_on, color4,context);
+
+  }
+
   Future<void> getCountries(context)async {
     await Future.delayed(Duration(seconds: 2));
     List<Country> paises=[Country(1,"Bolivia",-17.4364322,-64.9581047),
@@ -114,6 +128,20 @@ class MapRepository {
     }
     return markerAux;
   }
+  Future<void> initialiceMap(context)async{
+    switch(type){
+      case 0:
+        await getCountries(context);
+        break;
+      case 1:
+        await getCountries(context);
+        break;
+      case 2:
+        await getCountries(context);
+        break;
+    }
+
+}
   Future<void> changeFilter(idFilter,context)async{
     print("filte");
     filters[idFilter]=!filters[idFilter];

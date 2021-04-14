@@ -17,15 +17,17 @@ class BottomMenu extends StatefulWidget {
 }
 
 class _BottomMenuState extends State<BottomMenu> {
-  List<Widget> pages;
+  static List<Widget> pages;
+
+
 
   int _selectedIndex = 1;
-  PageController pageController=PageController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    pages=[TablesPage(),MapPage(),MapPage()];
+
+    pages=[TablesPage(),MapPage(),Container()];
   }
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,9 @@ class _BottomMenuState extends State<BottomMenu> {
       body: BlocProvider(
         create:(context)=>MapBLoc(MapRepository()),
     child: BlocBuilder<MapBLoc,MapState>(
-      builder: (context, state)
-      {
-        return Stack(
+        builder: (context, state)
+        {
+          return Stack(
               children: [
               ScrollConfiguration(
               behavior: ScrollBehavior(),
@@ -44,9 +46,8 @@ class _BottomMenuState extends State<BottomMenu> {
             axisDirection: AxisDirection.right,
             color: color1.withOpacity(0),
 
-            child: PageView(
-                physics: NeverScrollableScrollPhysics(),
-                controller: pageController,
+            child: IndexedStack(
+                index:_selectedIndex,
                 children: pages
             ),
           ),
@@ -75,19 +76,21 @@ class _BottomMenuState extends State<BottomMenu> {
                           ),
                         ],
                         onTap: (index){
-                          setState(() {if(index==_selectedIndex){
+                          if(index==_selectedIndex){
                             print("no");
                           }
                           else{
                             print("si");
-                            _selectedIndex = index;
-                            pageController.jumpToPage(_selectedIndex);
+                            setState(() {
+                              _selectedIndex = index;
+                            });
                           }
-                          });
+
                         },
 
                         buttonBackgroundColor: color2,
-                        lock: state is MapGraphicsOkState?true:false,
+                        lock:  state is MapGraphicsOkState?true:false,
+
                         backgroundColor: color1,
                         height: size.height*0.07,
                         color: color1,
@@ -95,19 +98,21 @@ class _BottomMenuState extends State<BottomMenu> {
                       ),
               ),
             ),
-                Positioned(
+            state is MapGraphicsOkState&&_selectedIndex==1?Positioned(
                   bottom: size.height*0.028,
                   left: size.width*0.5-size.height*0.03,
                   child: AnimatedOpacity(
-                      opacity: state is MapGraphicsOkState?1:0,
+                      opacity: state is MapGraphicsOkState&&_selectedIndex==1?1:0,
                       duration: Duration(milliseconds: 300),
                       child: MapButtonAnimated(size.height*0.06,size.height*0.01)),
 
-                )
-                ],
-        );
-      }
-    ))
+                ):Container()
+
+
+      ],
+        );}
+    )
+    )
     );
   }
 }
