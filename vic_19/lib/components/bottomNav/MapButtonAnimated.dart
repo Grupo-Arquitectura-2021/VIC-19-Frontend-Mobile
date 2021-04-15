@@ -15,33 +15,27 @@ class MapButtonAnimated extends StatefulWidget {
 }
 
 class _MapButtonAnimatedState extends State<MapButtonAnimated> with SingleTickerProviderStateMixin  {
-  final TextEditingController textController = TextEditingController();
-  AnimationController controller;
-  double width;
-  double height;
+  AnimationController _controller;
+  double _width;
+  double _height;
+  bool _active=true;
 
-  _MapButtonAnimatedState(this.width, this.height);
+  _MapButtonAnimatedState(this._width, this._height);
 
   @override
   void initState() {
-    controller = AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
-    hilo();
+    _controller = AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
+    _controller.repeat(reverse: true);
     super.initState();
-  }
-  hilo()async{
-    await Future.delayed(Duration(milliseconds: 200));
-
-    controller.forward(from: 0.0);
-    hilo();
   }
 
   @override
   Widget build(BuildContext context) {
     final Animation<double> offsetAnimation =
-    Tween(begin: -5.0, end: 5.0).chain(CurveTween(curve: Curves.easeInOutExpo)).animate(controller)
+    Tween(begin: -5.0, end: 5.0).chain(CurveTween(curve: Curves.easeInOutExpo)).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          controller.reverse();
+          _controller.reverse();
         }
       });
 
@@ -55,7 +49,7 @@ class _MapButtonAnimatedState extends State<MapButtonAnimated> with SingleTicker
                   child: Column(
                     children: [
 
-                      Icon(Icons.keyboard_arrow_up,size: width*0.3,color: color2,),
+                      Icon(Icons.keyboard_arrow_up,size: _width*0.3,color: color2,),
                     ],
                   ),
                 ),
@@ -64,17 +58,19 @@ class _MapButtonAnimatedState extends State<MapButtonAnimated> with SingleTicker
               child:
               GestureDetector(
                 onTap: (){
+                  _controller.dispose();
+
                   BlocProvider.of<MapBLoc>(context).add(MapMainMapEvent());
                 },
                 child: Container(
-                  width: width,
-                  height: width,
+                  width: _width,
+                  height: _width,
                   decoration: BoxDecoration(
                       color:color2,
-                      borderRadius: BorderRadius.circular(width)
+                      borderRadius: BorderRadius.circular(_width)
                   ),
                   child:Center(
-                    child: Icon(Icons.public_rounded,size: width*0.7,color: color1,),
+                    child: Icon(Icons.public_rounded,size: _width*0.7,color: color1,),
                   ),
                 ),
               )

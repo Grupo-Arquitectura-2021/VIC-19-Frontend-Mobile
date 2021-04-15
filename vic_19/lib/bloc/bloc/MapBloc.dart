@@ -18,7 +18,7 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
        yield MapLoadingMarkersState();
        print(event.props[0]);
        await _mapR.getCountries(event.props[0]);
-       yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap);
+       yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap,_mapR.lastLocation,_mapR.area);
      }
      catch(e){
        print(e);
@@ -26,7 +26,7 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
    }
    else if(event is SelectLocationEvent){
      try{
-       yield MapSelectCountryState( event.props[0]);
+       yield MapSelectLocationState(event.props[0],_mapR.lastLocation);
      }
      catch(e){
        print(e);
@@ -54,9 +54,8 @@ class MapBLoc extends Bloc<MapEvent,MapState>{
    else if(event is MapExpandEvent){
      try{
        yield MapLoadingMarkersState();
-       print("alvinasdf");
-       await _mapR.expandMap(event.props[0]);
-       yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap);
+       await _mapR.expandMap(event.props[0],event.props[1]);
+       yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap,_mapR.lastLocation,_mapR.area);
      }
      catch(e){
        print(e);

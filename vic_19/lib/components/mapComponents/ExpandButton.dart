@@ -7,7 +7,9 @@ import 'package:vic_19/bloc/events/MapEvent.dart';
 class ExpandButton extends StatelessWidget {
   double _width;
   double _height;
-  ExpandButton(this._width, this._height);
+  int _type;
+  bool _activo;
+  ExpandButton(this._width, this._height,this._type,this._activo);
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +25,15 @@ class ExpandButton extends StatelessWidget {
               child:  Center(
                 child:
                 Icon(
-                  Icons.fullscreen_rounded,
+                  _type==1?Icons.fullscreen_rounded:Icons.fullscreen_exit,
                   color: color1,
                   size: _width,
                 ),
               ),
               onPressed: (){
-                BlocProvider.of<MapBLoc>(context).add(MapExpandEvent(context));
+                if(_activo){
+                  BlocProvider.of<MapBLoc>(context).add(MapExpandEvent(context,_type));
+                }
               }
           );
   }

@@ -210,7 +210,7 @@
     "featureType": "road",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "on"
       }
     ]
   },
@@ -237,7 +237,7 @@
     "elementType": "labels",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "on"
       }
     ]
   },
@@ -290,7 +290,7 @@
     "featureType": "transit",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "on"
       }
     ]
   },
@@ -309,6 +309,9 @@
     "stylers": [
       {
         "color": "#d59563"
+      },
+      {
+        "visibility": "off"
       }
     ]
   },

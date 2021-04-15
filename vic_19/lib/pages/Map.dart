@@ -3,13 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geojson/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
-import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 import 'package:vic_19/components/general/DownloadBottom.dart';
 import 'package:vic_19/components/general/Loading.dart';
@@ -36,8 +36,12 @@ class _MapPageState extends State<MapPage> {
   List<bool> filters=[true,false,false,false];
   ScrollController _scrollController;
   bool graphics=false;
-  String title="";
+  bool select=false;
   double zoom=5;
+  LatLng center=LatLng(-16.2256651,-65.0455838);
+  Set<Polygon> geo=Set();
+
+  List<String> _data=['p','p1','p2','p3','p4','p5'];
   @override
   void initState() {
     super.initState();
@@ -48,7 +52,19 @@ class _MapPageState extends State<MapPage> {
     super.initState();
   }
 
-
+  masGrandepolygon(Set<Polygon>pol){
+    Set<Polygon> polAux=Set();
+    if(pol.length>0){
+      var maxPol=pol.elementAt(0);
+      for(int i=1;i<pol.length;i++){
+        if(pol.elementAt(i).points.length>maxPol.points.length){
+          maxPol=pol.elementAt(i);
+        }
+      }
+      polAux.add(maxPol);
+    }
+    return polAux;
+  }
   @override
   Widget build(BuildContext context) {
     size=Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height);
@@ -56,22 +72,26 @@ class _MapPageState extends State<MapPage> {
           builder: (context,state){
             print(state);
             if(state is MaploadMarkersOkState){
+              select=false;
+
               markers=state.props[1];
               zoom=state.props[0];
+              center=state.props[3];
               mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
                 target: state.props[3],
-
                 zoom: state.props[0],
               )));
               type=state.props[2];
+              if(type==2){
+                geo=state.props[5];
+              }
             }
             if(state is MapFilterOkState){
               markers=state.props[0];
               filters=state.props[1];
             }
-            if(state is MapSelectCountryState){
-              Location country=state.props[0];
-              title=country.name;
+            if(state is MapSelectLocationState){
+              select=true;
             }
             if(state is MapGraphicsOkState){
                 _scrollController.animateTo(_scrollController.position.maxScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
@@ -100,24 +120,32 @@ class _MapPageState extends State<MapPage> {
                                  Stack(
                                    children: [GoogleMap(
                                        zoomControlsEnabled: false,
-                                       minMaxZoomPreference: MinMaxZoomPreference(zoom-0.5,zoom+0.5),
+                                       minMaxZoomPreference: type==2?MinMaxZoomPreference(zoom,zoom+7):MinMaxZoomPreference(zoom,zoom+2),
                                        cameraTargetBounds: CameraTargetBounds(
                                          LatLngBounds
-                                           (northeast: LatLng(-10.2256651,-59.0455838),southwest: LatLng(-20.2256651,-68.0455838))
+                                           (northeast: LatLng(center.latitude+zoom*0.5,center.longitude+zoom*0.5),
+                                             southwest: LatLng(center.latitude-zoom*0.5,center.longitude-zoom*0.5))
                                        ),
-
                                        initialCameraPosition: _kGooglePlex,
                                        markers: markers,
-                                       trafficEnabled: false,
-                                       buildingsEnabled: false ,
-                                       compassEnabled: false,
-                                       indoorViewEnabled: false,
-                                       liteModeEnabled: false,
-                                       mapToolbarEnabled: false,
-                                       myLocationButtonEnabled: false,
-                                       myLocationEnabled: false,
-                                       rotateGesturesEnabled: false,
+                                       polygons: masGrandepolygon(geo),
+                                        scrollGesturesEnabled: true,
+                                       buildingsEnabled: false,
                                        tiltGesturesEnabled: false,
+                                       rotateGesturesEnabled: false
+                                       ,
+                                       myLocationEnabled: true,
+                                       myLocationButtonEnabled: true,
+                                       mapToolbarEnabled: false,
+                                       liteModeEnabled: false,
+                                       indoorViewEnabled: false,
+                                       compassEnabled: false,
+                                       trafficEnabled: false
+                                       ,
+                                       zoomGesturesEnabled: true,
+
+
+
 
 
 
@@ -182,17 +210,17 @@ class _MapPageState extends State<MapPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: type==0||type==1?[
-                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0])]:[
-                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0]),
+                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0],!graphics?true:false)]:[
+                                      FilterButton(size.width*0.3, 10,"Ubicación", 0, color4, Icons.location_on,filters[0],!graphics?true:false),
                                       SizedBox(width: size.width*0.05,),
 
-                                      FilterButton(size.width*0.3, 10,"Hospitales", 1, color6, Icons.local_hospital,filters[1]),
+                                      FilterButton(size.width*0.3, 10,"Hospitales", 1, color6, Icons.local_hospital,filters[1],!graphics?true:false),
                                       SizedBox(width: size.width*0.05,),
 
-                                      FilterButton(size.width*0.3, 10,"Farmacias", 2, color3, Icons.local_pharmacy,filters[2]),
+                                      FilterButton(size.width*0.3, 10,"Farmacias", 2, color3, Icons.local_pharmacy,filters[2],!graphics?true:false),
                                       SizedBox(width: size.width*0.05,),
 
-                                      FilterButton(size.width*0.3, 10,"Albergues", 3, color2, Icons.local_hotel,filters[3])],
+                                      FilterButton(size.width*0.3, 10,"Albergues", 3, color2, Icons.local_hotel,filters[3],!graphics?true:false)],
                                   ),
                                 )
                               ],
@@ -207,7 +235,7 @@ class _MapPageState extends State<MapPage> {
                           width: size.width,
                           height: size.height*0.2,
                           child: Center(
-                            child: TitleMap(size.width*0.6,size.height*0.05,title),
+                            child: TitleMap(size.width*0.8,size.height*0.08),
                           )
                       )
                   ),
@@ -215,17 +243,26 @@ class _MapPageState extends State<MapPage> {
                     right: size.width*0.03,
                     bottom: size.height*0.085,
                     child: AnimatedOpacity(
-                        opacity: title!=""&&!graphics?1:0,
+                        opacity: select&&!graphics?1:0,
+
                         duration: Duration(milliseconds: 300),
-                        child: GraphicsButton(size.height*0.05,size.height*0.05)),
+                        child: GraphicsButton(size.height*0.05,size.height*0.05,select&&!graphics?true:false)),
                   ),
                   Positioned(
                     left: size.width*0.03,
                     bottom: size.height*0.115,
                     child: AnimatedOpacity(
-                        opacity: title!=""&&!graphics?1:0,
+                        opacity: select&&!graphics&&type!=2?1:0,
                         duration: Duration(milliseconds: 300),
-                        child: ExpandButton(size.height*0.05,size.height*0.05)),
+                        child: ExpandButton(size.height*0.05,size.height*0.05,1,select&&!graphics&&type!=2?true:false)),
+                  ),
+                  Positioned(
+                    left: size.width*0.03,
+                    bottom: size.width*0.03+size.height*0.115+size.height*0.05,
+                    child: AnimatedOpacity(
+                        opacity: !graphics&&type!=0?1:0,
+                        duration: Duration(milliseconds: 300),
+                        child: ExpandButton(size.height*0.05,size.height*0.05,2,!graphics&&type!=0?true:false)),
                   ),
                   state is MapLoadingMarkersState || state is MapInitialState?Loading():Container()
                 ],

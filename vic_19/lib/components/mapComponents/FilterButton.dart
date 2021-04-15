@@ -12,11 +12,12 @@ class FilterButton extends StatelessWidget {
   int _filter;
   Color _color;
   IconData _icon;
+  bool _status;
   bool _active;
 
 
   FilterButton(this._width, this._height, this._text, this._filter, this._color,
-      this._icon,this._active);
+      this._icon,this._status,this._active);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class FilterButton extends StatelessWidget {
               duration: Duration(milliseconds: 200),
               decoration: BoxDecoration(
               borderRadius:  BorderRadius.circular(_height*0.5),
-              color:_active?_color.withOpacity(0.5):color8,
+              color:_status?_color.withOpacity(0.5):color8,
             ),
               padding: EdgeInsets.symmetric(horizontal: _height,vertical: _height*0.5),
             child: Row(
@@ -60,7 +61,10 @@ class FilterButton extends StatelessWidget {
 
 
         onPressed: (){
-              BlocProvider.of<MapBLoc>(context).add(SelectFilterEvent(_filter,context));
+          if(_active){
+
+            BlocProvider.of<MapBLoc>(context).add(SelectFilterEvent(_filter,context));
+          }
         }
     );
   }

@@ -44,7 +44,8 @@ class MapMainMapEvent extends MapEvent{
 }
 class MapExpandEvent extends MapEvent{
   BuildContext _context;
-  MapExpandEvent(this._context);
+  int _type;
+  MapExpandEvent(this._context,this._type);
   @override
-  List<Object> get props => [_context];
+  List<Object> get props => [_context,_type];
 }

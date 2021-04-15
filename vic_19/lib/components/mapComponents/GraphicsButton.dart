@@ -7,8 +7,8 @@ import 'package:vic_19/bloc/events/MapEvent.dart';
 class GraphicsButton extends StatelessWidget {
   double _width;
   double _height;
-
-  GraphicsButton(this._width, this._height);
+ bool _activo;
+  GraphicsButton(this._width, this._height,this._activo);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,10 @@ class GraphicsButton extends StatelessWidget {
 
 
           onPressed: (){
-            BlocProvider.of<MapBLoc>(context).add(MapGraphicsEvent());
+            if(_activo){
+
+              BlocProvider.of<MapBLoc>(context).add(MapGraphicsEvent());
+            }
           }
       ),
           Icon(Icons.keyboard_arrow_down,color: color3,),
