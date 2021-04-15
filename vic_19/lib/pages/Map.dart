@@ -153,11 +153,26 @@ class _MapPageState extends State<MapPage> {
                               SizedBox(height: 40,),
                               LineChartWidget(_data),
                               SizedBox(height: 40,),
-                              DownloadBottom(color2, "Excel"),
+                              GestureDetector(
+                                onTap: (){
+
+                                },
+                                  child: DownloadBottom(color2, "Excel")
+                              ),
                               SizedBox(height: 40,),
-                              DownloadBottom(color6, "Csv"),
+                              GestureDetector(
+                                  onTap: (){
+
+                                  },
+                                  child: DownloadBottom(color6, "Csv")
+                              ),
                               SizedBox(height: 40,),
-                              DownloadBottom(color3, "PDF"),
+                              GestureDetector(
+                                  onTap: (){
+
+                                  },
+                                  child: DownloadBottom(color3, "PDF")
+                              ),
                             ],
                           ),
                         )
