@@ -3,20 +3,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geojson/geojson.dart' as geoL;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
+import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
+import 'package:vic_19/components/general/DownloadBottom.dart';
 import 'package:vic_19/components/general/Loading.dart';
+import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
 import 'package:vic_19/components/mapComponents/TitleMap.dart';
 import 'package:vic_19/util/BoliviaMap.dart';
+import 'package:vic_19/util/MapUtils.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
 class MapPage extends StatefulWidget {
@@ -131,6 +134,28 @@ class _MapPageState extends State<MapPage> {
                           child: Column(
                             children: [
                               SizedBox(height: 40,),
+                              LineChartWidget(_data),
+                              SizedBox(height: 40,),
+                              GestureDetector(
+                                onTap: (){
+
+                                },
+                                  child: DownloadBottom(color2, "Excel")
+                              ),
+                              SizedBox(height: 40,),
+                              GestureDetector(
+                                  onTap: (){
+
+                                  },
+                                  child: DownloadBottom(color6, "Csv")
+                              ),
+                              SizedBox(height: 40,),
+                              GestureDetector(
+                                  onTap: (){
+
+                                  },
+                                  child: DownloadBottom(color3, "PDF")
+                              ),
                             ],
                           ),
                         )
