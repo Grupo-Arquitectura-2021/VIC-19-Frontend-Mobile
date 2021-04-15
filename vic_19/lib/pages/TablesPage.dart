@@ -20,13 +20,13 @@ class _TablesPageState extends State<TablesPage> {
             child: Column(
               children: [
                 SizedBox(height: 80,),
-                Container(
-                  width: size.width,
-                  padding: EdgeInsets.all(30),
-                  // color: color6,
-                  child: LineChartWidget(_dataList),
-                ),
-                SizedBox(height: 30,),
+                // Container(
+                //   width: size.width,
+                //   padding: EdgeInsets.all(30),
+                //   // color: color6,
+                //   child: LineChartWidget(_dataList),
+                // ),
+                // SizedBox(height: 30,),
                 Container(
                   alignment: Alignment.center,
                   width: size.width,
