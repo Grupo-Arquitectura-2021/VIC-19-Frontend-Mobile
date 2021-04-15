@@ -11,6 +11,7 @@ import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
+import 'package:vic_19/components/general/DownloadBottom.dart';
 import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
@@ -151,6 +152,12 @@ class _MapPageState extends State<MapPage> {
                             children: [
                               SizedBox(height: 40,),
                               LineChartWidget(_data),
+                              SizedBox(height: 40,),
+                              DownloadBottom(color2, "Excel"),
+                              SizedBox(height: 40,),
+                              DownloadBottom(color6, "Csv"),
+                              SizedBox(height: 40,),
+                              DownloadBottom(color3, "PDF"),
                             ],
                           ),
                         )
