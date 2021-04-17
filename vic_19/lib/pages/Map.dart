@@ -11,6 +11,7 @@ import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
+import 'package:vic_19/components/general/DateSelection.dart';
 import 'package:vic_19/components/general/DownloadBottom.dart';
 import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
@@ -28,6 +29,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  DateTime _selectedDate=DateTime(2021,07,20);
   String _mapStyle;
   GoogleMapController mapController;
   Size size;
@@ -161,7 +163,9 @@ class _MapPageState extends State<MapPage> {
                           width:size.width,
                           child: Column(
                             children: [
-                              SizedBox(height: 40,),
+                              SizedBox(height: size.height*0.16,),
+                              DateSeleccion(_selectedDate),
+                              SizedBox(height: 30,),
                               LineChartWidget(_data),
                               SizedBox(height: 30,),
                               Row(
@@ -187,7 +191,7 @@ class _MapPageState extends State<MapPage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 30,),
+                              SizedBox(height: 20,),
                               GestureDetector(
                                 onTap: (){
 
@@ -214,7 +218,7 @@ class _MapPageState extends State<MapPage> {
                       ],
                     ),
                   ),
-                    Positioned(
+                    graphics?Container():Positioned(
                         top: MediaQuery.of(context).padding.top+size.height*0.12,
                         child: AnimatedOpacity(
                             opacity: graphics?0:1,
