@@ -44,7 +44,11 @@ class _DateSeleccionState extends State<DateSeleccion> {
 
   Future<Null> _selecDate(BuildContext context) async {
     DateTime date;
-    date=await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(2019), lastDate: DateTime(2222));
+    date=await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(2019), lastDate: DateTime(2222),helpText: "Seleccione una fecha",
+    builder: (BuildContext context, Widget child){
+      return Theme(data: ThemeData.dark().copyWith(primaryColor: color2,accentColor: color2,colorScheme: ColorScheme.dark(primary: color2,background: color1,surface: color2),), child: child);
+    }
+    );
     if(date!=null && date!=_selectedDate){
       setState(() {
         _selectedDate=date;

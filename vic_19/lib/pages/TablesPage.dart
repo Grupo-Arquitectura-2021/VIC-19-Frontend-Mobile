@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vic_19/components/general/DateSelection.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/tables/BasicTable.dart';
 
@@ -10,6 +11,7 @@ class TablesPage extends StatefulWidget {
 
 class _TablesPageState extends State<TablesPage> {
   List<String> _dataList;
+  DateTime _selectedDate=DateTime.now();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -20,6 +22,8 @@ class _TablesPageState extends State<TablesPage> {
             child: Column(
               children: [
                 SizedBox(height: 80,),
+                DateSeleccion(_selectedDate),
+                SizedBox(height: 40,),
                 // Container(
                 //   width: size.width,
                 //   padding: EdgeInsets.all(30),
