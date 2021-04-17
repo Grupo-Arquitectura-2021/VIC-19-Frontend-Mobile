@@ -13,15 +13,12 @@ class DateSeleccion extends StatefulWidget {
 class _DateSeleccionState extends State<DateSeleccion> {
   DateTime _selectedDate;
   _DateSeleccionState(this._selectedDate);
-  DateTime _date=DateTime.now();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: (){
-        // setState(() {
           _selecDate(context);
-        // });
       },
       child: Container(
           height: size.height*0.04,
@@ -46,10 +43,11 @@ class _DateSeleccionState extends State<DateSeleccion> {
   }
 
   Future<Null> _selecDate(BuildContext context) async {
-    _selectedDate=await showDatePicker(context: context, initialDate: _date, firstDate: DateTime(2019), lastDate: DateTime(2222));
-    if(_selectedDate!=null && _selectedDate!=_date){
+    DateTime date;
+    date=await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(2019), lastDate: DateTime(2222));
+    if(date!=null && date!=_selectedDate){
       setState(() {
-        _date=_selectedDate;
+        _selectedDate=date;
       });
     }
   }

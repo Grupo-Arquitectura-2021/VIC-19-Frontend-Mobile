@@ -29,7 +29,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  DateTime _selectedDate=DateTime(2021,07,20);
+  DateTime _selectedDate=DateTime.now();
   String _mapStyle;
   GoogleMapController mapController;
   Size size;
@@ -173,33 +173,31 @@ class _MapPageState extends State<MapPage> {
                           ),
                           child: Column(
                             children: [
-                              SizedBox(height: size.height*0.16,),
-                              DateSeleccion(_selectedDate),
-                              SizedBox(height: 30,),
+                              // SizedBox(height: size.height*0.16,),
                               SizedBox(height: MediaQuery.of(context).padding.top+size.height*0.15,),
+                              DateSeleccion(_selectedDate),
+                              SizedBox(height: size.height*0.02,),
                               LineChartWidget(_data,size.width*0.9,size.height*0.3),
-                              SizedBox(height: size.height*0.05,),
-                              SizedBox(height: 40,),
-                              SizedBox(height: 30,),
+                              SizedBox(height: size.height*0.02,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Column(
                                     children: [
-                                      Text("CONFIRMADOS",style: TextStyle(color: color2,fontSize: size.height*0.024),),
-                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.035),),
+                                      Text("CONFIRMADOS",style: TextStyle(color: color2,fontSize: size.height*0.02),),
+                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.037),),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      Text("RECUPERADOS",style: TextStyle(color: color3,fontSize: size.height*0.024),),
-                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.035),),
+                                      Text("RECUPERADOS",style: TextStyle(color: color3,fontSize: size.height*0.02),),
+                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.037),),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      Text("FALLECIDOS",style: TextStyle(color: color4,fontSize: size.height*0.024),),
-                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.035),),
+                                      Text("FALLECIDOS",style: TextStyle(color: color4,fontSize: size.height*0.02),),
+                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.037),),
                                     ],
                                   ),
                                 ],
@@ -211,14 +209,14 @@ class _MapPageState extends State<MapPage> {
                                 },
                                   child: DownloadButton(color2, "Excel",size.width*0.35,size.height*0.05)
                               ),
-                              SizedBox(height: size.height*0.01,),
+                              SizedBox(height: size.height*0.012,),
                               GestureDetector(
                                   onTap: (){
 
                                   },
                                   child: DownloadButton(color6, "Csv",size.width*0.35,size.height*0.05)
                               ),
-                              SizedBox(height: size.height*0.01,),
+                              SizedBox(height: size.height*0.012,),
                               GestureDetector(
                                   onTap: (){
 
@@ -232,7 +230,7 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ),
                     graphics?Container():Positioned(
-                        top: MediaQuery.of(context).padding.top+size.height*0.12,
+                        top: MediaQuery.of(context).padding.top+size.height*0.02,
                         child: AnimatedOpacity(
                             opacity: graphics?0:1,
                             duration: Duration(milliseconds: 500),
