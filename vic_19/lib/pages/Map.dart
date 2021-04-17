@@ -163,21 +163,45 @@ class _MapPageState extends State<MapPage> {
                             children: [
                               SizedBox(height: 40,),
                               LineChartWidget(_data),
-                              SizedBox(height: 40,),
+                              SizedBox(height: 30,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text("CONFIRMADOS",style: TextStyle(color: color2,fontSize: size.height*0.024),),
+                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.035),),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text("RECUPERADOS",style: TextStyle(color: color3,fontSize: size.height*0.024),),
+                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.035),),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text("FALLECIDOS",style: TextStyle(color: color4,fontSize: size.height*0.024),),
+                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.035),),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 30,),
                               GestureDetector(
                                 onTap: (){
 
                                 },
                                   child: DownloadBottom(color2, "Excel")
                               ),
-                              SizedBox(height: 40,),
+                              SizedBox(height: 20,),
                               GestureDetector(
                                   onTap: (){
 
                                   },
                                   child: DownloadBottom(color6, "Csv")
                               ),
-                              SizedBox(height: 40,),
+                              SizedBox(height: 20,),
                               GestureDetector(
                                   onTap: (){
 
