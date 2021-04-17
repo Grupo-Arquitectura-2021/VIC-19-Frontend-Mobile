@@ -3,9 +3,15 @@ class Location{
   String _name;
   double _lat;
   double _lon;
+  int _type;
 
+  Location(this._idLocation, this._name, this._lat, this._lon, this._type);
 
-  Location(this._idLocation,this._name, this._lat, this._lon);
+  int get type => _type;
+
+  set type(int value) {
+    _type = value;
+  }
 
   double get lon => _lon;
 
@@ -19,15 +25,15 @@ class Location{
     _lat = value;
   }
 
-  int get idLocation => _idLocation;
-
-  set idLocation(int value) {
-    _idLocation = value;
-  }
-
   String get name => _name;
 
   set name(String value) {
     _name = value;
+  }
+
+  int get idLocation => _idLocation;
+
+  set idLocation(int value) {
+    _idLocation = value;
   }
 }

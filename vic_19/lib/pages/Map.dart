@@ -12,7 +12,7 @@ import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 import 'package:vic_19/components/general/DateSelection.dart';
-import 'package:vic_19/components/general/DownloadBottom.dart';
+import 'package:vic_19/components/general/DownloadButton.dart';
 import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
@@ -158,15 +158,28 @@ class _MapPageState extends State<MapPage> {
                                        }),mapController==null?Container(width: size.width,height: size.height,color:color1):Container()],
                                  ),
                         ),
-                        SizedBox(
+                        Container(
                           height: size.height,
                           width:size.width,
+
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                color8,color1
+                              ],
+                              stops: [0,0],
+                              begin: Alignment.topCenter, end:  Alignment.bottomCenter
+                            )
+                          ),
                           child: Column(
                             children: [
                               SizedBox(height: size.height*0.16,),
                               DateSeleccion(_selectedDate),
                               SizedBox(height: 30,),
-                              LineChartWidget(_data),
+                              SizedBox(height: MediaQuery.of(context).padding.top+size.height*0.15,),
+                              LineChartWidget(_data,size.width*0.9,size.height*0.3),
+                              SizedBox(height: size.height*0.05,),
+                              SizedBox(height: 40,),
                               SizedBox(height: 30,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -196,21 +209,21 @@ class _MapPageState extends State<MapPage> {
                                 onTap: (){
 
                                 },
-                                  child: DownloadBottom(color2, "Excel")
+                                  child: DownloadButton(color2, "Excel",size.width*0.35,size.height*0.05)
                               ),
-                              SizedBox(height: 20,),
+                              SizedBox(height: size.height*0.01,),
                               GestureDetector(
                                   onTap: (){
 
                                   },
-                                  child: DownloadBottom(color6, "Csv")
+                                  child: DownloadButton(color6, "Csv",size.width*0.35,size.height*0.05)
                               ),
-                              SizedBox(height: 20,),
+                              SizedBox(height: size.height*0.01,),
                               GestureDetector(
                                   onTap: (){
 
                                   },
-                                  child: DownloadBottom(color3, "PDF")
+                                  child: DownloadButton(color3, "PDF",size.width*0.35,size.height*0.05)
                               ),
                             ],
                           ),
@@ -257,13 +270,23 @@ class _MapPageState extends State<MapPage> {
                         )
                   ),
                     ),
-                  Positioned(
-                      top: 0,
-                      child: Container(
-                          width: size.width,
-                          height: size.height*0.2,
-                          child: Center(
-                            child: TitleMap(size.width*0.8,size.height*0.08),
+                  AnimatedPositioned(
+                    duration: Duration(milliseconds: 1000),
+                      top: MediaQuery.of(context).padding.top+(!graphics?size.height*0.1:size.height*0.035),
+                      child: AnimatedOpacity(
+                          opacity: select?1:0,
+
+                          duration: Duration(milliseconds: 300),
+
+                          child:Container(
+                              width: size.width,
+                              height: size.height*0.09,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TitleMap(size.width*0.8,size.height*0.09),
+                                ],
+                              )
                           )
                       )
                   ),

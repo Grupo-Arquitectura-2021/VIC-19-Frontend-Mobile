@@ -4,31 +4,33 @@ import 'package:vic_19/PaletteColor.dart';
 
 
 class LineTitles{
-  static getTitleData(List<String> _titles,List<String> _titlesY){
+  static getTitleData(List<String> _titles,List<String> _titlesY,double size){
     // getTitleData(this._titles);
     return FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 10,
-          margin: 15,
-          getTextStyles: (value)=> const TextStyle(
-            color: Colors.white,
+          margin: 10,
+          getTextStyles: (value)=> TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 13
+            color: color5,
+            fontSize: size
           ),
           getTitles: (value){
             switch (value.toInt()){
-              case 2:
+              case 0:
                 return _titles[0];
-              case 4:
+              case 2:
                 return _titles[1];
-              case 6:
-                return _titles[2];
-              case 8:
+              case 4:
                 return _titles[3];
+              case 6:
+                return _titles[5];
+              case 8:
+                return _titles[6];
               case 10:
-                return _titles[4];
+                return _titles[7];
               // case 12:
               //   return _titles[5];
               // case 14:
@@ -42,11 +44,11 @@ class LineTitles{
       leftTitles: SideTitles(
         showTitles: true,
           // reservedSize: 10,
-          margin: 20,
-          getTextStyles: (value)=> const TextStyle(
-              color: Colors.white,
+          margin: 10,
+          getTextStyles: (value)=> TextStyle(
+              color: color5,
               fontWeight: FontWeight.bold,
-              fontSize: 13
+              fontSize: size
           ),
           getTitles: (value){
             switch (value.toInt()){

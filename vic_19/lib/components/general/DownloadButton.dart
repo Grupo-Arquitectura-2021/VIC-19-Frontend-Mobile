@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
 import '../../PaletteColor.dart';
-class DownloadBottom extends StatelessWidget {
+class DownloadButton extends StatelessWidget {
   Color _color;
   String _text;
+ double _width;
+ double _height;
 
-  DownloadBottom(this._color, this._text);
+
+  DownloadButton(this._color, this._text, this._width, this._height);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      height: 50,
-      width: 100,
+      height: _height,
+      width: _width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: _color)

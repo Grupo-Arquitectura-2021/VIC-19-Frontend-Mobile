@@ -112,14 +112,14 @@ class MapRepository {
 
   Future<void> getMunicipality(context)async {
     await Future.delayed(Duration(seconds: 2));
-    List<Location> municipality=[Location(1,"La Paz",-16.48920066821045, -68.14260226389267),
-      Location(2,"El Alto",-16.499388273844996, -68.20500327360526),
-      Location(3,"Palca",-16.560703122358806, -67.9523169532082),
-      Location(4,"Mecapaca",-16.667937020029967, -68.01828549716129),
-      Location(5,"Achocalla",-16.574975300040517, -68.16925482192639),
-      Location(6,"Viacha",-16.649509323339043, -68.29731419297877),
-      Location(7,"Laja",-16.53326672290246, -68.38563860039085),
-      Location(8,"Pucarani",-16.399741665683763, -68.4767678555612),];
+    List<Location> municipality=[Location(1,"La Paz",-16.48920066821045, -68.14260226389267,0),
+      Location(2,"El Alto",-16.499388273844996, -68.20500327360526,0),
+      Location(3,"Palca",-16.560703122358806, -67.9523169532082,0),
+      Location(4,"Mecapaca",-16.667937020029967, -68.01828549716129,0),
+      Location(5,"Achocalla",-16.574975300040517, -68.16925482192639,0),
+      Location(6,"Viacha",-16.649509323339043, -68.29731419297877,0),
+      Location(7,"Laja",-16.53326672290246, -68.38563860039085,0),
+      Location(8,"Pucarani",-16.399741665683763, -68.4767678555612,0),];
     locations=municipality;
     zoom=7.5 ;
     type=2;
@@ -128,27 +128,27 @@ class MapRepository {
 
   }
   Future<void> getDrugsStore(context)async {
-    List<Location> drugStoreList=[Location(9,"Farmacia Por Ti",-16.48957542357021, -68.20142423123032),
-      Location(10,"Super Farmacia Virgen de Copacabana",-16.505852472111464, -68.16305325284088),
-      Location(11,"Farmacia Gran Chaco",-16.514967466129153, -68.21714865977809),
-      Location(12,"Farmacias Bolivia",-16.493570677055626, -68.13190995115573),
-      Location(13,"Farmacias Bolivia",-16.510457299578828, -68.12247191142971),
-      Location(14,"Farmacias Bolivia",-16.479017386826108, -68.1212058323144),
-      Location(15,"FarmaCorp",-16.53826239478578, -68.06634735456959),];
+    List<Location> drugStoreList=[Location(9,"Farmacia Por Ti",-16.48957542357021, -68.20142423123032,2),
+      Location(10,"Super Farmacia Virgen de Copacabana",-16.505852472111464, -68.16305325284088,2),
+      Location(11,"Farmacia Gran Chaco",-16.514967466129153, -68.21714865977809,2),
+      Location(12,"Farmacias Bolivia",-16.493570677055626, -68.13190995115573,2),
+      Location(13,"Farmacias Bolivia",-16.510457299578828, -68.12247191142971,2),
+      Location(14,"Farmacias Bolivia",-16.479017386826108, -68.1212058323144,2),
+      Location(15,"FarmaCorp",-16.53826239478578, -68.06634735456959,2),];
     drugstores=drugStoreList;
     if(filters[2]){
     markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,25,context));}
 
   }
   Future<void> getHospital(context)async {
-    List<Location> hospitalList=[Location(16,"Hospital de El Alto Sur",-16.525026864458482, -68.22341050395703),
-      Location(17,"Hospital del norte",-16.484208946561754, -68.2055577224549),
-      Location(18,"Hospital Arco iris",-16.48409176143849, -68.12036953146652),
-      Location(19,"Hospital Pucarani",-16.401320297987237, -68.47573248966475),
-      Location(20,"Hospital de Laja",-16.53169992701307, -68.38578191597261),
-      Location(21,"Hospital obrero",-16.499186356840237, -68.11818314496122),
-      Location(22,"Hospital Boliviano Holandes",-16.52142904552383, -68.15408302126085),
-      Location(23,"Hospital Cota Cota",-16.53976095296443, -68.06531729080666),];
+    List<Location> hospitalList=[Location(16,"Hospital de El Alto Sur",-16.525026864458482, -68.22341050395703,1),
+      Location(17,"Hospital del norte",-16.484208946561754, -68.2055577224549,1),
+      Location(18,"Hospital Arco iris",-16.48409176143849, -68.12036953146652,1),
+      Location(19,"Hospital Pucarani",-16.401320297987237, -68.47573248966475,1),
+      Location(20,"Hospital de Laja",-16.53169992701307, -68.38578191597261,1),
+      Location(21,"Hospital obrero",-16.499186356840237, -68.11818314496122,1),
+      Location(22,"Hospital Boliviano Holandes",-16.52142904552383, -68.15408302126085,1),
+      Location(23,"Hospital Cota Cota",-16.53976095296443, -68.06531729080666,1),];
     hospital=hospitalList;
     if(filters[1]){
     markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,25,context));
@@ -156,10 +156,10 @@ class MapRepository {
 
   }
   Future<void> getShelters(context)async {
-    List<Location> _shelterList=[Location(24,"Albergue Transitorio",-16.520983002910345, -68.19755751373685),
-      Location(25,"Remar Viacha",-16.49771294090049, -68.13778200949986),
-      Location(26,"Hogar Carlos de Villegas",-16.507836752632958, -68.13134040251619),
-      Location(27,"Hogar Virgen de Copacabana",-16.536528470964985, -68.18857531889586)];
+    List<Location> _shelterList=[Location(24,"Albergue Transitorio",-16.520983002910345, -68.19755751373685,3),
+      Location(25,"Remar Viacha",-16.49771294090049, -68.13778200949986,3),
+      Location(26,"Hogar Carlos de Villegas",-16.507836752632958, -68.13134040251619,3),
+      Location(27,"Hogar Virgen de Copacabana",-16.536528470964985, -68.18857531889586,3)];
     shelters=_shelterList;
     if(filters[3]){
       markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,25,context));}
@@ -167,15 +167,15 @@ class MapRepository {
   }
   Future<void> getCities(context)async {
     await Future.delayed(Duration(seconds: 2));
-    List<Location> cities=[Location(1,"La Paz",-16.08354782509485, -68.06967003644534),
-      Location(2,"Oruro",-19.358081865080415, -67.95256482218397),
-      Location(3,"Potosi",-21.25680123243468, -67.12895296863799),
-      Location(4,"Cochabamba",-17.198275410380212, -65.05790819645144),
-      Location(5,"Chuquisaca",-19.79806384524433, -64.37655968335869),
-      Location(6,"Tarija",-21.60047499330198, -64.14467146894596),
-      Location(7,"Pando",-11.597779067996576, -66.78552003036548),
-      Location(8,"Beni",-14.001738953430753, -64.82698706230555),
-      Location(9,"Santa Cruz",-17.709650631754297, -61.05660654016773)];
+    List<Location> cities=[Location(1,"La Paz",-16.08354782509485, -68.06967003644534,0),
+      Location(2,"Oruro",-19.358081865080415, -67.95256482218397,0),
+      Location(3,"Potosi",-21.25680123243468, -67.12895296863799,0),
+      Location(4,"Cochabamba",-17.198275410380212, -65.05790819645144,0),
+      Location(5,"Chuquisaca",-19.79806384524433, -64.37655968335869,0),
+      Location(6,"Tarija",-21.60047499330198, -64.14467146894596,0),
+      Location(7,"Pando",-11.597779067996576, -66.78552003036548,0),
+      Location(8,"Beni",-14.001738953430753, -64.82698706230555,0),
+      Location(9,"Santa Cruz",-17.709650631754297, -61.05660654016773,0)];
     locations=cities;
     zoom=5.5;
     type=1;
@@ -186,12 +186,12 @@ class MapRepository {
 
   Future<void> getCountries(context)async {
     await Future.delayed(Duration(seconds: 2));
-    List<Location> paises=[Location(1,"Bolivia",-17.4364322,-64.9581047),
-      Location(2,"Brasil",-11.6570027,-60.4375673),
-      Location(3,"Peru",-14.134636, -70.929510),
-      Location(4,"Chile",-23.664653, -69.362242),
-      Location(5,"Paraguay",-22.9604184,-59.6220523),
-      Location(6,"Argentina",-26.5972821,-63.175)];
+    List<Location> paises=[Location(1,"Bolivia",-17.4364322,-64.9581047,0),
+      Location(2,"Brasil",-11.6570027,-60.4375673,0),
+      Location(3,"Peru",-14.134636, -70.929510,0),
+      Location(4,"Chile",-23.664653, -69.362242,0),
+      Location(5,"Paraguay",-22.9604184,-59.6220523,0),
+      Location(6,"Argentina",-26.5972821,-63.175,0)];
     locations=paises;
     zoom=5;
     type=0;
