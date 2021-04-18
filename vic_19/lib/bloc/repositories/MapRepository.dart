@@ -251,7 +251,7 @@ class MapRepository {
           zIndex: i%2==0?1:0,
           onTap: () {
               selectLocation=l;
-              BlocProvider.of<MapBLoc>(context).add(SelectLocationEvent(l));
+              BlocProvider.of<MapBloc>(context).add(SelectLocationEvent(l));
 
           }));
     }

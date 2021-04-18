@@ -71,7 +71,7 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
           controller.reverse();
         }
       });
-    return BlocBuilder<MapBLoc,MapState>(
+    return BlocBuilder<MapBloc,MapState>(
         builder:(context,state){
           if(state is MapSelectLocationState){
             Location loc=state.props[0];
@@ -141,7 +141,7 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
                               TextSpan(
 
                                 children: [
-                                  TextSpan(text:_loc!=null?"${getTitleType(_type-1,0)}: ":"",style: TextStyle(color: color4,fontSize: 50,fontWeight: FontWeight.w500))
+                                  TextSpan(text:_loc!=null?"${getTitleType(_type-1,0)}: ":"",style: TextStyle(color: color1,fontSize: 50,fontWeight: FontWeight.w500))
                                   ,
                                   TextSpan(text:_loc!=null&&_subTitle!=""?_subTitle:"",style: TextStyle(color: color1,fontSize: 50))
                                 ],

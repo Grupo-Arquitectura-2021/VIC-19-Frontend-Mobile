@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vic_19/components/general/DateSelection.dart';
-import 'package:vic_19/components/graphics/LinearChart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vic_19/Model/LocationData.dart';
+import 'package:vic_19/bloc/bloc/TablesBloc.dart';
+import 'package:vic_19/bloc/states/TablesState.dart';
+import 'package:vic_19/components/general/Loading.dart';
+import 'package:vic_19/components/graphics/DateSelection.dart';
 import 'package:vic_19/components/tables/BasicTable.dart';
 
 import '../PaletteColor.dart';
@@ -10,38 +14,42 @@ class TablesPage extends StatefulWidget {
 }
 
 class _TablesPageState extends State<TablesPage> {
-  List<String> _dataList;
+  List<LocationData> _dataList=List();
   DateTime _selectedDate=DateTime.now();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                SizedBox(height: 80,),
-                DateSeleccion(_selectedDate),
-                SizedBox(height: 40,),
-                // Container(
-                //   width: size.width,
-                //   padding: EdgeInsets.all(30),
-                //   // color: color6,
-                //   child: LineChartWidget(_dataList),
-                // ),
-                // SizedBox(height: 30,),
-                Container(
-                  alignment: Alignment.center,
-                  width: size.width,
-                  padding: EdgeInsets.all(10),
-                  child: BasicTableWidget(),
+      body: BlocBuilder<TablesBloc,TablesState>(
+    builder: (context,state){
+      if(state is TablesCitiesOkState){
+        _dataList=state.props[0];
+      }
+      return Stack(
+        children: [
+                SingleChildScrollView(
+                child: Container(
+                alignment: Alignment.topCenter,
+                  height: size.height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DateSeleccion(_selectedDate,color3),
+                      Container(
+                        alignment: Alignment.center,
+                        width: size.width,
+                        child: BasicTableWidget(_dataList,size.width*0.95,size.height*0.7),
+                      ),
+                      // LineChartWidget(_dataList),
+                    ],
+                  ),
+                )
                 ),
-                // LineChartWidget(_dataList),
-              ],
-            ),
-          )
-      ),
+          state is TablesLoadingState?Loading():Container()
+        ],
+      );
+    },
+    )
     );
   }
 }

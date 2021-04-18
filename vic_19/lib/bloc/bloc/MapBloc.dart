@@ -5,9 +5,9 @@ import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 
-class MapBLoc extends Bloc<MapEvent,MapState>{
+class MapBloc extends Bloc<MapEvent,MapState>{
   MapRepository _mapR;
-  MapBLoc(this._mapR);
+  MapBloc(this._mapR);
  @override
   MapState get initialState => MapInitialState();
 

@@ -32,7 +32,7 @@ class ExpandButton extends StatelessWidget {
               ),
               onPressed: (){
                 if(_activo){
-                  BlocProvider.of<MapBLoc>(context).add(MapExpandEvent(context,_type));
+                  BlocProvider.of<MapBloc>(context).add(MapExpandEvent(context,_type));
                 }
               }
           );

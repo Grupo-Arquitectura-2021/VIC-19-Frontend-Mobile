@@ -1,115 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:vic_19/Model/Location.dart';
+import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
 import '../../PaletteColor.dart';
 
-class BasicTableWidget extends StatefulWidget {
+class BasicTableWidget extends StatelessWidget {
+  List<LocationData> _data;
+  double _width;
+  double _height;
 
-  @override
-  _BasicTableWidgetState createState() => _BasicTableWidgetState();
-}
+  BasicTableWidget(this._data, this._width, this._height);
 
-class _BasicTableWidgetState extends State<BasicTableWidget> {
   @override
   Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: MyBehavior(),
-      child: SingleChildScrollView(
+    return Container(
+      width: _width,
+      height: _height,
+      child: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: DataTable(
-              //tile card expansion
-              columns: [
-                DataColumn(label: Text("Departamentos",style: TextStyle(color: color3,fontSize: 15),)),
-                DataColumn(label: Text("Confirmados",style: TextStyle(color: color3,fontSize: 15),)),
-                DataColumn(label: Text("Recuperados",style: TextStyle(color: color3,fontSize: 15),)),
-                DataColumn(label: Text("Fallecidos",style: TextStyle(color: color3,fontSize: 15),)),
-                // DataColumn(label: Text("Fallecidos"),numeric:true,),
-              ],
-              rows: [
-                DataRow(
-                  selected: true,
-                    cells:[
-                      DataCell(Text("La Paz",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                  selected: true,
-                    cells:[
-                      DataCell(Text("Sucre",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-                DataRow(
-                    selected: true,
-                    cells:[
-                      DataCell(Text("Tarija",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("283.084",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("232.422",style: TextStyle(color: color5,fontSize: 12),)),
-                      DataCell(Text("12.469",style: TextStyle(color: color5,fontSize: 12),)),
-                    ]
-                ),
-              ],
-          ),
-        ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: DataTable(
+                  dataRowColor:  MaterialStateColor.resolveWith((states) => color8.withOpacity(0.3)),
+                  headingRowColor: MaterialStateColor.resolveWith((states) => color8.withOpacity(0.6)),
+                  //tile card expansion
+                  columns: [
+                    DataColumn(label: Text("Departamentos",style: TextStyle(color: color3,fontSize: 15),)),
+                    DataColumn(label: Text("Confirmados",style: TextStyle(color: color3,fontSize: 15),)),
+                    DataColumn(label: Text("Recuperados",style: TextStyle(color: color3,fontSize: 15),)),
+                    DataColumn(label: Text("Fallecidos",style: TextStyle(color: color3,fontSize: 15),)),
+                    // DataColumn(label: Text("Fallecidos"),numeric:true,),
+                  ],
+                  rows:
+                  _data.map((data){
+                    return DataRow(
+                        selected: true,
+                        cells:[
+                          DataCell(Text(data.name,style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(Text(data.confirmed.toString(),style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(Text(data.recovered.toString(),style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(Text(data.deceased.toString(),style: TextStyle(color: color5,fontSize: 12),)),
+                        ]
+                    );
+                  }).toList()
+              ),
+            ),
+        )
+      ),
     );
   }
 }

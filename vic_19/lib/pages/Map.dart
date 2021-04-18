@@ -11,16 +11,15 @@ import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
-import 'package:vic_19/components/general/DateSelection.dart';
-import 'package:vic_19/components/general/DownloadButton.dart';
+import 'package:vic_19/components/graphics/DateSelection.dart';
+import 'package:vic_19/components/graphics/DownloadButton.dart';
 import 'package:vic_19/components/general/Loading.dart';
+import 'package:vic_19/components/graphics/DataLabel.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
 import 'package:vic_19/components/mapComponents/TitleMap.dart';
-import 'package:vic_19/util/BoliviaMap.dart';
-import 'package:vic_19/util/MapUtils.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
 class MapPage extends StatefulWidget {
@@ -70,7 +69,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     size=Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height);
-    return BlocBuilder<MapBLoc,MapState>(
+    return BlocBuilder<MapBloc,MapState>(
           builder: (context,state){
             print(state);
             if(state is MaploadMarkersOkState){
@@ -154,7 +153,7 @@ class _MapPageState extends State<MapPage> {
                                        onMapCreated: (GoogleMapController controller){
                                          mapController=controller;
                                          mapController.setMapStyle(_mapStyle);
-                                         BlocProvider.of<MapBLoc>(context).add(GetCountriesEvent(context));
+                                         BlocProvider.of<MapBloc>(context).add(GetCountriesEvent(context));
                                        }),mapController==null?Container(width: size.width,height: size.height,color:color1):Container()],
                                  ),
                         ),
@@ -175,31 +174,16 @@ class _MapPageState extends State<MapPage> {
                             children: [
                               // SizedBox(height: size.height*0.16,),
                               SizedBox(height: MediaQuery.of(context).padding.top+size.height*0.15,),
-                              DateSeleccion(_selectedDate),
+                              DateSeleccion(_selectedDate,color3),
                               SizedBox(height: size.height*0.02,),
                               LineChartWidget(_data,size.width*0.9,size.height*0.3),
                               SizedBox(height: size.height*0.02,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Column(
-                                    children: [
-                                      Text("CONFIRMADOS",style: TextStyle(color: color2,fontSize: size.height*0.02),),
-                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.037),),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("RECUPERADOS",style: TextStyle(color: color3,fontSize: size.height*0.02),),
-                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.037),),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("FALLECIDOS",style: TextStyle(color: color4,fontSize: size.height*0.02),),
-                                      Text("202",style: TextStyle(color: color5,fontSize: size.height*0.037),),
-                                    ],
-                                  ),
+                                    DataLabel(size.width*0.3, size.height*0.09, "CONFIRMADOS", 1050,color2),
+                                    DataLabel(size.width*0.3, size.height*0.09, "RECUPERADOS", 1569,color3),
+                                    DataLabel(size.width*0.3, size.height*0.09, "FALLECIDOS", 4541,color4)
                                 ],
                               ),
                               SizedBox(height: 20,),

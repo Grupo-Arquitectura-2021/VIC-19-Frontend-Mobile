@@ -37,7 +37,7 @@ class GraphicsButton extends StatelessWidget {
           onPressed: (){
             if(_activo){
 
-              BlocProvider.of<MapBLoc>(context).add(MapGraphicsEvent());
+              BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent());
             }
           }
       ),

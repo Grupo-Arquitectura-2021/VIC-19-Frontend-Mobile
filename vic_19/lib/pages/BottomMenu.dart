@@ -1,7 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vic_19/Pages/Map.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/bloc/bloc/NewsBloc.dart';
+import 'package:vic_19/bloc/bloc/TablesBloc.dart';
+import 'package:vic_19/bloc/events/NewsEvent.dart';
+import 'package:vic_19/bloc/events/TablesEvent.dart';
 import 'package:vic_19/bloc/repositories/MapRepository.dart';
+import 'package:vic_19/bloc/repositories/NewsRepository.dart';
+import 'package:vic_19/bloc/repositories/TablesRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 import 'package:vic_19/components/bottomNav/MapButtonAnimated.dart';
 import 'package:vic_19/components/bottomNav/curved_navigation_bar.dart';
@@ -34,9 +40,13 @@ class _BottomMenuState extends State<BottomMenu> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: BlocProvider(
-        create:(context)=>MapBLoc(MapRepository()),
-    child: BlocBuilder<MapBLoc,MapState>(
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<MapBloc>(create: (context)=>MapBloc(MapRepository())),
+          BlocProvider<TablesBloc>(create: (context)=>TablesBloc(TablesRepository())..add(TablesGetCitiesEvent())),
+          BlocProvider<NewsBloc>(create: (context)=>NewsBloc(NewsRepository())..add(NewsGetEvent()))
+        ],
+    child: BlocBuilder<MapBloc,MapState>(
         builder: (context, state)
         {
           return Stack(

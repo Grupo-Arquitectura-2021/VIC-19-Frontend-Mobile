@@ -63,7 +63,7 @@ class FilterButton extends StatelessWidget {
         onPressed: (){
           if(_active){
 
-            BlocProvider.of<MapBLoc>(context).add(SelectFilterEvent(_filter,context));
+            BlocProvider.of<MapBloc>(context).add(SelectFilterEvent(_filter,context));
           }
         }
     );

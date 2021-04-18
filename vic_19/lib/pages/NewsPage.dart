@@ -1,4 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:vic_19/Model/News.dart';
+import 'package:vic_19/bloc/bloc/NewsBloc.dart';
+import 'package:vic_19/bloc/events/NewsEvent.dart';
+import 'package:vic_19/bloc/states/NewsState.dart';
+import 'package:vic_19/components/general/Loading.dart';
+import 'package:vic_19/components/news/NewsCard.dart';
+import 'package:vic_19/components/news/NewsSingleAlert.dart';
+import 'package:vic_19/util/MyBehavior.dart';
 
 import '../PaletteColor.dart';
 class NewsPage extends StatefulWidget {
@@ -7,73 +18,72 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  int idNews;
-  Future<void> _showMyDialog(int idNews) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('News',style: TextStyle(color: color3),),
-          backgroundColor: color1,
-          content: SingleChildScrollView(
-            child: Text("loremsafjlafjlasajfldsjalfjlsajfljakfl;jasl;fjklasjfl;asjkfkshafklhajsfkljhaskfhklshfksahfklhjaskd"
-                "fhaksfhkasfksahfklhsajfhkashfkhsakfhaskjfhkashdfkahsdkfhkaslhdfkashfklhaskdfjhksadjfhkasjhdfjklahfdklsahfkljhsk"
-                "lfjhkalshdfkashdfklsahfklsahdfklhsdfklhsdjkhfksadhfjkjsahdfjkashfkahskljfhasklfhklsahfklashfjkdlshaklfhjjkslajhfjklsahdf"
-                "fhaksfhkasfksahfklhsajfhkashfkhsakfhaskjfhkashdfkahsdkfhkaslhdfkashfklhaskdfjhksadjfhkasjhdfjklahfdklsahfkljhsk"
-                "fhaksfhkasfksahfklhsajfhkashfkhsakfhaskjfhkashdfkahsdkfhkaslhdfkashfklhaskdfjhksadjfhkasjhdfjklahfdklsahfkljhsk",style: TextStyle(color: color5),),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Aceptar',style: TextStyle(color: color4),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  Size size;
+  EasyRefreshController _easyRefreshController=EasyRefreshController();
+  List<News> _news= List();
+
   @override
-  List<String> _news=['breve descripcion','breve descripcion 2','breve descripcion 3','breve descripcion 4','breve descripcion 5','breve descripcion 6'];
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Container(
-        height: size.height,
-        child: ListView.builder(
-          itemCount: _news.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context,index){
-              return GestureDetector(
-                onTap: (){
-                  _showMyDialog(idNews);
-                },
-                child: Card(
-                  color: color1,
-                  elevation: 5,
-                  borderOnForeground: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Container(
-                    height: size.height*0.12,
-                    // decoration: BoxDecoration(
-                    //   borderRadius: BorderRadius.circular(10.0),
-                    //   border: Border.all(color: color2)
-                    // ),
-                    // child: Center(child: Text("Title",style: TextStyle(color: color3,fontSize: size.height*0.035),)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Title",style: TextStyle(color: color3,fontSize: size.height*0.035),),
-                        Text("${_news[index]}",style: TextStyle(color: color5,fontSize: size.height*0.02),),
-                      ],
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: color6.withOpacity(0.5),
+        title: Text("Noticias",textAlign: TextAlign.center,style: TextStyle(color: color5,fontSize:30,fontWeight: FontWeight.w400),),
+
+      ),
+        body: BlocBuilder<NewsBloc,NewsState>(
+          builder: (context, state) {
+            if(state is NewsListOkState){
+              _easyRefreshController.finishRefresh();
+              _news=state.props[0];
+              print(_news);
+            }
+            return Stack(
+              children: [
+                  Container(
+                    height: size.height,
+                    width: size.width,
+                    child: ScrollConfiguration(
+                      behavior: MyBehavior(),
+                      child: EasyRefresh(
+                        controller: _easyRefreshController,
+                        onRefresh: ()async{
+                          BlocProvider.of<NewsBloc>(context).add(NewsGetEvent());
+                        },
+
+                        header: MaterialHeader(
+                          backgroundColor: Colors.transparent,
+
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.transparent),
+
+                        ),
+                        child: ListView.separated(
+
+                            separatorBuilder: (context,index){
+                              return Divider(color: color6,);
+                            },
+
+                            padding: EdgeInsets.all(size.width*0.01),
+                            itemCount: _news.length+1,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context,index){
+                              if(index==_news.length){
+                                return SizedBox(height: size.height*0.08);
+                              }
+                              else{
+
+                                return NewsCard(size.width*0.98, size.height*0.15, _news[index]);
+                              }
+                            }
+                        ),
+                      )
                     ),
                   ),
-                ),
-              );
-            }
+                state is NewsLoadingState?Loading():Container()
+              ],
+            );
+          }
         )
       );
   }

@@ -60,7 +60,7 @@ class _MapButtonAnimatedState extends State<MapButtonAnimated> with SingleTicker
                 onTap: (){
                   _controller.dispose();
 
-                  BlocProvider.of<MapBLoc>(context).add(MapMainMapEvent());
+                  BlocProvider.of<MapBloc>(context).add(MapMainMapEvent());
                 },
                 child: Container(
                   width: _width,
