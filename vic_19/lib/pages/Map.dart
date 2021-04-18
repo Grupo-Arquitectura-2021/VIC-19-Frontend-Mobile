@@ -174,7 +174,7 @@ class _MapPageState extends State<MapPage> {
                             children: [
                               // SizedBox(height: size.height*0.16,),
                               SizedBox(height: MediaQuery.of(context).padding.top+size.height*0.15,),
-                              DateSeleccion(_selectedDate,color3),
+                              DateSeleccion(_selectedDate,color2),
                               SizedBox(height: size.height*0.02,),
                               LineChartWidget(_data,size.width*0.9,size.height*0.3),
                               SizedBox(height: size.height*0.02,),

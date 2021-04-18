@@ -28,8 +28,8 @@ class _NewsPageState extends State<NewsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: color6.withOpacity(0.5),
-        title: Text("Noticias",textAlign: TextAlign.center,style: TextStyle(color: color5,fontSize:30,fontWeight: FontWeight.w400),),
+        backgroundColor: color3.withOpacity(0.9),
+        title: Text("Noticias",textAlign: TextAlign.center,style: TextStyle(color: color1,fontSize:30,fontWeight: FontWeight.w400),),
 
       ),
         body: BlocBuilder<NewsBloc,NewsState>(
@@ -61,7 +61,7 @@ class _NewsPageState extends State<NewsPage> {
                         child: ListView.separated(
 
                             separatorBuilder: (context,index){
-                              return Divider(color: color6,);
+                              return Divider(color: color3,);
                             },
 
                             padding: EdgeInsets.all(size.width*0.01),

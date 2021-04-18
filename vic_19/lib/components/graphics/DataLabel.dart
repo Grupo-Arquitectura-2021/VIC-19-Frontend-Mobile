@@ -30,7 +30,7 @@ class DataLabel extends StatelessWidget {
         children: [
           SizedBox(
             width: _widthP,
-            height: _heightP*0.25,
+            height: _heightP*0.32,
             child:
             AutoSizeText(_label,textAlign: TextAlign.center,style: TextStyle(color: _color,fontSize: 50),maxLines: 1,minFontSize: 1,),
           ),
@@ -40,7 +40,7 @@ class DataLabel extends StatelessWidget {
           ),
           SizedBox(
               width: _widthP,
-              height: _heightP*0.65,
+              height: _heightP*0.58,
             child:
             AutoSizeText(_data.toString(),textAlign: TextAlign.center,style: TextStyle(height: 1,color: color5,fontSize: 50,fontWeight: FontWeight.w200),maxLines: 1,minFontSize: 1,)
           )

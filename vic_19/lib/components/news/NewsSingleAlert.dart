@@ -41,7 +41,10 @@ class NewsSingleAlert extends StatelessWidget {
           child: ListView(
             children: [
               Text(_news.title,style: TextStyle(color: _color,fontSize: 20,fontWeight: FontWeight.w500),),
+              SizedBox(height: 10,),
               Text(_news.content,style: TextStyle(color: color5),),
+              SizedBox(height: 10,),
+              Text(_news.source,style: TextStyle(color: _color),),
             ],
           ),
         )

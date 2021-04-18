@@ -37,7 +37,7 @@ class NewsCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
 
-                          AutoSizeText(_news.title,style: TextStyle(color: color5,fontSize: 50),maxLines: 4,minFontSize: 14,maxFontSize: 18)
+                          AutoSizeText(_news.title,style: TextStyle(color: color5,fontSize: 50),maxLines: 3,minFontSize: 10,maxFontSize: 18)
                         ],
                       )
                   ),
@@ -45,7 +45,7 @@ class NewsCard extends StatelessWidget {
                       width: _width*0.6,
                       height: _height*0.1,
                       child:
-                            AutoSizeText("${_news.dateTime.day}-${_news.dateTime.month}-${_news.dateTime.year} ${_news.dateTime.hour}:${_news.dateTime.minute}",style: TextStyle(color: color6,fontSize: 50),maxLines: 1,minFontSize: 1,maxFontSize: 14)
+                            AutoSizeText("${_news.dateTime.day}-${_news.dateTime.month}-${_news.dateTime.year} ${_news.dateTime.hour}:${_news.dateTime.minute}",style: TextStyle(color: color3,fontSize: 50),maxLines: 1,minFontSize: 1,maxFontSize: 14)
 
                   ),
                 ],
@@ -74,7 +74,7 @@ class NewsCard extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return NewsSingleAlert(_width, _height*2,color6, _news);
+        return NewsSingleAlert(_width, _height*2,color3, _news);
       },
     );
   }

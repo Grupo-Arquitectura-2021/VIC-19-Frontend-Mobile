@@ -34,10 +34,10 @@ class _DateSeleccionState extends State<DateSeleccion> {
         child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("   ${_selectedDate.day}/",style: TextStyle(color: color5,fontSize: size.height*0.025),),
-                Text("${_selectedDate.month}/",style: TextStyle(color: color5,fontSize: size.height*0.025),),
-                Text("${_selectedDate.year}",style: TextStyle(color: color5,fontSize: size.height*0.025),),
-                Icon(Icons.arrow_drop_down,color: color5,),
+                Text("   ${_selectedDate.day}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
+                Text("${_selectedDate.month}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
+                Text("${_selectedDate.year}",style: TextStyle(color: color1,fontSize: size.height*0.025),),
+                Icon(Icons.arrow_drop_down,color: color1,),
               ],
             ),
       ),
