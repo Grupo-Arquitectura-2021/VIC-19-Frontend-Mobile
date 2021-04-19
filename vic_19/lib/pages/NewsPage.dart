@@ -37,6 +37,7 @@ class _NewsPageState extends State<NewsPage> {
             if(state is NewsListOkState){
               _easyRefreshController.finishRefresh();
               _news=state.props[0];
+              print("sdfhkasfhjksaf");
               print(_news);
             }
             return Stack(

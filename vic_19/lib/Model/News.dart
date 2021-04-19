@@ -47,4 +47,13 @@ class News {
   set idNews(int value) {
     _idNews = value;
   }
+
+  News.fromJson(Map<String, dynamic> json) {
+    idNews= json['idNews'];
+    title = json['title'];
+    content = json['content'];
+    dateNews = json['dateNews'];
+    urlImage = json['urlImage'];
+    source = json['source'];
+  }
 }

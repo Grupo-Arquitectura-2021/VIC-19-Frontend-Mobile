@@ -1,6 +1,7 @@
 
 
 import 'package:bloc/bloc.dart';
+import 'package:vic_19/Model/News.dart';
 import 'package:vic_19/bloc/events/NewsEvent.dart';
 import 'package:vic_19/bloc/repositories/NewsRepository.dart';
 import 'package:vic_19/bloc/states/NewsState.dart';
@@ -18,8 +19,10 @@ class NewsBloc extends Bloc<NewsEvent,NewsState>{
    if(event is NewsGetEvent){
      try{
        yield NewsLoadingState();
+       List<News> _listNews=
        await _newsR.getNews();
-       yield NewsListOkState(_newsR.news);
+       yield NewsListOkState(_listNews);
+       // yield NewsListOkState(_newsR.news);
      }
      catch(e){
        print(e);
