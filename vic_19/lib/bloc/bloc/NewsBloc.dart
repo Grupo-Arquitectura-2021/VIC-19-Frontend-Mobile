@@ -18,13 +18,14 @@ class NewsBloc extends Bloc<NewsEvent,NewsState>{
   Stream<NewsState> mapEventToState(NewsEvent event) async*{
    if(event is NewsGetEvent){
      try{
+       print("news");
        yield NewsLoadingState();
-       List<News> _listNews=
        await _newsR.getNews();
-       yield NewsListOkState(_listNews);
+       yield NewsListOkState(_newsR.news);
        // yield NewsListOkState(_newsR.news);
      }
      catch(e){
+       print("entra");
        print(e);
      }
    }

@@ -38,8 +38,11 @@ class NewsCard extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-
-                          AutoSizeText(_news.title,style: TextStyle(color: color5,fontSize: 50),maxLines: 3,minFontSize: 10,maxFontSize: 18)
+                        SizedBox(
+                          width: _width*0.6,
+                          child:
+                          AutoSizeText(_news.title,textAlign: TextAlign.start,style: TextStyle(color: color5,fontSize: 50),maxLines: 3,minFontSize: 1,maxFontSize: 18),
+                        )
                         ],
                       )
                   ),

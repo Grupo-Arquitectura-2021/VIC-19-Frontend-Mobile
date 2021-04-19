@@ -35,7 +35,6 @@ class _NewsPageState extends State<NewsPage> {
         body: BlocBuilder<NewsBloc,NewsState>(
           builder: (context, state) {
             if(state is NewsListOkState){
-              _easyRefreshController.finishRefresh();
               _news=state.props[0];
               print("sdfhkasfhjksaf");
               print(_news);
@@ -56,7 +55,7 @@ class _NewsPageState extends State<NewsPage> {
                         header: MaterialHeader(
                           backgroundColor: Colors.transparent,
 
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.transparent),
+                            valueColor: AlwaysStoppedAnimation<Color>(color2),
 
                         ),
                         child: ListView.separated(

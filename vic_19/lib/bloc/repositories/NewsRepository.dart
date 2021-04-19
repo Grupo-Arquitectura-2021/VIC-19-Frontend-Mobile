@@ -6,15 +6,14 @@ import 'package:vic_19/Model/News.dart';
 import 'package:vic_19/util/ApiUrl.dart';
 import 'package:http/http.dart' as http;
 class NewsRepository {
-  // List<News> _news;
-  //
-  // List<News> get news => _news;
-  //
-  // set news(List<News> value) {
-  //   _news = value;
-  // }
-  Future <List<News>> getNews()async{
-    try{
+   List<News> _news;
+
+   List<News> get news => _news;
+
+   set news(List<News> value) {
+     _news = value;
+   }
+  Future <void> getNews()async{
       // print(userId.toString());
       String url=ApiUrl+"news/list";
       // List<News> newsList;
@@ -26,21 +25,14 @@ class NewsRepository {
 
       var newsList3=List<News>();
 
-      for(newsList2 in newsList2){
-        newsList3.add(News.fromJson(newsList2));
+      for(var n in newsList2){
+        newsList3.add(News.fromJson(n));
       }
       print("prueba repository");
       print(newsList3[0].title);
       if(res.statusCode == 200){
-        // print("DoneListaNews");
-        return newsList3;
-      }else{
-        return null;
+        news=newsList3;
       }
-    }
-    catch(error){
-      print(error);
-      return null;
     }
   }
 
@@ -102,4 +94,3 @@ class NewsRepository {
   // }
 
 
-}
