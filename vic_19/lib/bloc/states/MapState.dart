@@ -2,6 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vic_19/Model/Location.dart';
+import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 
 abstract class MapState extends Equatable{
@@ -46,10 +47,15 @@ class MapFilterOkState extends MapState{
   @override
   List<Object> get props=>[_markers,_filters];
 }
-class MapGraphicsOkState extends MapState{
-  MapGraphicsOkState();
+class MapLoadingGraphicsState extends MapState{
   @override
   List<Object> get props=>[];
+}
+class MapGraphicsOkState extends MapState{
+  LocationData _locationData;
+  MapGraphicsOkState(this._locationData);
+  @override
+  List<Object> get props=>[_locationData];
 }
 class MapMainMapOkState extends MapState{
   @override

@@ -20,6 +20,13 @@ class LocationData{
     _deceased = value;
   }
 
+
+  DateTime get dateCovid => _dateCovid;
+
+  set dateCovid(DateTime value) {
+    _dateCovid = value;
+  }
+
   int get confirmed => _confirmed;
 
   set confirmed(int value) {
@@ -55,21 +62,15 @@ class LocationData{
   set vaccinated(int value) {
     _vaccinated = value;
   }
-
-  DateTime get dateLocationCovid => _dateLocationCovid;
-
-  set dateLocationCovid(DateTime value) {
-    _dateLocationCovid = value;
-  }
-  LocationData.fromJson(Map<String, dynamic> json) {
-    // idLocation= json['idLocation'];
+  LocationData.fromJson(json){
     idLocation=1;
-    name = json['nameLocationCovid'];
-    dateLocationCovid = DateTime.parse(json['dateLocationCovid']);
-    deceased = json['deathCases'];
-    confirmed = json['confirmedCases'];
-    vaccinated = json['vaccinated'];
-    total = json['cumulativeCases'];
-    recovered = json['recuperated'];
+    name=json["nameLocationCovid"];
+    deceased=json["deathCases"];
+    confirmed=json["confirmedCases"];
+    vaccinated=json["vaccinated"];
+    total=json["cumulativeCases"];
+    recovered=json["recuperated"];
+    dateCovid=DateTime.parse(json["dateLocationCovid"]);
+
   }
 }

@@ -7,6 +7,7 @@ import 'package:geojson/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:vic_19/Model/Location.dart';
+import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
@@ -41,6 +42,7 @@ class _MapPageState extends State<MapPage> {
   double zoom=5;
   LatLng center=LatLng(-16.2256651,-65.0455838);
   Set<Polygon> geo=Set();
+  LocationData data;
 
   List<String> _data=['p','p1','p2','p3','p4','p5'];
   @override
@@ -94,9 +96,13 @@ class _MapPageState extends State<MapPage> {
             if(state is MapSelectLocationState){
               select=true;
             }
+            if(state is MapLoadingGraphicsState){
+              _scrollController.animateTo(_scrollController.position.maxScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
+              graphics=true;
+            }
             if(state is MapGraphicsOkState){
-                _scrollController.animateTo(_scrollController.position.maxScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
-                graphics=true;
+                data=state.props[0];
+
 
             }
             if(state is MapMainMapOkState){
@@ -177,17 +183,17 @@ class _MapPageState extends State<MapPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      DataLabel(size.width*0.3, size.height*0.09, "CONFIRMADOS", 1050,color2),
-                                      DataLabel(size.width*0.3, size.height*0.09, "RECUPERADOS", 1569,color3),
-                                      DataLabel(size.width*0.3, size.height*0.09, "FALLECIDOS", 4541,color4)
+                                      DataLabel(size.width*0.3, size.height*0.09, "CONFIRMADOS",data!=null?data.confirmed:0,color2),
+                                      DataLabel(size.width*0.3, size.height*0.09, "RECUPERADOS", data!=null?data.recovered:0,color3),
+                                      DataLabel(size.width*0.3, size.height*0.09, "FALLECIDOS",data!=null?data.deceased:0,color4)
                                     ],
                                   ),
                                   SizedBox(height: size.height*0.01,)
                                   ,Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    DataLabel(size.width*0.3, size.height*0.09, "TOTAL", 1050,color6),
-                                    DataLabel(size.width*0.3, size.height*0.09, "VACUNADOS", 1569,color5),
+                                    DataLabel(size.width*0.3, size.height*0.09, "TOTAL",data!=null?data.total:0,color6),
+                                    DataLabel(size.width*0.3, size.height*0.09, "VACUNADOS", data!=null?data.vaccinated:0,color5),
                                   ],
                                 ),],
                               ),

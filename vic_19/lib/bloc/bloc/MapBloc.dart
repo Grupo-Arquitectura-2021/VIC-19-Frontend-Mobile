@@ -45,7 +45,9 @@ class MapBloc extends Bloc<MapEvent,MapState>{
    }
    else if(event is MapGraphicsEvent){
      try{
-       yield MapGraphicsOkState();
+       yield MapLoadingGraphicsState();
+       await _mapR.getDataLocationCountry();
+       yield MapGraphicsOkState(_mapR.locationData);
      }
      catch(e){
        print(e);

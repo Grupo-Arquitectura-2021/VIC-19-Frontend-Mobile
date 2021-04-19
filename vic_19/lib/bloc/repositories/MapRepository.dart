@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vic_19/Model/Location.dart';
+import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/util/ApiUrl.dart';
@@ -26,7 +27,14 @@ class MapRepository {
   int _type;
   LatLng _centerMap;
   double _size;
+  LocationData _locationData;
 
+
+  LocationData get locationData => _locationData;
+
+  set locationData(LocationData value) {
+    _locationData = value;
+  }
 
   double get size => _size;
 
@@ -74,6 +82,7 @@ class MapRepository {
     type=0;
     _centerMap=LatLng(-16.2256651,-65.0455838);
     area=Set();
+    _locationData=LocationData.fromLocationData(1,"",0,0,0, 0, 0);
   }
 
   double get zoom => _zoom;
@@ -249,7 +258,25 @@ class MapRepository {
     }
 
   }
+  Future<bool> getDataLocationCountry()async{
+    var url=ApiUrl + "country/${selectLocation.idLocation}/2021-04-19";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    var resJson = json.decode(response.body);
+    LocationData country=LocationData.fromJson(resJson);
+    print("country");
+    if(response.statusCode==200){
+      locationData=country;
+      return true;
+    }
+    else{
+      return false;
+    }
 
+  }
   Future<bool> getCountries(context)async {
     /*List<Location> paises=[Location(1,"Bolivia",-17.4364322,-64.9581047,0),
       Location(2,"Brasil",-11.6570027,-60.4375673,0),
