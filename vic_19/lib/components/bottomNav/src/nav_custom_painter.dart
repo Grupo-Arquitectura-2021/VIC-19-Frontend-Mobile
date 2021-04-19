@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vic_19/PaletteColor.dart';
 
 class NavCustomPainter extends CustomPainter {
   double loc;
@@ -17,7 +18,7 @@ class NavCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Color(0xFF7BC950)
+      ..color = color2
       ..style = PaintingStyle.fill;
 
     final path = Path()

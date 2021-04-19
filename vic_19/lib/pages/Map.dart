@@ -121,12 +121,6 @@ class _MapPageState extends State<MapPage> {
                                  Stack(
                                    children: [GoogleMap(
                                        zoomControlsEnabled: false,
-                                       minMaxZoomPreference: type==2?MinMaxZoomPreference(zoom,zoom+7):MinMaxZoomPreference(zoom,zoom+2),
-                                       cameraTargetBounds: CameraTargetBounds(
-                                         LatLngBounds
-                                           (northeast: LatLng(center.latitude+zoom*0.5,center.longitude+zoom*0.5),
-                                             southwest: LatLng(center.latitude-zoom*0.5,center.longitude-zoom*0.5))
-                                       ),
                                        initialCameraPosition: _kGooglePlex,
                                        markers: markers,
                                        polygons: masGrandepolygon(geo),
@@ -178,37 +172,57 @@ class _MapPageState extends State<MapPage> {
                               SizedBox(height: size.height*0.02,),
                               LineChartWidget(_data,size.width*0.9,size.height*0.3),
                               SizedBox(height: size.height*0.02,),
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      DataLabel(size.width*0.3, size.height*0.09, "CONFIRMADOS", 1050,color2),
+                                      DataLabel(size.width*0.3, size.height*0.09, "RECUPERADOS", 1569,color3),
+                                      DataLabel(size.width*0.3, size.height*0.09, "FALLECIDOS", 4541,color4)
+                                    ],
+                                  ),
+                                  SizedBox(height: size.height*0.01,)
+                                  ,Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    DataLabel(size.width*0.3, size.height*0.09, "TOTAL", 1050,color6),
+                                    DataLabel(size.width*0.3, size.height*0.09, "VACUNADOS", 1569,color5),
+                                  ],
+                                ),],
+                              ),
+                              SizedBox(height: size.height*0.01,),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: size.width*0.05)
+                                ,child: Divider(
+
+                                color: color2.withOpacity(0.5),
+
+                              ),),
+                              SizedBox(height: size.height*0.01,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                    DataLabel(size.width*0.3, size.height*0.09, "CONFIRMADOS", 1050,color2),
-                                    DataLabel(size.width*0.3, size.height*0.09, "RECUPERADOS", 1569,color3),
-                                    DataLabel(size.width*0.3, size.height*0.09, "FALLECIDOS", 4541,color4)
+
+                                  GestureDetector(
+                                      onTap: (){
+
+                                      },
+                                      child: DownloadButton(Colors.lightGreen, "EXCEL",size.width*0.3,size.height*0.05)
+                                  ),
+                                  SizedBox(height: size.height*0.012,),
+                                  GestureDetector(
+                                      onTap: (){
+
+                                      },
+                                      child: DownloadButton(Colors.red, "PDF",size.width*0.3,size.height*0.05)
+                                  ),
                                 ],
-                              ),
-                              SizedBox(height: 20,),
-                              GestureDetector(
-                                onTap: (){
+                              )
 
-                                },
-                                  child: DownloadButton(color2, "Excel",size.width*0.35,size.height*0.05)
-                              ),
-                              SizedBox(height: size.height*0.012,),
-                              GestureDetector(
-                                  onTap: (){
 
-                                  },
-                                  child: DownloadButton(color6, "Csv",size.width*0.35,size.height*0.05)
-                              ),
-                              SizedBox(height: size.height*0.012,),
-                              GestureDetector(
-                                  onTap: (){
-
-                                  },
-                                  child: DownloadButton(color3, "PDF",size.width*0.35,size.height*0.05)
-                              ),
-                            ],
-                          ),
+                            ]
+                        )
                         )
                       ],
                     ),
@@ -305,8 +319,9 @@ class _MapPageState extends State<MapPage> {
         );
   }
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(-16.2256651,-65.0455838),
-    zoom: 4.5,
+
+    target:LatLng(-16.2256651,-58.0455838),
+    zoom: 2,
   );
 
 }

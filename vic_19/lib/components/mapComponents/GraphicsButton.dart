@@ -13,35 +13,42 @@ class GraphicsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
+      height: _height*1.6,
+      child: Stack(
         children: [
-          MaterialButton(
-          minWidth: _width,
-          height: _height,
-          padding: EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(_height*0.2),
-              side: BorderSide(color: color3.withOpacity(0),width: 1)
+          Column(
+            children: [MaterialButton(
+                minWidth: _width,
+                height: _height,
+                padding: EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(_height*0.2),
+                    side: BorderSide(color: color3.withOpacity(0),width: 1)
+                ),
+                color: color3.withOpacity(0.7),
+                child:  Center(
+                  child:
+                  Icon(
+                    Icons.bar_chart,
+                    color: color1,
+                    size: _width*0.8,
+                  ),
+                ),
+
+
+                onPressed: (){
+                  if(_activo){
+
+                    BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent());
+                  }
+                }
+            ),],
           ),
-          color: color3.withOpacity(0.7),
-          child:  Center(
-            child:
-            Icon(
-              Icons.bar_chart,
-              color: color1,
-              size: _width*0.8,
-            ),
-          ),
-
-
-          onPressed: (){
-            if(_activo){
-
-              BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent());
-            }
-          }
-      ),
-          Icon(Icons.keyboard_arrow_down,color: color3,),
+          Positioned(
+            bottom:0,
+            left: _width*0.25,
+            child: Icon(Icons.keyboard_arrow_down,color: color3,size:_width*0.6),
+          )
         ],
       ),
     );

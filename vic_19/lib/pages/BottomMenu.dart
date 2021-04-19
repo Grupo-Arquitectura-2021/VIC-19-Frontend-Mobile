@@ -58,7 +58,7 @@ class _BottomMenuState extends State<BottomMenu> {
             Positioned(
               bottom: 0,
               child: Container(
-                height: size.height*0.07,
+                height: size.height*0.075,
                 width: size.width,
                 child: CurvedNavigationBar(
                         index: _selectedIndex,
@@ -70,7 +70,7 @@ class _BottomMenuState extends State<BottomMenu> {
                           Icon(
                             Icons.public_rounded,
                             size: size.height*0.04,
-                            color: _selectedIndex==1?color1:color5,
+                            color: state is MapGraphicsOkState&&_selectedIndex==1?Colors.transparent:_selectedIndex==1?color1:color5,
                           ),
                           Icon(
                             Icons.list_alt_rounded,
@@ -91,18 +91,18 @@ class _BottomMenuState extends State<BottomMenu> {
 
                         },
 
-                        buttonBackgroundColor: color2,
+                        buttonBackgroundColor: color2.withOpacity(state is MapGraphicsOkState&&_selectedIndex==1?0:1),
                         lock:  state is MapGraphicsOkState?true:false,
 
-                        backgroundColor: color1,
-                        height: size.height*0.07,
-                        color: color1,
+                        backgroundColor: color8,
+                        height: size.height*0.075,
+                        color: color8,
                         animationDuration: const Duration(milliseconds: 300),
                       ),
               ),
             ),
             state is MapGraphicsOkState&&_selectedIndex==1?Positioned(
-                  bottom: size.height*0.028,
+                  bottom: size.height*0.034,
                   left: size.width*0.5-size.height*0.03,
                   child: AnimatedOpacity(
                       opacity: state is MapGraphicsOkState&&_selectedIndex==1?1:0,

@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/util/ApiUrl.dart';
 import 'package:vic_19/util/MapUtils.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
-
+import 'package:http/http.dart' as http;
 class MapRepository {
   double _zoom;
   List<bool> _filters;
@@ -22,7 +25,14 @@ class MapRepository {
   Set<Marker> _markers;
   int _type;
   LatLng _centerMap;
+  double _size;
 
+
+  double get size => _size;
+
+  set size(double value) {
+    _size = value;
+  }
 
   int get type => _type;
 
@@ -111,7 +121,7 @@ class MapRepository {
   }
 
   Future<void> getMunicipality(context)async {
-    await Future.delayed(Duration(seconds: 2));
+    /*await Future.delayed(Duration(seconds: 2));
     List<Location> municipality=[Location(1,"La Paz",-16.48920066821045, -68.14260226389267,0),
       Location(2,"El Alto",-16.499388273844996, -68.20500327360526,0),
       Location(3,"Palca",-16.560703122358806, -67.9523169532082,0),
@@ -123,8 +133,39 @@ class MapRepository {
     locations=municipality;
     zoom=7.5 ;
     type=2;
-    centerMap=LatLng(-14.48920066821045, -68.14260226389267);
-    markers=await addMarkers(municipality, Icons.location_on, color4,35,context);
+    centerMap=LatLng(municipality[0].lat, municipality[0].lon);
+    markers=await addMarkers(municipality, Icons.location_on, color4,size*0.035,context);
+    List<Location> cities=List();
+    var url=ApiUrl + "city/location";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );*/
+    List<Location> municipality=List();
+    var url=ApiUrl + "municipality/location/${lastLocation.idLocation}";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+      municipality.add(newLocation);
+    });
+    print("municipality");
+    if(response.statusCode==200){
+      locations=municipality;
+      zoom=6;
+      type=2;
+      centerMap=LatLng(municipality[0].lat,municipality[0].lon);
+      markers=await addMarkers(locations, Icons.location_on, color4,size*0.035,context);
+      return true;
+    }
+    else{
+      return false;
+    }
 
   }
   Future<void> getDrugsStore(context)async {
@@ -137,7 +178,7 @@ class MapRepository {
       Location(15,"FarmaCorp",-16.53826239478578, -68.06634735456959,2),];
     drugstores=drugStoreList;
     if(filters[2]){
-    markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,25,context));}
+    markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,size*0.035,context));}
 
   }
   Future<void> getHospital(context)async {
@@ -151,7 +192,7 @@ class MapRepository {
       Location(23,"Hospital Cota Cota",-16.53976095296443, -68.06531729080666,1),];
     hospital=hospitalList;
     if(filters[1]){
-    markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,25,context));
+    markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,size*0.035,context));
     }
 
   }
@@ -162,11 +203,11 @@ class MapRepository {
       Location(27,"Hogar Virgen de Copacabana",-16.536528470964985, -68.18857531889586,3)];
     shelters=_shelterList;
     if(filters[3]){
-      markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,25,context));}
+      markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,size*0.035,context));}
 
   }
   Future<void> getCities(context)async {
-    await Future.delayed(Duration(seconds: 2));
+    /*await Future.delayed(Duration(seconds: 2));
     List<Location> cities=[Location(1,"La Paz",-16.08354782509485, -68.06967003644534,0),
       Location(2,"Oruro",-19.358081865080415, -67.95256482218397,0),
       Location(3,"Potosi",-21.25680123243468, -67.12895296863799,0),
@@ -180,23 +221,68 @@ class MapRepository {
     zoom=5.5;
     type=1;
     centerMap=LatLng(-16.2256651,-63.5455838);
-    markers=await addMarkers(cities, Icons.location_on, color4,35,context);
+    markers=await addMarkers(cities, Icons.location_on, color4,size*0.035,context);*/
+    List<Location> cities=List();
+    var url=ApiUrl + "city/location";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+      cities.add(newLocation);
+    });
+    print("cities");
+    if(response.statusCode==200){
+      print(cities);
+      locations=cities;
+      zoom=5.5;
+      type=1;
+      centerMap=LatLng(-16.2256651,-63.5455838);
+      markers=await addMarkers(cities, Icons.location_on, color4,size*0.035,context);
+      return true;
+    }
+    else{
+      return false;
+    }
 
   }
 
-  Future<void> getCountries(context)async {
-    await Future.delayed(Duration(seconds: 2));
-    List<Location> paises=[Location(1,"Bolivia",-17.4364322,-64.9581047,0),
+  Future<bool> getCountries(context)async {
+    /*List<Location> paises=[Location(1,"Bolivia",-17.4364322,-64.9581047,0),
       Location(2,"Brasil",-11.6570027,-60.4375673,0),
       Location(3,"Peru",-14.134636, -70.929510,0),
       Location(4,"Chile",-23.664653, -69.362242,0),
       Location(5,"Paraguay",-22.9604184,-59.6220523,0),
-      Location(6,"Argentina",-26.5972821,-63.175,0)];
-    locations=paises;
-    zoom=5;
-    type=0;
-    centerMap=LatLng(-16.2256651,-65.0455838);
-    markers=await addMarkers(paises, Icons.location_on, color4,35,context);
+      Location(6,"Argentina",-26.5972821,-63.175,0)];*/
+    List<Location> paises=List();
+    var url=ApiUrl + "country/location";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+      paises.add(newLocation);
+    });
+    print("country");
+    if(response.statusCode==200){
+      print(paises[0]);
+      locations=paises;
+      zoom=3.5;
+      type=0;
+      centerMap=LatLng(-16.2256651,-58.0455838);
+      size=MediaQuery.of(context).size.height;
+      markers=await addMarkers(paises, Icons.location_on, color4,size*0.035,context);
+      return true;
+    }
+    else{
+      return false;
+    }
 
   }
   getTitleMarker(title,filter){
@@ -258,6 +344,8 @@ class MapRepository {
     return markerAux;
   }
   Future<void> expandMap(context,t)async{
+
+    size=MediaQuery.of(context).size.height;
     if(type<2||(type<3&&t==2&&type>=0)){
       t==1?type++:type--;
       switch(type){
@@ -311,19 +399,19 @@ class MapRepository {
         if(filters[i]==true){
           switch(i){
             case 0:
-                    markers.addAll(await addMarkers(locations, Icons.location_on, color4,type ==0?35:type ==1?35:25,context));
+                    markers.addAll(await addMarkers(locations, Icons.location_on, color4,size*0.035,context));
               break;
 
             case 1:
-              markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,type ==0?35:type ==1?34:25,context));
+              markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,size*0.035,context));
               break;
 
             case 2:
-              markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,type ==0?35:type ==1?34:25,context));
+              markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,size*0.035,context));
               break;
 
             case 3:
-              markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,type ==0?35:type ==1?35:25,context));
+              markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,size*0.035,context));
               break;
           }
         }

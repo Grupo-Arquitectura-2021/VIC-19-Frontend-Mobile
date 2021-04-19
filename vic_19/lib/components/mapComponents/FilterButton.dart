@@ -43,18 +43,24 @@ class FilterButton extends StatelessWidget {
                 Icon(
                   _icon,
                   color: color5,
+                  size: _width*0.2,
                 ),
                 SizedBox(
-                  width: 5,
+                  width: _width*0.01,
                 ),
-                AutoSizeText(
-                  _text,
-                  style: TextStyle(
+                SizedBox(
+                    width: _width*0.58,
+                  child:
+                  AutoSizeText(
+                    _text,
+                    style: TextStyle(
                       color: color5,
+                    ),
+                    maxLines: 1,
+                    maxFontSize: 50,
+                    minFontSize: 1,
                   ),
-                  maxLines: 1,
-                  maxFontSize: 50,
-                ),
+                )
               ],
             ),
           ),
