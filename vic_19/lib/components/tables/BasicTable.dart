@@ -42,6 +42,7 @@ class BasicTableWidget extends StatelessWidget {
                         // onSelectChanged: (value){
                         //   _showModalBottomSheet(context);
                         // },
+                        //
 
                         cells:[
                           DataCell(GestureDetector(onTap: (){

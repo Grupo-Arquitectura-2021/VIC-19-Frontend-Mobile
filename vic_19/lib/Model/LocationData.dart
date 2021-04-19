@@ -1,17 +1,18 @@
 class LocationData{
   int _idLocation;
   String _name;
-  int _recovered;
-  int _confirmed;
+  DateTime _dateLocationCovid;
   int _deceased;
+  int _confirmed;
   int _vaccinated;
   int _total;
+  int _recovered;
 
   LocationData();
 
 
-  LocationData.fromLocationData(this._idLocation, this._name, this._recovered, this._confirmed,
-      this._deceased,this._vaccinated,this._total);
+  LocationData.fromLocationData(this._idLocation, this._name, this._dateLocationCovid, this._deceased,this._confirmed,
+      this._vaccinated,this._total,this._recovered);
 
   int get deceased => _deceased;
 
@@ -53,5 +54,22 @@ class LocationData{
 
   set vaccinated(int value) {
     _vaccinated = value;
+  }
+
+  DateTime get dateLocationCovid => _dateLocationCovid;
+
+  set dateLocationCovid(DateTime value) {
+    _dateLocationCovid = value;
+  }
+  LocationData.fromJson(Map<String, dynamic> json) {
+    // idLocation= json['idLocation'];
+    idLocation=1;
+    name = json['nameLocationCovid'];
+    dateLocationCovid = DateTime.parse(json['dateLocationCovid']);
+    deceased = json['deathCases'];
+    confirmed = json['confirmedCases'];
+    vaccinated = json['vaccinated'];
+    total = json['cumulativeCases'];
+    recovered = json['recuperated'];
   }
 }

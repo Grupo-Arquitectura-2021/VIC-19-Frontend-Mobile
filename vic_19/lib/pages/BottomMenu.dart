@@ -26,7 +26,7 @@ class BottomMenu extends StatefulWidget {
 class _BottomMenuState extends State<BottomMenu> {
   static List<Widget> pages;
 
-
+  DateTime _datetable=DateTime.now();
 
   int _selectedIndex = 1;
   @override
@@ -43,7 +43,7 @@ class _BottomMenuState extends State<BottomMenu> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider<MapBloc>(create: (context)=>MapBloc(MapRepository())),
-          BlocProvider<TablesBloc>(create: (context)=>TablesBloc(TablesRepository())..add(TablesGetCitiesEvent())),
+          BlocProvider<TablesBloc>(create: (context)=>TablesBloc(TablesRepository())..add(TablesGetCitiesEvent("${_datetable.year}-${_datetable.month}-${_datetable.day}"))),
           BlocProvider<NewsBloc>(create: (context)=>NewsBloc(NewsRepository())..add(NewsGetEvent()))
         ],
     child: BlocBuilder<MapBloc,MapState>(
