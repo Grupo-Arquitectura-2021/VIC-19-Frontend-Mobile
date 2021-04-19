@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:vic_19/Model/News.dart';
 import 'package:vic_19/PaletteColor.dart';
+import 'package:vic_19/components/news/BottomSheet.dart';
 import 'package:vic_19/components/news/NewsSingleAlert.dart';
 
 class NewsCard extends StatelessWidget {
@@ -21,7 +22,8 @@ class NewsCard extends StatelessWidget {
 
         elevation: 0,
         onPressed: (){
-          _showMyDialog(context);
+          // _showMyDialog(context);
+          _showModalBottomSheet(context);
         },
         child: Container(
           width: _width,
@@ -78,4 +80,14 @@ class NewsCard extends StatelessWidget {
       },
     );
   }
+   _showModalBottomSheet(context){
+    var size=MediaQuery.of(context).size;
+    showModalBottomSheet(context: context,
+        shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(size.width*0.05),topLeft: Radius.circular(size.width*0.05))),
+        isScrollControlled: true,
+        builder: (BuildContext context){
+          return CardBottomSheet(size.width*0.05, size.height*0.8, _news, color3,color1);
+        }
+    );
+   }
 }

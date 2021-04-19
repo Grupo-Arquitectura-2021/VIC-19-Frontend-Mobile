@@ -4,12 +4,14 @@ class LocationData{
   int _recovered;
   int _confirmed;
   int _deceased;
+  int _vaccinated;
+  int _total;
 
   LocationData();
 
 
   LocationData.fromLocationData(this._idLocation, this._name, this._recovered, this._confirmed,
-      this._deceased);
+      this._deceased,this._vaccinated,this._total);
 
   int get deceased => _deceased;
 
@@ -39,5 +41,17 @@ class LocationData{
 
   set idLocation(int value) {
     _idLocation = value;
+  }
+
+  int get total => _total;
+
+  set total(int value) {
+    _total = value;
+  }
+
+  int get vaccinated => _vaccinated;
+
+  set vaccinated(int value) {
+    _vaccinated = value;
   }
 }

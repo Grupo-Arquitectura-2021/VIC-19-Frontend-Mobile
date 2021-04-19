@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
+import 'package:vic_19/components/tables/TableBottomSheet.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
 import '../../PaletteColor.dart';
@@ -37,9 +38,15 @@ class BasicTableWidget extends StatelessWidget {
                   rows:
                   _data.map((data){
                     return DataRow(
-                        selected: true,
+                        // selected: false,
+                        // onSelectChanged: (value){
+                        //   _showModalBottomSheet(context);
+                        // },
+
                         cells:[
-                          DataCell(Text(data.name,style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(GestureDetector(onTap: (){
+                            _showModalBottomSheet(context);},
+                              child: Text(data.name,style: TextStyle(color: color5,fontSize: 12),))),
                           DataCell(Text(data.confirmed.toString(),style: TextStyle(color: color5,fontSize: 12),)),
                           DataCell(Text(data.recovered.toString(),style: TextStyle(color: color5,fontSize: 12),)),
                           DataCell(Text(data.deceased.toString(),style: TextStyle(color: color5,fontSize: 12),)),
@@ -50,6 +57,17 @@ class BasicTableWidget extends StatelessWidget {
             ),
         )
       ),
+    );
+  }
+
+  _showModalBottomSheet(context){
+    var size=MediaQuery.of(context).size;
+    showModalBottomSheet(context: context,
+        shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(size.width*0.05),topLeft: Radius.circular(size.width*0.05))),
+        isScrollControlled: true,
+        builder: (BuildContext context){
+          return TableBottomSheet(20,1,"17-04-21",size.height*0.8, _data, color3,color1);
+        }
     );
   }
 }
