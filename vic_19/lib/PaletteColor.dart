@@ -11,3 +11,4 @@ var color6 = Color(0xFF247BA0);
 var color7=Colors.black;
 var color8= Color(0xff25272d);
 var color9 = Color(0xFF7BC950);
+var color10=Colors.white;
