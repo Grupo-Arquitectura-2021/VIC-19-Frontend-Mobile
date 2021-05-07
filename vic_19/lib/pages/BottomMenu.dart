@@ -13,6 +13,7 @@ import 'package:vic_19/components/bottomNav/MapButtonAnimated.dart';
 import 'package:vic_19/components/bottomNav/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/pages/NewsPage.dart';
 import 'package:vic_19/pages/TablesPage.dart';
 
@@ -65,7 +66,7 @@ class _BottomMenuState extends State<BottomMenu> {
                         items: [Icon(
                           Icons.table_chart_rounded,
                           size: size.height*0.04,
-                          color: _selectedIndex==0?color1:color5,
+                          color: state is MapGraphicsOkState?Colors.transparent:_selectedIndex==0?color1:color5,
                         ),
                           Icon(
                             Icons.public_rounded,
@@ -75,7 +76,7 @@ class _BottomMenuState extends State<BottomMenu> {
                           Icon(
                             Icons.list_alt_rounded,
                             size: size.height*0.04,
-                            color: _selectedIndex==2?color1:color5,
+                            color: state is MapGraphicsOkState?Colors.transparent:_selectedIndex==2?color1:color5,
                           ),
                         ],
                         onTap: (index){
@@ -109,7 +110,8 @@ class _BottomMenuState extends State<BottomMenu> {
                       duration: Duration(milliseconds: 300),
                       child: MapButtonAnimated(size.height*0.06,size.height*0.01)),
 
-                ):Container()
+                ):Container(),
+                state is MapLoadingState || state is MapInitialState?Loading(null,0.6,1):state is MapLoadingGraphicsState?Loading("Obteniendo Datos", 0.6,2):Container()
 
 
       ],

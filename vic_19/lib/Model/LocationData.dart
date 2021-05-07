@@ -21,11 +21,6 @@ class LocationData{
   }
 
 
-  DateTime get dateCovid => _dateCovid;
-
-  set dateCovid(DateTime value) {
-    _dateCovid = value;
-  }
 
   int get confirmed => _confirmed;
 
@@ -70,7 +65,13 @@ class LocationData{
     vaccinated=json["vaccinated"];
     total=json["cumulativeCases"];
     recovered=json["recuperated"];
-    dateCovid=DateTime.parse(json["dateLocationCovid"]);
+    _dateLocationCovid=DateTime.parse(json["dateLocationCovid"]);
 
+  }
+
+  DateTime get dateLocationCovid => _dateLocationCovid;
+
+  set dateLocationCovid(DateTime value) {
+    _dateLocationCovid = value;
   }
 }

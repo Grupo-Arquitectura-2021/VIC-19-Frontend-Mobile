@@ -73,6 +73,8 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
       });
     return BlocBuilder<MapBloc,MapState>(
         builder:(context,state){
+          print("estadotitle");
+          print(_loc);
           if(state is MapSelectLocationState){
             Location loc=state.props[0];
             if(loc!=null){
@@ -87,6 +89,7 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
             moveCard();
           }
           if(state is MaploadMarkersOkState){
+            print("entra");
             _type=state.props[2];
             Location loc=state.props[4];
             _loc=null;

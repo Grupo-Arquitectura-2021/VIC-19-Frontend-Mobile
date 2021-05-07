@@ -1,20 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/bloc/events/MapEvent.dart';
 
 import '../../PaletteColor.dart';
 
-class DateSeleccion extends StatefulWidget {
+
+class DateSeleccion extends StatelessWidget {
   DateTime _selectedDate;
   Color _color;
   DateSeleccion(this._selectedDate,this._color);
-  @override
-  _DateSeleccionState createState() => _DateSeleccionState(this._selectedDate,this._color);
-}
-
-class _DateSeleccionState extends State<DateSeleccion> {
-  DateTime _selectedDate;
-  Color _color;
-  _DateSeleccionState(this._selectedDate,this._color);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -31,10 +27,10 @@ class _DateSeleccionState extends State<DateSeleccion> {
         onPressed: (){
             _selecDate(context);
         },
-        child: Row(
+        child: _selectedDate==null?Container():Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("   ${_selectedDate.day}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
+                Text("${_selectedDate.day}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
                 Text("${_selectedDate.month}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
                 Text("${_selectedDate.year}",style: TextStyle(color: color1,fontSize: size.height*0.025),),
                 Icon(Icons.arrow_drop_down,color: color1,),
@@ -52,9 +48,8 @@ class _DateSeleccionState extends State<DateSeleccion> {
     }
     );
     if(date!=null && date!=_selectedDate){
-      setState(() {
-        _selectedDate=date;
-      });
+      BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent(date));
+
     }
   }
 }

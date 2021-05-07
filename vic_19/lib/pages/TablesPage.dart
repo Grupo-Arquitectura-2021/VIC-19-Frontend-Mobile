@@ -45,7 +45,7 @@ class _TablesPageState extends State<TablesPage> {
                   ),
                 )
                 ),
-          state is TablesLoadingState?Loading():Container()
+          state is TablesLoadingState?Loading(null,0.6,1):Container()
         ],
       );
     },

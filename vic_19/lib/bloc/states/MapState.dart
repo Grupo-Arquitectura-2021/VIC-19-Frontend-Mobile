@@ -11,7 +11,7 @@ class MapInitialState extends MapState{
   @override
   List<Object> get props=>[];
 }
-class MapLoadingMarkersState extends MapState{
+class MapLoadingState extends MapState{
   @override
   List<Object> get props=>[];
 }

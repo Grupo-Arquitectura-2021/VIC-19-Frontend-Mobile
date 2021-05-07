@@ -41,6 +41,7 @@ dependencies:
   fl_chart: ^0.12.0
   geojson: ^0.10.0
   flutter_easyrefresh: 2.1.8
+  intl:
 dev_dependencies:
   flutter_test:
     sdk: flutter

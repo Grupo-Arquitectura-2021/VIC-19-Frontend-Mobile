@@ -32,10 +32,11 @@ class SelectFilterEvent extends MapEvent{
   List<Object> get props => [_idFilter,_context];
 }
 class MapGraphicsEvent extends MapEvent{
-  MapGraphicsEvent();
+  DateTime _date;
+  MapGraphicsEvent(this._date);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [_date];
 }
 class MapMainMapEvent extends MapEvent{
 

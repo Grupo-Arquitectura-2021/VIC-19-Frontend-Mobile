@@ -80,7 +80,7 @@ class _NewsPageState extends State<NewsPage> {
                       )
                     ),
                   ),
-                state is NewsLoadingState?Loading():Container()
+                state is NewsLoadingState?Loading(null,0.6,1):Container()
               ],
             );
           }

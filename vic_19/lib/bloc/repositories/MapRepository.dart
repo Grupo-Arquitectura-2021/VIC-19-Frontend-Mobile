@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/PaletteColor.dart';
@@ -82,7 +83,7 @@ class MapRepository {
     type=0;
     _centerMap=LatLng(-16.2256651,-65.0455838);
     area=Set();
-    _locationData=LocationData.fromLocationData(1,"",0,0,0, 0, 0);
+    _locationData=LocationData.fromLocationData(1,"",null,0,0, 0, 0,0);
   }
 
   double get zoom => _zoom;
@@ -130,27 +131,6 @@ class MapRepository {
   }
 
   Future<void> getMunicipality(context)async {
-    /*await Future.delayed(Duration(seconds: 2));
-    List<Location> municipality=[Location(1,"La Paz",-16.48920066821045, -68.14260226389267,0),
-      Location(2,"El Alto",-16.499388273844996, -68.20500327360526,0),
-      Location(3,"Palca",-16.560703122358806, -67.9523169532082,0),
-      Location(4,"Mecapaca",-16.667937020029967, -68.01828549716129,0),
-      Location(5,"Achocalla",-16.574975300040517, -68.16925482192639,0),
-      Location(6,"Viacha",-16.649509323339043, -68.29731419297877,0),
-      Location(7,"Laja",-16.53326672290246, -68.38563860039085,0),
-      Location(8,"Pucarani",-16.399741665683763, -68.4767678555612,0),];
-    locations=municipality;
-    zoom=7.5 ;
-    type=2;
-    centerMap=LatLng(municipality[0].lat, municipality[0].lon);
-    markers=await addMarkers(municipality, Icons.location_on, color4,size*0.035,context);
-    List<Location> cities=List();
-    var url=ApiUrl + "city/location";
-    final response = await http.get(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
-        }
-    );*/
     List<Location> municipality=List();
     var url=ApiUrl + "municipality/location/${lastLocation.idLocation}";
     final response = await http.get(url,
@@ -216,21 +196,6 @@ class MapRepository {
 
   }
   Future<void> getCities(context)async {
-    /*await Future.delayed(Duration(seconds: 2));
-    List<Location> cities=[Location(1,"La Paz",-16.08354782509485, -68.06967003644534,0),
-      Location(2,"Oruro",-19.358081865080415, -67.95256482218397,0),
-      Location(3,"Potosi",-21.25680123243468, -67.12895296863799,0),
-      Location(4,"Cochabamba",-17.198275410380212, -65.05790819645144,0),
-      Location(5,"Chuquisaca",-19.79806384524433, -64.37655968335869,0),
-      Location(6,"Tarija",-21.60047499330198, -64.14467146894596,0),
-      Location(7,"Pando",-11.597779067996576, -66.78552003036548,0),
-      Location(8,"Beni",-14.001738953430753, -64.82698706230555,0),
-      Location(9,"Santa Cruz",-17.709650631754297, -61.05660654016773,0)];
-    locations=cities;
-    zoom=5.5;
-    type=1;
-    centerMap=LatLng(-16.2256651,-63.5455838);
-    markers=await addMarkers(cities, Icons.location_on, color4,size*0.035,context);*/
     List<Location> cities=List();
     var url=ApiUrl + "city/location";
     final response = await http.get(url,
@@ -258,16 +223,19 @@ class MapRepository {
     }
 
   }
-  Future<bool> getDataLocationCountry()async{
-    var url=ApiUrl + "country/${selectLocation.idLocation}/2021-04-19";
+  Future<bool> getDataLocationCountry(DateTime date)async{
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(date);
+    var url=ApiUrl + "country/${selectLocation.idLocation}/$formattedDate";
     final response = await http.get(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         }
     );
     var resJson = json.decode(response.body);
+    print("data");
+    print(resJson);
     LocationData country=LocationData.fromJson(resJson);
-    print("country");
     if(response.statusCode==200){
       locationData=country;
       return true;
@@ -278,12 +246,6 @@ class MapRepository {
 
   }
   Future<bool> getCountries(context)async {
-    /*List<Location> paises=[Location(1,"Bolivia",-17.4364322,-64.9581047,0),
-      Location(2,"Brasil",-11.6570027,-60.4375673,0),
-      Location(3,"Peru",-14.134636, -70.929510,0),
-      Location(4,"Chile",-23.664653, -69.362242,0),
-      Location(5,"Paraguay",-22.9604184,-59.6220523,0),
-      Location(6,"Argentina",-26.5972821,-63.175,0)];*/
     List<Location> paises=List();
     var url=ApiUrl + "country/location";
     final response = await http.get(url,
