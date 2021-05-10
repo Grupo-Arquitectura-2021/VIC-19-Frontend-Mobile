@@ -52,7 +52,7 @@ class CardBottomSheet extends StatelessWidget {
                   SizedBox(height: 10,),
                   GestureDetector(
                     onTap: (){
-                      print("url seleccionada");
+                      // print("url seleccionada");
                       // _launchInBrowser(_news.source);
                       openUrl(_news.source);
                     },

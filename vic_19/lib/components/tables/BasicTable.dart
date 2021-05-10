@@ -51,8 +51,7 @@ class BasicTableWidget extends StatelessWidget {
 
                         cells:[
                           DataCell(GestureDetector(onTap: (){
-                            print("Id seleccionada de ciudad");
-
+                            // print("Id seleccionada de ciudad");
                             // print(data.name);
                             // print(data.idLocation);
                             BlocProvider.of<TablesBloc>(context).add(TablesGetMunicipalityEvent(data.dateLocationCovid, data.name));},
