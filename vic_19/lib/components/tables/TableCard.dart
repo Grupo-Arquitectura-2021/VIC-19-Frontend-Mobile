@@ -42,6 +42,12 @@ class TableCard extends StatelessWidget {
                     SizedBox(width: _width*0.01,),
                     Text(_locationData.deceased.toString(),style: TextStyle(color: _color2,fontSize: _height*0.025),),
                   ],),
+                  SizedBox(height: _height*0.007,),
+                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                    Text("Acumulados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
+                    SizedBox(width: _width*0.01,),
+                    Text(_locationData.total.toString(),style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                  ],),
                   SizedBox(height: _height*0.015,),
                 ],
               ),

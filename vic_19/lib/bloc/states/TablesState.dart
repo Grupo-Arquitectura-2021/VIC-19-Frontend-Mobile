@@ -14,12 +14,13 @@ class TablesCitiesOkState extends TablesState{
 }
 class TablesMunicipalityOkState extends TablesState{
   List<LocationData> _data;
-
-
-  TablesMunicipalityOkState(this._data);
+  DateTime _dateTime;
+  // int _cityId;
+  String _cityName;
+  TablesMunicipalityOkState(this._data,this._dateTime,this._cityName);
 
   @override
-  List<Object> get props=>[_data];
+  List<Object> get props=>[_data,_dateTime,_cityName];
 }
 class TablesInitState extends TablesState{
 
