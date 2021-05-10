@@ -36,8 +36,8 @@ class _NewsPageState extends State<NewsPage> {
           builder: (context, state) {
             if(state is NewsListOkState){
               _news=state.props[0];
-              print("sdfhkasfhjksaf");
-              print(_news);
+              // print("sdfhkasfhjksaf");
+              // print(_news);
             }
             return Stack(
               children: [
