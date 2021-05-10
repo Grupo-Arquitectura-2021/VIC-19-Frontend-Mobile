@@ -16,14 +16,16 @@ class TablesPage extends StatefulWidget {
 class _TablesPageState extends State<TablesPage> {
   List<LocationData> _dataList=List();
   DateTime _selectedDate=DateTime.now();
+  LocationData _locationData;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: BlocBuilder<TablesBloc,TablesState>(
-    builder: (context,state){
+        body: BlocBuilder<TablesBloc,TablesState>(
+      builder: (context,state){
       if(state is TablesCitiesOkState){
         _dataList=state.props[0];
+        _selectedDate=state.props[1];
       }
       return Stack(
         children: [
@@ -34,7 +36,7 @@ class _TablesPageState extends State<TablesPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      DateSeleccion(_selectedDate,color3),
+                      DateSeleccion(_selectedDate,color3,2),
                       Container(
                         alignment: Alignment.center,
                         width: size.width,

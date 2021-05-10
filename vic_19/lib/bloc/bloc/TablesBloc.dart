@@ -19,7 +19,7 @@ class TablesBloc extends Bloc<TablesEvent,TablesState>{
      try{
        yield TablesLoadingState();
        await _tabR.getCities(event.props[0]);
-       yield TablesCitiesOkState(_tabR.data);
+       yield TablesCitiesOkState(_tabR.data,event.props[0]);
      }
      catch(e){
        print(e);

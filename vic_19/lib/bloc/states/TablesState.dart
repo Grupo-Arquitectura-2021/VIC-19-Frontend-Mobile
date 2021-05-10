@@ -6,11 +6,11 @@ abstract class TablesState extends Equatable{
 }
 class TablesCitiesOkState extends TablesState{
   List<LocationData> _data;
-
-  TablesCitiesOkState(this._data);
+  DateTime _dateTime;
+  TablesCitiesOkState(this._data,this._dateTime);
 
   @override
-  List<Object> get props=>[_data];
+  List<Object> get props=>[_data,_dateTime];
 }
 class TablesMunicipalityOkState extends TablesState{
   List<LocationData> _data;

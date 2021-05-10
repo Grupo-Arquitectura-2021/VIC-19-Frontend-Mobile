@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/bloc/bloc/TablesBloc.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
+import 'package:vic_19/bloc/events/TablesEvent.dart';
 
 import '../../PaletteColor.dart';
 
@@ -10,7 +12,8 @@ import '../../PaletteColor.dart';
 class DateSeleccion extends StatelessWidget {
   DateTime _selectedDate;
   Color _color;
-  DateSeleccion(this._selectedDate,this._color);
+  int _option;
+  DateSeleccion(this._selectedDate,this._color,this._option);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -47,9 +50,20 @@ class DateSeleccion extends StatelessWidget {
       return Theme(data: ThemeData.dark().copyWith(primaryColor: _color.withOpacity(0.8),accentColor: _color.withOpacity(0.8),textSelectionColor: color5,cursorColor: _color,colorScheme: ColorScheme.dark(primary: _color,background: color1,surface: _color.withOpacity(0.7)),), child: child);
     }
     );
-    if(date!=null && date!=_selectedDate){
-      BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent(date));
+    switch(_option){
+      case 1:
+        if(date!=null && date!=_selectedDate){
+          BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent(date));
+        }
+        break;
+      case 2:
+        if(date!=null && date!=_selectedDate){
+          // print("prueba llamda table");
+          BlocProvider.of<TablesBloc>(context).add(TablesGetCitiesEvent(date));
+        }
+        break;
 
     }
+
   }
 }

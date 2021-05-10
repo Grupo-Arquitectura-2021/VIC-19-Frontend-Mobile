@@ -16,7 +16,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
    if(event is GetCountriesEvent){
      try{
        yield MapLoadingState();
-       print(event.props[0]);
+       // print(event.props[0]);
        await _mapR.getCountries(event.props[0]);
        yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap,_mapR.lastLocation,_mapR.area);
      }

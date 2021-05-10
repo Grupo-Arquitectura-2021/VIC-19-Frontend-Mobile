@@ -101,9 +101,6 @@ class _MapPageState extends State<MapPage> {
             }
             if(state is MapGraphicsOkState){
                 dataLocation=state.props[0];
-
-
-
             }
             if(state is MapMainMapOkState){
               _scrollController.animateTo(_scrollController.position.minScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
@@ -241,7 +238,7 @@ class _MapPageState extends State<MapPage> {
                             children: [
                               // SizedBox(height: size.height*0.16,),
                               SizedBox(height: MediaQuery.of(context).padding.top+size.height*0.15,),
-                              DateSeleccion(dataLocation!=null?dataLocation.dateLocationCovid:DateTime.now(),color2),
+                              DateSeleccion(dataLocation!=null?dataLocation.dateLocationCovid:DateTime.now(),color2,1),
                               SizedBox(height: size.height*0.02,),
                               LineChartWidget(_data,size.width*0.9,size.height*0.3),
                               SizedBox(height: size.height*0.02,),
