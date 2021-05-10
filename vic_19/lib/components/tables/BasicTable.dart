@@ -58,9 +58,9 @@ class BasicTableWidget extends StatelessWidget {
                             BlocProvider.of<TablesBloc>(context).add(TablesGetMunicipalityEvent(data.dateLocationCovid, data.name));},
                             // _showModalBottomSheet(context,data.idLocation,"${data.dateLocationCovid.year}-${data.dateLocationCovid.month}-${data.dateLocationCovid.day}");},
                               child: Text(data.name,style: TextStyle(color: color5,fontSize: 12),))),
-                          DataCell(Text(data.confirmed.toString(),style: TextStyle(color: color5,fontSize: 12),)),
-                          DataCell(Text(data.recovered.toString(),style: TextStyle(color: color5,fontSize: 12),)),
-                          DataCell(Text(data.deceased.toString(),style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(Text(data.confirmed>0?data.confirmed.toString():"-",style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(Text(data.recovered>0?data.recovered.toString():"-",style: TextStyle(color: color5,fontSize: 12),)),
+                          DataCell(Text(data.deceased>0?data.deceased.toString():"-",style: TextStyle(color: color5,fontSize: 12),)),
                           DataCell(Text("${data.dateLocationCovid.year}-${data.dateLocationCovid.month}-${data.dateLocationCovid.day}",style: TextStyle(color: color5,fontSize: 12),)),
                         ]
                     );
