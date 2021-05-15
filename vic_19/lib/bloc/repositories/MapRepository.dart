@@ -171,16 +171,10 @@ class MapRepository {
       drugstoreList.add(newLocation);
     });
     print("Drugstores");
-    if(response.statusCode==200){
-      drugstores=drugstoreList;
-      zoom=6;
-      type=2;
-      centerMap=LatLng(drugstoreList[0].lat,drugstoreList[0].lon);
-      markers= await addMarkers(drugstores, Icons.local_pharmacy, color3, size*0.035, context);
-      return true;
-    }
-    else{
-      return false;
+    drugstores=drugstoreList;
+    if(filters[2]) {
+      markers.addAll(await addMarkers(
+          drugstores, Icons.local_pharmacy, color3, size * 0.035, context));
     }
   }
   Future<void> getHospital(context)async {
