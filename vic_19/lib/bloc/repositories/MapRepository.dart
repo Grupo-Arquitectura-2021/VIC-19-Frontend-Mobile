@@ -157,18 +157,31 @@ class MapRepository {
     }
 
   }
-  Future<void> getDrugsStore(context)async {
-    List<Location> drugStoreList=[Location(9,"Farmacia Por Ti",-16.48957542357021, -68.20142423123032,2),
-      Location(10,"Super Farmacia Virgen de Copacabana",-16.505852472111464, -68.16305325284088,2),
-      Location(11,"Farmacia Gran Chaco",-16.514967466129153, -68.21714865977809,2),
-      Location(12,"Farmacias Bolivia",-16.493570677055626, -68.13190995115573,2),
-      Location(13,"Farmacias Bolivia",-16.510457299578828, -68.12247191142971,2),
-      Location(14,"Farmacias Bolivia",-16.479017386826108, -68.1212058323144,2),
-      Location(15,"FarmaCorp",-16.53826239478578, -68.06634735456959,2),];
-    drugstores=drugStoreList;
-    if(filters[2]){
-    markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,size*0.035,context));}
-
+  Future<void> getDrugstore(context)async {
+    List<Location> drugstoreList=List();
+    var url = ApiUrl + "drugstore/location/city/${lastLocation.idLocation}";
+    final response = await http.get(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+      drugstoreList.add(newLocation);
+    });
+    print("Drugstores");
+    if(response.statusCode==200){
+      drugstores=drugstoreList;
+      zoom=6;
+      type=2;
+      centerMap=LatLng(drugstoreList[0].lat,drugstoreList[0].lon);
+      markers= await addMarkers(drugstores, Icons.local_pharmacy, color3, size*0.035, context);
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   Future<void> getHospital(context)async {
     List<Location> hospitalList=[Location(16,"Hospital de El Alto Sur",-16.525026864458482, -68.22341050395703,1),
@@ -372,7 +385,7 @@ class MapRepository {
           }
           await getMunicipality(context);
           await getHospital(context);
-          await getDrugsStore(context);
+          await getDrugstore(context);
           await getShelters(context);
           break;
       }
