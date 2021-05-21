@@ -17,7 +17,7 @@ class TablesRepository {
   }
 
   Future<void> getCities(String dateCity)async{
-    String url=ApiUrl+"city/"+dateCity;
+    String url=ApiUrl+"city?date="+dateCity;
     var res = await http.get(url, //ip for virtualized devices
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

@@ -15,22 +15,22 @@ class NewsRepository {
    }
   Future <void> getNews()async{
       // print(userId.toString());
-      String url=ApiUrl+"news/list";
+      String url=ApiUrl+"news?n=10&i=0";
       // List<News> newsList;
       var res = await http.get(url, //ip for virtualized devices
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
-      var newsList2 = json.decode(utf8.decode(res.bodyBytes));
-
-      var newsList3=List<News>();
-
-      for(var n in newsList2){
-        newsList3.add(News.fromJson(n));
-      }
-      print("prueba repository");
-      print(newsList3[0].title);
+      print("newsbody");
+      print(res.body);
+      print(res.body);
       if(res.statusCode == 200){
+        var body = json.decode(utf8.decode(res.bodyBytes));
+        var bodyList=body["newsList"];
+        var newsList3=List<News>();
+        for(var n in bodyList){
+          newsList3.add(News.fromJson(n));
+        }
         news=newsList3;
       }
     }

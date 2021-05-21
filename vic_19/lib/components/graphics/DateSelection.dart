@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,16 +10,20 @@ import '../../PaletteColor.dart';
 
 class DateSeleccion extends StatelessWidget {
   DateTime _selectedDate;
+  Color _backColor;
   Color _color;
-  DateSeleccion(this._selectedDate,this._color);
+  double _width;
+  double _height;
+  DateSeleccion(this._selectedDate,this._color,this._backColor,this._width,this._height);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal:size.width*0.25,),
+      width: _width,
+      height: _height,
       child: MaterialButton(
-        height: size.height*0.04,
-        color: _color.withOpacity(0.7),
+        elevation: 0,
+        color: _backColor,
 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -27,15 +32,21 @@ class DateSeleccion extends StatelessWidget {
         onPressed: (){
             _selecDate(context);
         },
-        child: _selectedDate==null?Container():Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("${_selectedDate.day}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
-                Text("${_selectedDate.month}/",style: TextStyle(color: color1,fontSize: size.height*0.025),),
-                Text("${_selectedDate.year}",style: TextStyle(color: color1,fontSize: size.height*0.025),),
-                Icon(Icons.arrow_drop_down,color: color1,),
-              ],
-            ),
+        child: _selectedDate==null?Container():Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: _height*0.55,
+                width: _width*0.8,
+                child:Center(
+                  child: AutoSizeText("${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}",style: TextStyle(color: _color,fontSize: size.height*0.025),),
+                )
+              ),
+              Icon(Icons.arrow_drop_down,color:_color,size: _width*0.1,),
+            ],
+          ),
+        )
       ),
     );
   }

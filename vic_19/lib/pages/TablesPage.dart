@@ -34,7 +34,7 @@ class _TablesPageState extends State<TablesPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      DateSeleccion(_selectedDate,color3),
+                      DateSeleccion(_selectedDate,color1,color3,size.width*0.5,size.height*0.05),
                       Container(
                         alignment: Alignment.center,
                         width: size.width,

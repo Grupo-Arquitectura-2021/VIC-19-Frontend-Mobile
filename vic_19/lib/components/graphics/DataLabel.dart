@@ -8,42 +8,38 @@ class DataLabel extends StatelessWidget {
   String _label;
   int _data;
   Color _color;
-  double _widthP;
-  double _heightP;
-  DataLabel(this._width, this._height,this._label,this._data,this._color){
-    _widthP=_width*0.8;
-    _heightP=_height-_width*0.2;
-  }
+  DataLabel(this._width, this._height,this._label,this._data,this._color);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: _width,
       height: _height,
-      decoration: BoxDecoration(
-
-        color: color8.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(_width*0.05)
-      ),
-      padding: EdgeInsets.all(_width*0.1),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(
-            width: _widthP,
-            height: _heightP*0.32,
-            child:
-            AutoSizeText(_label,textAlign: TextAlign.center,style: TextStyle(color: _color,fontSize: 50),maxLines: 1,minFontSize: 1,),
+          Row(
+            children: [
+              Icon(Icons.show_chart_outlined,size: _width*0.1,color: _color,),
+              SizedBox(width: _width*0.05,),
+              Container(
+                width: _width*0.5,
+                height: _height,
+                alignment: Alignment.centerLeft,
+                child:
+                    AutoSizeText(_label,textAlign: TextAlign.left,style: TextStyle(color: _color,fontSize: 14),maxLines: 1,minFontSize: 1,)
+              ),
+            ],
           ),
           SizedBox(
-            height: _heightP*0.1,
-
-          ),
-          SizedBox(
-              width: _widthP,
-              height: _heightP*0.58,
+              width: _width*0.35,
+              height: _height,
             child:
-            AutoSizeText(_data==null? "-":_data.toString(),textAlign: TextAlign.center,style: TextStyle(height: 1,color: color5,fontSize: 50,fontWeight: FontWeight.w200),maxLines: 1,minFontSize: 1,)
-          )
+              Center(
+                child: AutoSizeText(_data==null? "-":_data.toString(),textAlign: TextAlign.right,style: TextStyle(color: color5,fontSize: 20,fontWeight: FontWeight.w300),maxLines: 1,minFontSize: 1,)
+                ,
+              )
+             )
         ],
       ),
     );

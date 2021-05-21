@@ -13,8 +13,8 @@ class LineTitles{
           reservedSize: 10,
           margin: 10,
           getTextStyles: (value)=> TextStyle(
-            fontWeight: FontWeight.bold,
-            color: color5,
+            fontWeight: FontWeight.w300,
+              color: color5.withOpacity(0.7),
             fontSize: size
           ),
           getTitles: (value){
@@ -43,11 +43,10 @@ class LineTitles{
         ),
       leftTitles: SideTitles(
         showTitles: true,
-          // reservedSize: 10,
           margin: 10,
           getTextStyles: (value)=> TextStyle(
-              color: color5,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w300,
+              color: color5.withOpacity(0.7),
               fontSize: size
           ),
           getTitles: (value){

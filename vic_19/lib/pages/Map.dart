@@ -229,23 +229,15 @@ class _MapPageState extends State<MapPage> {
                           width:size.width,
 
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                color8,color1
-                              ],
-                              stops: [0,0],
-                              begin: Alignment.topCenter, end:  Alignment.bottomCenter
-                            )
+                            color: color8
                           ),
                           child: Column(
                             children: [
                               // SizedBox(height: size.height*0.16,),
-                              SizedBox(height: MediaQuery.of(context).padding.top+size.height*0.15,),
-                              DateSeleccion(dataLocation!=null?dataLocation.dateLocationCovid:DateTime.now(),color2),
-                              SizedBox(height: size.height*0.02,),
-                              LineChartWidget(_data,size.width*0.9,size.height*0.3),
-                              SizedBox(height: size.height*0.02,),
-                              Column(
+                              SizedBox(height: MediaQuery.of(context).padding.top,),
+                              SizedBox(height: size.height*0.13,),
+                              ChartWidget(dataLocation!=null?dataLocation.dateLocationCovid:DateTime.now(),_data,size.width,size.height*0.87-MediaQuery.of(context).padding.top,dataLocation),
+                              /*Column(
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -263,8 +255,8 @@ class _MapPageState extends State<MapPage> {
                                     DataLabel(size.width*0.3, size.height*0.09, "VACUNADOS", dataLocation!=null?dataLocation.vaccinated:0,color5),
                                   ],
                                 ),],
-                              ),
-                              SizedBox(height: size.height*0.01,),
+                              ),*/
+                              /*SizedBox(height: size.height*0.01,),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: size.width*0.05)
                                 ,child: Divider(
@@ -291,7 +283,7 @@ class _MapPageState extends State<MapPage> {
                                       child: DownloadButton(Colors.red, "PDF",size.width*0.3,size.height*0.05)
                                   ),
                                 ],
-                              )
+                              )*/
 
 
                             ]
@@ -309,13 +301,15 @@ class _MapPageState extends State<MapPage> {
 
                           duration: Duration(milliseconds: 300),
 
-                          child:Container(
+                          child:AnimatedContainer(
                               width: size.width,
                               height: size.height*0.09,
+
+                              duration: Duration(milliseconds: 300),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  TitleMap(size.width*0.8,size.height*0.09),
+                                  TitleMap(size.width*0.8,size.height*0.09,color5,color1),
                                 ],
                               )
                           )

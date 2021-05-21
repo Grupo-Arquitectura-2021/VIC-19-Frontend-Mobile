@@ -8,9 +8,11 @@ import 'package:vic_19/bloc/states/MapState.dart';
 class TitleMap extends StatefulWidget {
   double _width;
   double _height;
-  TitleMap(this._width, this._height);
+  Color _backColor;
+  Color _color;
+  TitleMap(this._width, this._height,this._backColor,this._color);
   @override
-  _TitleMapState createState() => _TitleMapState(this._width, this._height);
+  _TitleMapState createState() => _TitleMapState(this._width, this._height,_backColor,_color);
 }
 
 class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixin {
@@ -19,8 +21,10 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
   String _subTitle="";
   Location _loc;
   int _type=0;
+  Color _backColor;
+  Color _color;
   AnimationController controller;
-  _TitleMapState(this._width, this._height);
+  _TitleMapState(this._width, this._height,this._backColor,this._color);
 
   @override
   void initState() {
@@ -112,7 +116,7 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
                     height: _height,
                     padding: EdgeInsets.symmetric(vertical: _height*0.1,horizontal: _width*0.05),
                     decoration: BoxDecoration(
-                        color: color5.withOpacity(0.9),
+                        color: _backColor.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(_height*0.1)
                     ),
                     child: Column(
@@ -144,9 +148,9 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
                               TextSpan(
 
                                 children: [
-                                  TextSpan(text:_loc!=null?"${getTitleType(_type-1,0)}: ":"",style: TextStyle(color: color1,fontSize: 50,fontWeight: FontWeight.w500))
+                                  TextSpan(text:_loc!=null?"${getTitleType(_type-1,0)}: ":"",style: TextStyle(color: _color,fontSize: 50,fontWeight: FontWeight.w500))
                                   ,
-                                  TextSpan(text:_loc!=null&&_subTitle!=""?_subTitle:"",style: TextStyle(color: color1,fontSize: 50))
+                                  TextSpan(text:_loc!=null&&_subTitle!=""?_subTitle:"",style: TextStyle(color: _color,fontSize: 50))
                                 ],
 
                               ),
@@ -168,7 +172,7 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
                             ),
                             maxLines: 1,maxFontSize: 50,minFontSize: 1,
                             textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 50,color: color1.withOpacity(0.7)),),)
+                          style: TextStyle(fontSize: 50,color: _color.withOpacity(0.7)),),)
                       ],
                     )
                 ),

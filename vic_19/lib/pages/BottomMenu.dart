@@ -111,7 +111,7 @@ class _BottomMenuState extends State<BottomMenu> {
                       child: MapButtonAnimated(size.height*0.06,size.height*0.01)),
 
                 ):Container(),
-                state is MapLoadingState || state is MapInitialState?Loading(null,0.6,1):state is MapLoadingGraphicsState?Loading("Obteniendo Datos", 0.6,2):Container()
+              state is MapLoadingState || state is MapInitialState?Loading(null,0.6,1):state is MapLoadingGraphicsState?Loading("Obteniendo Datos", 0.6,2):Container()
 
 
       ],

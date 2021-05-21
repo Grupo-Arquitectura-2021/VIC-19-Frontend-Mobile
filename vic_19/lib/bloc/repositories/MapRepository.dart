@@ -138,24 +138,29 @@ class MapRepository {
           'Content-Type': 'application/json; charset=UTF-8'
         }
     );
-    List resJson = json.decode(utf8.decode(response.bodyBytes));
-    resJson.forEach((element) {
-      Location newLocation=Location.fromJson(element, 0);
-      municipality.add(newLocation);
-    });
-    print("municipality");
     if(response.statusCode==200){
-      locations=municipality;
-      zoom=6;
-      type=2;
-      centerMap=LatLng(municipality[0].lat,municipality[0].lon);
-      markers=await addMarkers(locations, Icons.location_on, color4,size*0.035,context);
-      return true;
+
+      List resJson = json.decode(utf8.decode(response.bodyBytes));
+      resJson.forEach((element) {
+        Location newLocation=Location.fromJson(element, 0);
+        municipality.add(newLocation);
+      });
+      if(response.statusCode==200){
+        locations=municipality;
+        zoom=6;
+        type=2;
+        centerMap=LatLng(municipality[0].lat,municipality[0].lon);
+        markers=await addMarkers(locations, Icons.location_on, color4,size*0.035,context);
+        return true;
+      }
+      else{
+        return false;
+      }
+
     }
     else{
       return false;
     }
-
   }
   Future<void> getDrugsStore(context)async {
     List<Location> drugStoreList=[Location(9,"Farmacia Por Ti",-16.48957542357021, -68.20142423123032,2),
@@ -226,7 +231,7 @@ class MapRepository {
   Future<bool> getDataLocationCountry(DateTime date)async{
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formattedDate = formatter.format(date);
-    var url=ApiUrl + "country/${selectLocation.idLocation}/$formattedDate";
+    var url=ApiUrl + "country/${selectLocation.idLocation}?date=$formattedDate";
     final response = await http.get(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
@@ -253,13 +258,12 @@ class MapRepository {
           'Content-Type': 'application/json; charset=UTF-8'
         }
     );
-    List resJson = json.decode(utf8.decode(response.bodyBytes));
-    resJson.forEach((element) {
-      Location newLocation=Location.fromJson(element, 0);
-      paises.add(newLocation);
-    });
-    print("country");
     if(response.statusCode==200){
+      List resJson = json.decode(utf8.decode(response.bodyBytes));
+      resJson.forEach((element) {
+        Location newLocation=Location.fromJson(element, 0);
+        paises.add(newLocation);
+      });
       print(paises[0]);
       locations=paises;
       zoom=3.5;
@@ -278,7 +282,7 @@ class MapRepository {
     String tit="";
     switch(type){
       case 0:
-        tit="Paisdddddddddddddd\n";
+        tit="Pais\n";
         break;
       case 1:
         tit="Departamento\n";
