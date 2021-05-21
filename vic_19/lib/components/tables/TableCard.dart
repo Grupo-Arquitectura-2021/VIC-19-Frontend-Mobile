@@ -28,19 +28,25 @@ class TableCard extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center,children: [
                     Text("Confirmados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
                     SizedBox(width: _width*0.01,),
-                    Text(_locationData.confirmed.toString(),style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    Text(_locationData.confirmed>0?_locationData.confirmed.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
                   ],),
                   SizedBox(height: _height*0.007,),
                   Row(mainAxisAlignment: MainAxisAlignment.center,children: [
                     Text("Recuperados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
                     SizedBox(width: _width*0.01,),
-                    Text(_locationData.recovered.toString(),style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    Text(_locationData.recovered>0?_locationData.recovered.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
                   ],),
                   SizedBox(height: _height*0.007,),
                   Row(mainAxisAlignment: MainAxisAlignment.center,children: [
                     Text("Fallecidos:",style: TextStyle(color: _color,fontSize: _height*0.025),),
                     SizedBox(width: _width*0.01,),
-                    Text(_locationData.deceased.toString(),style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    Text(_locationData.deceased>0?_locationData.deceased.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                  ],),
+                  SizedBox(height: _height*0.007,),
+                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                    Text("Acumulados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
+                    SizedBox(width: _width*0.01,),
+                    Text(_locationData.total>0?_locationData.total.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
                   ],),
                   SizedBox(height: _height*0.015,),
                 ],

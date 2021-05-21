@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class TablesRepository {
   List<LocationData> _data;
-  LocationData _selectData;
+  List<LocationData> _selectData;
 
 
   List<LocationData> get data => _data;
@@ -16,14 +16,17 @@ class TablesRepository {
     _data = value;
   }
 
-  Future<void> getCities(String dateCity)async{
-    String url=ApiUrl+"city?date="+dateCity;
+
+
+  Future<void> getCities(DateTime dateCity)async{
+    String url=ApiUrl+"city/"+"${dateCity.year}-${dateCity.month}-${dateCity.day}";
     var res = await http.get(url, //ip for virtualized devices
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         });
     var citiesList2 = json.decode(utf8.decode(res.bodyBytes));
-
+    // print("datos repsitorio");
+    // print(res.body);
     var citiesList3=List<LocationData>();
 
     for(var n in citiesList2){
@@ -33,6 +36,29 @@ class TablesRepository {
     print(citiesList3[0].total);
     if(res.statusCode == 200){
       data=citiesList3;
+    }
+  }
+
+  Future<void> getMunicipality(DateTime dateMunicipality, String cityName) async{
+    String url=ApiUrl+"city/name/"+cityName+"/municipality/${dateMunicipality.year}-${dateMunicipality.month}-${dateMunicipality.day}";
+    var res = await http.get(url, //ip for virtualized devices
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+    var municipalityList2 = json.decode(utf8.decode(res.bodyBytes));
+
+    var municipalityList3=List<LocationData>();
+    for(var n in municipalityList2){
+      municipalityList3.add(LocationData.fromJson(n));
+    }
+    // municipalityList3=LocationData.fromJson(municipalityList2);
+    // for(var n in municipalityList2){
+    //   citiesList3.add(LocationData.fromJson(n));
+    // }
+    print("prueba repository cities");
+    print(municipalityList3[0].total);
+    if(res.statusCode == 200){
+      selectData=municipalityList3;
     }
   }
 
@@ -67,9 +93,9 @@ class TablesRepository {
 
 
 
-  LocationData get selectData => _selectData;
+  List<LocationData> get selectData => _selectData;
 
-  set selectData(LocationData value) {
+  set selectData(List<LocationData> value) {
     _selectData = value;
   }
 }

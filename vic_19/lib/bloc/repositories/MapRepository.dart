@@ -162,32 +162,85 @@ class MapRepository {
       return false;
     }
   }
-  Future<void> getDrugsStore(context)async {
-    List<Location> drugStoreList=[Location(9,"Farmacia Por Ti",-16.48957542357021, -68.20142423123032,2),
-      Location(10,"Super Farmacia Virgen de Copacabana",-16.505852472111464, -68.16305325284088,2),
-      Location(11,"Farmacia Gran Chaco",-16.514967466129153, -68.21714865977809,2),
-      Location(12,"Farmacias Bolivia",-16.493570677055626, -68.13190995115573,2),
-      Location(13,"Farmacias Bolivia",-16.510457299578828, -68.12247191142971,2),
-      Location(14,"Farmacias Bolivia",-16.479017386826108, -68.1212058323144,2),
-      Location(15,"FarmaCorp",-16.53826239478578, -68.06634735456959,2),];
-    drugstores=drugStoreList;
-    if(filters[2]){
-    markers.addAll(await addMarkers(drugstores, Icons.local_pharmacy, color3,size*0.035,context));}
-
+  Future<void> getDrugstore(context)async {
+    List<Location> drugstoreList=List();
+    var url = ApiUrl + "drugstore/location/city/${lastLocation.idLocation}";
+    final response = await http.get(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+      drugstoreList.add(newLocation);
+    });
+    print("Drugstores");
+    drugstores=drugstoreList;
+    if(filters[2]) {
+      markers.addAll(await addMarkers(
+          drugstores, Icons.local_pharmacy, color3, size * 0.035, context));
+    }
   }
   Future<void> getHospital(context)async {
-    List<Location> hospitalList=[Location(16,"Hospital de El Alto Sur",-16.525026864458482, -68.22341050395703,1),
-      Location(17,"Hospital del norte",-16.484208946561754, -68.2055577224549,1),
-      Location(18,"Hospital Arco iris",-16.48409176143849, -68.12036953146652,1),
-      Location(19,"Hospital Pucarani",-16.401320297987237, -68.47573248966475,1),
-      Location(20,"Hospital de Laja",-16.53169992701307, -68.38578191597261,1),
-      Location(21,"Hospital obrero",-16.499186356840237, -68.11818314496122,1),
-      Location(22,"Hospital Boliviano Holandes",-16.52142904552383, -68.15408302126085,1),
-      Location(23,"Hospital Cota Cota",-16.53976095296443, -68.06531729080666,1),];
+    /*
+    List<Location> hospitalList=List();
+    var url=ApiUrl + "hospital/locationsByCity/${lastLocation.idLocation}";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+
+      print(newLocation);
+      print("ggg");
+
+      hospitalList.add(newLocation);
+    });
+    print("hospital");
+    print(hospitalList[0].lat);
+    print(hospitalList[0].lon);
+    print(hospitalList[0].idLocation);
+    print(hospitalList[0].name);
+    print(hospitalList[0].type);
+
+    if(response.statusCode==200){
+      locations=hospitalList;
+      zoom=6;
+      type=1;
+      centerMap=LatLng(hospitalList[0].lat,hospitalList[0].lon);
+      hospital=hospitalList;
+      if(filters[1]){
+        markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,size*0.035,context));
+      }
+      return true;
+
+    }
+    else{
+      return false;
+    }
+
+*/
+    List<Location> hospitalList=List();
+    var url=ApiUrl + "hospital/locationsByCity/${lastLocation.idLocation}";
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    List resJson = json.decode(utf8.decode(response.bodyBytes));
+    resJson.forEach((element) {
+      Location newLocation=Location.fromJson(element, 0);
+      hospitalList.add(newLocation);
+    });
     hospital=hospitalList;
     if(filters[1]){
     markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,size*0.035,context));
     }
+
 
   }
   Future<void> getShelters(context)async {
@@ -376,7 +429,7 @@ class MapRepository {
           }
           await getMunicipality(context);
           await getHospital(context);
-          await getDrugsStore(context);
+          await getDrugstore(context);
           await getShelters(context);
           break;
       }

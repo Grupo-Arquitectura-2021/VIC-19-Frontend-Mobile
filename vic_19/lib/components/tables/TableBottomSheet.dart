@@ -7,14 +7,14 @@ import 'package:vic_19/util/MyBehavior.dart';
 import '../../PaletteColor.dart';
 class TableBottomSheet extends StatelessWidget {
   double _radius;
-  int _departmentId;
+  String _departmentName;
   String _date;
   double _height;
   List<LocationData> _locationData;
   Color _color;
   Color _background;
 
-  TableBottomSheet(this._radius, this._departmentId,this._date,this._height, this._locationData, this._color,
+  TableBottomSheet(this._radius, this._departmentName,this._date,this._height, this._locationData, this._color,
       this._background);
 
   @override

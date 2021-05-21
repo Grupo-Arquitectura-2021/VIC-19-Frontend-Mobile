@@ -7,7 +7,7 @@ import 'package:vic_19/Model/LocationData.dart';
 abstract class TablesEvent extends Equatable{
 }
 class TablesGetCitiesEvent extends TablesEvent{
-  String _dateCities;
+  DateTime _dateCities;
   TablesGetCitiesEvent(this._dateCities);
   // TablesGetCitiesEvent();
   @override
@@ -16,11 +16,13 @@ class TablesGetCitiesEvent extends TablesEvent{
 }
 
 class TablesGetMunicipalityEvent extends TablesEvent{
-  LocationData _location;
-
-  TablesGetMunicipalityEvent(this._location);
-
+  // LocationData _location;
+  // int _locationId;
+  String _name;
+  DateTime _dateTime;
+  // TablesGetMunicipalityEvent(this._location);
+  TablesGetMunicipalityEvent(this._dateTime,this._name);
   @override
-  List<Object> get props => [_location];
+  List<Object> get props => [_dateTime,_name];
 
 }

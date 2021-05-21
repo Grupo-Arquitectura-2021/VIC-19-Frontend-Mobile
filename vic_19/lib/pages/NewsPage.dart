@@ -36,8 +36,8 @@ class _NewsPageState extends State<NewsPage> {
           builder: (context, state) {
             if(state is NewsListOkState){
               _news=state.props[0];
-              print("sdfhkasfhjksaf");
-              print(_news);
+              // print("sdfhkasfhjksaf");
+              // print(_news);
             }
             return Stack(
               children: [
@@ -88,19 +88,19 @@ class _NewsPageState extends State<NewsPage> {
       );
   }
 
-  Widget SpecificNews(int idNews){
-    return AlertDialog(
-      title: Text("News",style: TextStyle(color: color5,fontSize: 20),),
-      content: SingleChildScrollView(
-        child: Text("loremsafjlafjlasajfldsjalfjlsajfljakfl;jasl;fjklasjfl;asjkfkshafklhajsfkljhaskfhklshfksahfklhjaskd"
-            "fhaksfhkasfksahfklhsajfhkashfkhsakfhaskjfhkashdfkahsdkfhkaslhdfkashfklhaskdfjhksadjfhkasjhdfjklahfdklsahfkljhsk"
-            "lfjhkalshdfkashdfklsahfklsahdfklhsdfklhsdjkhfksadhfjkjsahdfjkashfkahskljfhasklfhklsahfklashfjkdlshaklfhjjkslajhfjklsahdf"),
-      ),
-      actions: <Widget>[
-        TextButton(onPressed:(){Navigator.of(context).pop();} , child: Text("Aceptar")),
-      ],
-    );
-  }
+  // Widget SpecificNews(int idNews){
+  //   return AlertDialog(
+  //     title: Text("News",style: TextStyle(color: color5,fontSize: 20),),
+  //     content: SingleChildScrollView(
+  //       child: Text("loremsafjlafjlasajfldsjalfjlsajfljakfl;jasl;fjklasjfl;asjkfkshafklhajsfkljhaskfhklshfksahfklhjaskd"
+  //           "fhaksfhkasfksahfklhsajfhkashfkhsakfhaskjfhkashdfkahsdkfhkaslhdfkashfklhaskdfjhksadjfhkasjhdfjklahfdklsahfkljhsk"
+  //           "lfjhkalshdfkashdfklsahfklsahdfklhsdfklhsdjkhfksadhfjkjsahdfjkashfkahskljfhasklfhklsahfklashfjkdlshaklfhjjkslajhfjklsahdf"),
+  //     ),
+  //     actions: <Widget>[
+  //       TextButton(onPressed:(){Navigator.of(context).pop();} , child: Text("Aceptar")),
+  //     ],
+  //   );
+  // }
 }
 
 
