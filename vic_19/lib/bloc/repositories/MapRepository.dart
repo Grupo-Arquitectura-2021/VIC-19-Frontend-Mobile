@@ -29,6 +29,7 @@ class MapRepository {
   LatLng _centerMap;
   double _size;
   LocationData _locationData;
+  List<bool> _activeDataGraphic;
 
 
   LocationData get locationData => _locationData;
@@ -84,6 +85,7 @@ class MapRepository {
     _centerMap=LatLng(-16.2256651,-65.0455838);
     area=Set();
     _locationData=LocationData.fromLocationData(1,"",null,0,0, 0, 0,0);
+    _activeDataGraphic=[true,false,false,false,false];
   }
 
   double get zoom => _zoom;
@@ -128,6 +130,13 @@ class MapRepository {
 
   set lastLocation(Location value) {
     _lastLocation = value;
+  }
+
+
+  List<bool> get activeDataGraphic => _activeDataGraphic;
+
+  set activeDataGraphic(List<bool> value) {
+    _activeDataGraphic = value;
   }
 
   Future<void> getMunicipality(context)async {
@@ -181,6 +190,9 @@ class MapRepository {
       markers.addAll(await addMarkers(
           drugstores, Icons.local_pharmacy, color3, size * 0.035, context));
     }
+  }
+  changeActiveDataGraphic(int index){
+    activeDataGraphic[index]=!activeDataGraphic[index];
   }
   Future<void> getHospital(context)async {
     /*

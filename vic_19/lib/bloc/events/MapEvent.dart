@@ -50,3 +50,11 @@ class MapExpandEvent extends MapEvent{
   @override
   List<Object> get props => [_context,_type];
 }
+class ChangeActiveDataGraphicEvent extends MapEvent{
+  final int _index;
+
+  ChangeActiveDataGraphicEvent(this._index);
+  @override
+  List<Object> get props => [_index];
+
+}

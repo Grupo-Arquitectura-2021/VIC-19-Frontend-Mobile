@@ -233,57 +233,10 @@ class _MapPageState extends State<MapPage> {
                           ),
                           child: Column(
                             children: [
-                              // SizedBox(height: size.height*0.16,),
                               SizedBox(height: MediaQuery.of(context).padding.top,),
                               SizedBox(height: size.height*0.13,),
                               ChartWidget(dataLocation!=null?dataLocation.dateLocationCovid:DateTime.now(),_data,size.width,size.height*0.87-MediaQuery.of(context).padding.top,dataLocation),
-                              /*Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      DataLabel(size.width*0.3, size.height*0.09, "CONFIRMADOS",dataLocation!=null?dataLocation.confirmed:0,color2),
-                                      DataLabel(size.width*0.3, size.height*0.09, "RECUPERADOS", dataLocation!=null?dataLocation.recovered:0,color3),
-                                      DataLabel(size.width*0.3, size.height*0.09, "FALLECIDOS",dataLocation!=null?dataLocation.deceased:0,color4)
-                                    ],
-                                  ),
-                                  SizedBox(height: size.height*0.01,)
-                                  ,Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    DataLabel(size.width*0.3, size.height*0.09, "TOTAL",dataLocation!=null?dataLocation.total:0,color6),
-                                    DataLabel(size.width*0.3, size.height*0.09, "VACUNADOS", dataLocation!=null?dataLocation.vaccinated:0,color5),
-                                  ],
-                                ),],
-                              ),*/
-                              /*SizedBox(height: size.height*0.01,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: size.width*0.05)
-                                ,child: Divider(
 
-                                color: color2.withOpacity(0.5),
-
-                              ),),
-                              SizedBox(height: size.height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-
-                                  GestureDetector(
-                                      onTap: (){
-
-                                      },
-                                      child: DownloadButton(Colors.lightGreen, "EXCEL",size.width*0.3,size.height*0.05)
-                                  ),
-                                  SizedBox(height: size.height*0.012,),
-                                  GestureDetector(
-                                      onTap: (){
-
-                                      },
-                                      child: DownloadButton(Colors.red, "PDF",size.width*0.3,size.height*0.05)
-                                  ),
-                                ],
-                              )*/
 
 
                             ]

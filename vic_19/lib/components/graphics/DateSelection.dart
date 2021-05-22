@@ -14,7 +14,8 @@ class DateSeleccion extends StatelessWidget {
   Color _color;
   double _width;
   double _height;
-  DateSeleccion(this._selectedDate,this._color,this._backColor,this._width,this._height);
+  bool _outlined;
+  DateSeleccion(this._selectedDate,this._color,this._backColor,this._width,this._height,this._outlined);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -23,10 +24,11 @@ class DateSeleccion extends StatelessWidget {
       height: _height,
       child: MaterialButton(
         elevation: 0,
-        color: _backColor,
+        color: !_outlined?_backColor:Colors.transparent,
 
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(color: _outlined?_backColor:Colors.transparent)
         ),
         padding: EdgeInsets.all(0),
         onPressed: (){
@@ -55,7 +57,7 @@ class DateSeleccion extends StatelessWidget {
     DateTime date;
     date=await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(2019), lastDate: DateTime(2222),helpText: "Seleccione una fecha",fieldLabelText: "Fecha",fieldHintText: "Mes/Dia/Año",errorInvalidText: "",errorFormatText: "",
     builder: (BuildContext context, Widget child){
-      return Theme(data: ThemeData.dark().copyWith(primaryColor: _color.withOpacity(0.8),accentColor: _color.withOpacity(0.8),textSelectionColor: color5,cursorColor: _color,colorScheme: ColorScheme.dark(primary: _color,background: color1,surface: _color.withOpacity(0.7)),), child: child);
+      return Theme(data: ThemeData.dark().copyWith(primaryColor: color5,accentColor: color5,textSelectionColor: color5,cursorColor: _color,backgroundColor: color1,colorScheme: ColorScheme.dark(primary: _color,background: color1,surface: color8,onBackground: color1,),), child: child);
     }
     );
     if(date!=null && date!=_selectedDate){

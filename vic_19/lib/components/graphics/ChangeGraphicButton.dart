@@ -13,16 +13,17 @@ class ChangeGraphicButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
+    return MaterialButton(
       height: _height,
-      width: _width,
-      decoration: BoxDecoration(
-        color: _backColor,
-          borderRadius: BorderRadius.circular(10),
-      ),
+      minWidth: _width,
+      color: _backColor,
+      onPressed: (){
+
+      },
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child:
-          Icon(_icon, color: color5,),
+          Icon(_icon, color: _color,),
     );
   }
 }

@@ -71,6 +71,10 @@ class MapBloc extends Bloc<MapEvent,MapState>{
 
      }
    }
+   else if(event is ChangeActiveDataGraphicEvent){
+     _mapR.changeActiveDataGraphic(event.props[0]);
+     yield ChangeActiveDataGraphicState(_mapR.activeDataGraphic);
+   }
 
   }
 }

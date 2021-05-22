@@ -78,3 +78,12 @@ class MapLoadCitiesOkState extends MapState{
   List<Object> get props=>[_zoom,_markers];
 
 }
+class ChangeActiveDataGraphicState extends MapState{
+  final List<bool> _list;
+
+  ChangeActiveDataGraphicState(this._list);
+
+  @override
+  List<Object> get props=>[_list];
+
+}
