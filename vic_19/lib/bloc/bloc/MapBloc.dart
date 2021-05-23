@@ -44,10 +44,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
    }
    else if(event is MapGraphicsEvent){
      try{
-       yield MapLoadingGraphicsState();
-       await Future.delayed(Duration(seconds: 2));
-       await _mapR.getDataLocationCountry(event.props[0]);
-       yield MapGraphicsOkState(_mapR.locationData);
+       yield MapGraphicsOkState();
      }
      catch(e){
        print(e);
@@ -70,10 +67,6 @@ class MapBloc extends Bloc<MapEvent,MapState>{
      catch(e){
 
      }
-   }
-   else if(event is ChangeActiveDataGraphicEvent){
-     _mapR.changeActiveDataGraphic(event.props[0]);
-     yield ChangeActiveDataGraphicState(_mapR.activeDataGraphic);
    }
 
   }

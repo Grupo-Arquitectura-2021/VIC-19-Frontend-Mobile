@@ -2,7 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/bloc/events/GraphicsEvent.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
 
 import '../../PaletteColor.dart';
@@ -16,9 +18,10 @@ class DateSeleccion extends StatelessWidget {
   double _height;
   bool _outlined;
   DateSeleccion(this._selectedDate,this._color,this._backColor,this._width,this._height,this._outlined);
+  Size size;
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+     size = MediaQuery.of(context).size;
     return Container(
       width: _width,
       height: _height,
@@ -61,8 +64,7 @@ class DateSeleccion extends StatelessWidget {
     }
     );
     if(date!=null && date!=_selectedDate){
-      BlocProvider.of<MapBloc>(context).add(MapGraphicsEvent(date));
-
+      BlocProvider.of<GraphicsBloc>(context).add((ChangeDateDataGraphicEvent(date)));
     }
   }
 }

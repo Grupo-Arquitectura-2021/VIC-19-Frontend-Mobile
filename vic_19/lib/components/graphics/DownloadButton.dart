@@ -15,20 +15,16 @@ class DownloadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
       height: _height,
       width: _width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: _color)
-      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _text!=null&&_text!=""?[
-          Icon(_icon, color: color5,size: _height*0.6,),
-          AutoSizeText("${_text}",style: TextStyle(color: color5),),
-        ]: [
-        Icon(_icon, color: color5,size: _height*0.6,),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children:[
+          Icon(_icon, color: _color,size: _width*0.2,),
+          SizedBox(
+            width: _width*0.7,
+            child:
+          AutoSizeText("${_text}",style: TextStyle(color: _color),maxLines: 1,),)
       ],
       ),
     );

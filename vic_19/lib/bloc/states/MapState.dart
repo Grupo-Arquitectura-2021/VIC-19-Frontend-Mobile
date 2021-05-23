@@ -1,5 +1,6 @@
 
 import 'package:equatable/equatable.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
@@ -52,10 +53,11 @@ class MapLoadingGraphicsState extends MapState{
   List<Object> get props=>[];
 }
 class MapGraphicsOkState extends MapState{
-  LocationData _locationData;
-  MapGraphicsOkState(this._locationData);
+
+  MapGraphicsOkState();
+
   @override
-  List<Object> get props=>[_locationData];
+  List<Object> get props=>[];
 }
 class MapMainMapOkState extends MapState{
   @override
@@ -80,10 +82,16 @@ class MapLoadCitiesOkState extends MapState{
 }
 class ChangeActiveDataGraphicState extends MapState{
   final List<bool> _list;
+  final List<List<FlSpot>> _listPoints;
+  final List<String> _xlabels;
+  final List<int> _ylabels;
 
-  ChangeActiveDataGraphicState(this._list);
+
+  ChangeActiveDataGraphicState(
+      this._list, this._listPoints, this._xlabels, this._ylabels);
 
   @override
-  List<Object> get props=>[_list];
+  List<Object> get props=>[
+    this._list, this._listPoints, this._xlabels, this._ylabels];
 
 }

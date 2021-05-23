@@ -5,16 +5,14 @@ import 'package:vic_19/pages/BottomMenu.dart';
 import 'PaletteColor.dart';
 void main() {
   runApp(MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp
+  ]);
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp
-    ]);
     return MaterialApp(
       title: 'Vic-19',
       debugShowCheckedModeBanner: false,

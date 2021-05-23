@@ -9,18 +9,22 @@ import 'package:flutter/services.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/PaletteColor.dart';
+import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/bloc/events/GraphicsEvent.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
+import 'package:vic_19/bloc/repositories/GraphicsRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
 import 'package:vic_19/components/graphics/DateSelection.dart';
 import 'package:vic_19/components/graphics/DownloadButton.dart';
 import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/components/graphics/DataLabel.dart';
-import 'package:vic_19/components/graphics/LinearChart.dart';
+import 'file:///C:/Users/Alvin/Documents/UniversidadProyectos/arquitectura/VIC-19-Frontend-Mobile/vic_19/lib/pages/ChartPage.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
 import 'package:vic_19/components/mapComponents/TitleMap.dart';
+import 'package:vic_19/pages/GraphicsPage.dart';
 import 'package:vic_19/util/MyBehavior.dart';
 
 class MapPage extends StatefulWidget {
@@ -42,6 +46,7 @@ class _MapPageState extends State<MapPage> {
   LatLng center=LatLng(-16.2256651,-65.0455838);
   Set<Polygon> geo=Set();
   LocationData dataLocation;
+  Location _selectLocation;
 
   List<String> _data=['p','p1','p2','p3','p4','p5'];
   @override
@@ -93,17 +98,13 @@ class _MapPageState extends State<MapPage> {
               filters=state.props[1];
             }
             if(state is MapSelectLocationState){
+              _selectLocation=state.props[0];
               select=true;
             }
-            if(state is MapLoadingGraphicsState){
+            if(state is MapGraphicsOkState){
               _scrollController.animateTo(_scrollController.position.maxScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
               graphics=true;
-            }
-            if(state is MapGraphicsOkState){
-                dataLocation=state.props[0];
-
-
-
+              BlocProvider.of<GraphicsBloc>(context).add(GetDataGraphicEvent(DateTime.now(), _selectLocation.idLocation));
             }
             if(state is MapMainMapOkState){
               _scrollController.animateTo(_scrollController.position.minScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
@@ -224,24 +225,8 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: size.height,
-                          width:size.width,
+                        GraphicsPage(size.width,size.height),
 
-                          decoration: BoxDecoration(
-                            color: color8
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(height: MediaQuery.of(context).padding.top,),
-                              SizedBox(height: size.height*0.13,),
-                              ChartWidget(dataLocation!=null?dataLocation.dateLocationCovid:DateTime.now(),_data,size.width,size.height*0.87-MediaQuery.of(context).padding.top,dataLocation),
-
-
-
-                            ]
-                        )
-                        )
                       ],
                     ),
                   ),

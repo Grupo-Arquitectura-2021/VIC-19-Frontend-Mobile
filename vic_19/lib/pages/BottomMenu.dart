@@ -1,10 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vic_19/Pages/Map.dart';
+import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/bloc/NewsBloc.dart';
 import 'package:vic_19/bloc/bloc/TablesBloc.dart';
 import 'package:vic_19/bloc/events/NewsEvent.dart';
 import 'package:vic_19/bloc/events/TablesEvent.dart';
+import 'package:vic_19/bloc/repositories/GraphicsRepository.dart';
 import 'package:vic_19/bloc/repositories/MapRepository.dart';
 import 'package:vic_19/bloc/repositories/NewsRepository.dart';
 import 'package:vic_19/bloc/repositories/TablesRepository.dart';
@@ -44,6 +46,7 @@ class _BottomMenuState extends State<BottomMenu> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider<MapBloc>(create: (context)=>MapBloc(MapRepository())),
+          BlocProvider<GraphicsBloc>(create: (context)=>GraphicsBloc(GraphicsRepository())),
           BlocProvider<TablesBloc>(create: (context)=>TablesBloc(TablesRepository())..add(TablesGetCitiesEvent(_datetable))),
           BlocProvider<NewsBloc>(create: (context)=>NewsBloc(NewsRepository())..add(NewsGetEvent()))
         ],
@@ -111,7 +114,7 @@ class _BottomMenuState extends State<BottomMenu> {
                       child: MapButtonAnimated(size.height*0.06,size.height*0.01)),
 
                 ):Container(),
-              state is MapLoadingState || state is MapInitialState?Loading(null,0.6,1):state is MapLoadingGraphicsState?Loading("Obteniendo Datos", 0.6,2):Container()
+              state is MapLoadingState || state is MapInitialState?Loading(null,0.6,1):Container()
 
 
       ],

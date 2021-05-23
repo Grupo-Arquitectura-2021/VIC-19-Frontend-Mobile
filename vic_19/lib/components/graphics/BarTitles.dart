@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:vic_19/PaletteColor.dart';
 
 
-class LineTitles{
-  static getTitleData(List<String> _titles,int intP,double size){
-    // getTitleData(this._titles);
+class BarTitles{
+  static getTitleData(List<String> _titles,List<int> _titlesY,double size){
     return FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
@@ -22,13 +21,13 @@ class LineTitles{
               case 0:
                 return _titles[0];
               case 2:
-                return _titles[2];
+                return _titles[1];
               case 4:
-                return _titles[4];
+                return _titles[2];
               case 6:
-                return _titles[6];
+                return _titles[3];
               case 8:
-                return _titles[8];
+                return _titles[4];
               // case 12:
               //   return _titles[5];
               // case 14:
@@ -42,15 +41,23 @@ class LineTitles{
       leftTitles: SideTitles(
         showTitles: true,
           margin: 1,
-          interval: intP*1.0,
           getTextStyles: (value)=> TextStyle(
               fontWeight: FontWeight.w300,
               color: color5.withOpacity(0.7),
               fontSize: size
           ),
           getTitles: (value){
-            if(value%intP==0)return value.toInt()>999?"${(value~/1000)}k":value.toInt().toString();
-            else return "";
+            switch (value.toInt()){
+              case 0:
+                return _titlesY[0].toString();
+              case 1:
+                return _titlesY[1].toString();
+              case 2:
+                return _titlesY[2].toString();
+              case 3:
+                return _titlesY[3].toString();
+            }
+            return '';
           }
       ),
     );
