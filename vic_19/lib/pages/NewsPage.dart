@@ -21,10 +21,9 @@ class _NewsPageState extends State<NewsPage> {
   Size size;
   EasyRefreshController _easyRefreshController=EasyRefreshController();
   List<News> _news= List();
-
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

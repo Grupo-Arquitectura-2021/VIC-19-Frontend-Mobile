@@ -21,7 +21,7 @@ class ChangeGraphicButton extends StatelessWidget {
     return MaterialButton(
       height: _height,
       minWidth: _width,
-      color: active?_backColor:_backColor.withOpacity(0.1),
+      color: active?_backColor:_backColor.withOpacity(0.05),
       onPressed: (){
         BlocProvider.of<GraphicsBloc>(context).add(ChangeActiveChartEvent(_index));
       },

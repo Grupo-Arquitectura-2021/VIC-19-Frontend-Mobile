@@ -66,9 +66,10 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
     }
     return title;
   }
+  Animation<double> offsetAnimation;
   @override
   Widget build(BuildContext context) {
-    final Animation<double> offsetAnimation =
+    offsetAnimation=
     Tween(begin: -0.30, end: 0.30).chain(CurveTween(curve: Curves.easeInOutExpo)).animate(controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {

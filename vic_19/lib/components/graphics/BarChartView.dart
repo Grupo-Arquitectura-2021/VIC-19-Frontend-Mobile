@@ -97,7 +97,7 @@ class BarChartView extends StatelessWidget {
             alignment: BarChartAlignment.spaceEvenly,
 
             groupsSpace: 1,
-              maxY: getMax()*1.0,
+              maxY: getMax()*1.0+getTitlesDiv(),
             gridData: FlGridData(
               show: true,
 

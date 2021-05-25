@@ -81,7 +81,7 @@ class GraphicsRepository {
     _activeDataGraphic = value;
   }
 
-  Future<bool> getAllDataLocationCountry(DateTime date)async{
+  Future<bool> getAllDataLocation(DateTime date)async{
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formattedDate = formatter.format(date);
     var url=ApiUrl + "country/allInfo/$idLocation?date=$formattedDate";
@@ -93,8 +93,6 @@ class GraphicsRepository {
 
     if(response.statusCode==200){
       var resJson = json.decode(response.body);
-      print("data");
-      print(resJson);
       List<LocationData> locations=List();
       resJson.forEach((element) {
         LocationData newLocation=LocationData.fromJson(element);

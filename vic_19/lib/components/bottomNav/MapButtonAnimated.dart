@@ -28,10 +28,10 @@ class _MapButtonAnimatedState extends State<MapButtonAnimated> with SingleTicker
     _controller.repeat(reverse: true);
     super.initState();
   }
-
+  Animation<double> offsetAnimation;
   @override
   Widget build(BuildContext context) {
-    final Animation<double> offsetAnimation =
+    offsetAnimation=
     Tween(begin: -5.0, end: 5.0).chain(CurveTween(curve: Curves.easeInOutExpo)).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {

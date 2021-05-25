@@ -91,10 +91,10 @@ class CurvedNavigationBarState extends State<CurvedNavigationBar>
     _animationController.dispose();
     super.dispose();
   }
-
+  Size size;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    size=MediaQuery.of(context).size;
     return Container(
       color: widget.backgroundColor.withOpacity(0),
       height: widget.height,

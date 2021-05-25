@@ -50,7 +50,7 @@ class NewsCard extends StatelessWidget {
                       width: _width*0.6,
                       height: _height*0.1,
                       child:
-                            AutoSizeText("${_news.dateTime.day}-${_news.dateTime.month}-${_news.dateTime.year} ${_news.dateTime.hour}:${_news.dateTime.minute}",style: TextStyle(color: color3,fontSize: 50),maxLines: 1,minFontSize: 1,maxFontSize: 14)
+                            AutoSizeText("${_news.dateNews.day}-${_news.dateNews.month}-${_news.dateNews.year} ${_news.dateNews.hour}:${_news.dateNews.minute}",style: TextStyle(color: color3,fontSize: 50),maxLines: 1,minFontSize: 1,maxFontSize: 14)
 
                   ),
                 ],
@@ -64,7 +64,7 @@ class NewsCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(_width*0.01),
                       image: DecorationImage(
-                          image: NetworkImage(_news.urlImage),
+                          image: NetworkImage(_news.newsImages),
                           fit: BoxFit.cover
                       )
                   ),

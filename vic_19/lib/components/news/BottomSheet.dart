@@ -30,7 +30,7 @@ class CardBottomSheet extends StatelessWidget {
             decoration: BoxDecoration(
                 // color: color2,
                 image: DecorationImage(
-                    image: NetworkImage(_news.urlImage),
+                    image: NetworkImage(_news.newsImages),
                     fit: BoxFit.cover
                 ),
                 borderRadius: BorderRadius.only(
@@ -54,9 +54,9 @@ class CardBottomSheet extends StatelessWidget {
                     onTap: (){
                       // print("url seleccionada");
                       // _launchInBrowser(_news.source);
-                      openUrl(_news.source);
+                      openUrl(_news.newsUrl);
                     },
-                      child: Text(_news.source,style: TextStyle(color: _color,fontSize: _height*0.025),)),
+                      child: Text("Ir a la fuente",style: TextStyle(color: _color,fontSize: _height*0.025),)),
                   SizedBox(height: 10,),
                 ],
               ),

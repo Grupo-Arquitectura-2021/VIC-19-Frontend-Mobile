@@ -29,12 +29,6 @@ class LineTitles{
                 return _titles[6];
               case 8:
                 return _titles[8];
-              // case 12:
-              //   return _titles[5];
-              // case 14:
-              //   return _titles[6];
-              // case 16:
-              //   return _titles[7];
             }
             return '';
           }
@@ -42,15 +36,21 @@ class LineTitles{
       leftTitles: SideTitles(
         showTitles: true,
           margin: 1,
-          interval: intP*1.0,
+          interval: intP!=0?intP*1.0:1,
           getTextStyles: (value)=> TextStyle(
               fontWeight: FontWeight.w300,
               color: color5.withOpacity(0.7),
               fontSize: size
           ),
           getTitles: (value){
-            if(value%intP==0)return value.toInt()>999?"${(value~/1000)}k":value.toInt().toString();
-            else return "";
+            if(intP==0){
+              return "";
+            }
+            else{
+
+              if(value%intP==0){return value.toInt()>999?"${(value~/1000)}k":value.toInt().toString();}
+              else return "";
+            }
           }
       ),
     );

@@ -22,9 +22,10 @@ class _TablesPageState extends State<TablesPage> {
   DateTime _selectedDate2=DateTime.now();
   String _locationName;
   LocationData _locationData;
+  Size size;
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+     size = MediaQuery.of(context).size;
     return Scaffold(
         body: BlocBuilder<TablesBloc,TablesState>(
       builder: (context,state){

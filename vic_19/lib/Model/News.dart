@@ -3,44 +3,14 @@ class News {
   String _title;
   String _content;
   DateTime _dateNews;
-  String _urlImage;
-  String _source;
+  String _newsImages;
+  String _newsUrl;
 
   News();
 
   News.fromNews(this._idNews, this._title, this._content, this._dateNews,
-      this._urlImage,this._source);
+      this._newsImages,this._newsUrl);
 
-
-  String get source => _source;
-
-  set source(String value) {
-    _source = value;
-  }
-
-  String get urlImage => _urlImage;
-
-  set urlImage(String value) {
-    _urlImage = value;
-  }
-
-  DateTime get dateTime => _dateNews;
-
-  set dateNews(DateTime value) {
-    _dateNews = value;
-  }
-
-  String get content => _content;
-
-  set content(String value) {
-    _content = value;
-  }
-
-  String get title => _title;
-
-  set title(String value) {
-    _title = value;
-  }
 
   int get idNews => _idNews;
 
@@ -53,7 +23,37 @@ class News {
     title = json['title'];
     content = json['content'];
     dateNews = DateTime.parse(json['dateNews']);
-    urlImage = json['urlImage'];
-    source = json['source'];
+    newsImages = json['newsImages'];
+    newsUrl = json['newsUrl'];
+  }
+
+  String get title => _title;
+
+  set title(String value) {
+    _title = value;
+  }
+
+  String get content => _content;
+
+  set content(String value) {
+    _content = value;
+  }
+
+  DateTime get dateNews => _dateNews;
+
+  set dateNews(DateTime value) {
+    _dateNews = value;
+  }
+
+  String get newsImages => _newsImages;
+
+  set newsImages(String value) {
+    _newsImages = value;
+  }
+
+  String get newsUrl => _newsUrl;
+
+  set newsUrl(String value) {
+    _newsUrl = value;
   }
 }

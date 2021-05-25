@@ -225,7 +225,7 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ],
                         ),
-                        GraphicsPage(size.width,size.height),
+                        GraphicsPage(size.width,size.height,graphics),
 
                       ],
                     ),

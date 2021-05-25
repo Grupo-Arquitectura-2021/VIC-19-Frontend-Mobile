@@ -18,16 +18,17 @@ import '../PaletteColor.dart';
 import '../components/graphics/LineTitles.dart';
 
 class GraphicsPage extends StatelessWidget {
+  final activePage;
   final List<Color>gradientColors=[color2,color3,color4];
-
   DateTime _selectedDate;
   LocationData _dataLocation;
   double _width;
   double _height;
-  List<bool> _activeData=[false,false,false,false];
-  GraphicsPage(this._width,this._height);
-  int _maxP;
-  int _intP;
+  List<bool> _activeData=[false,false,false,false,false];
+  List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras","Gráfica de predicción"];
+  GraphicsPage(this._width,this._height,this.activePage);
+  int _maxP=0;
+  int _intP=0;
   List<String> _titlesX=[];
   List<List<FlSpot>> _dataGraphics=[];
   int _activeChart=0;
@@ -60,15 +61,14 @@ class GraphicsPage extends StatelessWidget {
           if(state is ChangeActiveChartState){
             _activeChart=state.props[0];
           }
-          if(state is LoadingGraphicsState){
+          if(state is LoadingGraphicsState||!activePage){
             return Container(
-
                 decoration: BoxDecoration(
                 color: color8,
             ),
           width:    _width,
           height: _height,
-          child:Loading("Cargando Gráficas", 0.8,1));
+          child:Loading("Cargando Gráficas", 0.3,1));
           }
           else{
             return Container(
@@ -88,148 +88,109 @@ class GraphicsPage extends StatelessWidget {
                     Container(
                       width: _width,
                       height: _height*0.475,
-                      child: PageView(
+                      child: Column(
                         children: [
                           Container(
                               width: _width,
-                              height: _height*0.475,
-                              child: Column(
+                              height: _height*0.04,
+                              padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                      width: _width,
-                                      height: _height*0.04,
-                                      padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          DateSeleccion(_selectedDate, color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
-                                          SizedBox(width: _width*0.1,),
-                                        ],
-                                      )
-                                  ),
-                                  Container(
-                                      width: _width,
-                                      height: _height*0.08,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ChangeGraphicButton(color5, color5.withOpacity(0.5), Icons.show_chart, _width*0.3, _height*0.04,0,_activeChart==0?true:false),
-                                          ChangeGraphicButton(color5, color5.withOpacity(0.5), Icons.insert_chart, _width*0.3, _height*0.04,1,_activeChart==1?true:false),
-                                          ChangeGraphicButton(color5, color5.withOpacity(0.5), Icons.pie_chart, _width*0.3, _height*0.04,2,_activeChart==2?true:false),
-                                        ],
-                                      )
-                                  ),
-                                  Container(
-                                      width: _width,
-                                      height: _height*0.03,
-                                      alignment: Alignment.bottomCenter,
-                                      decoration: BoxDecoration(
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            child:
-                                            AutoSizeText("Grafica General",style:TextStyle(color: color5.withOpacity(0.9),fontSize: 20,fontWeight: FontWeight.w300)),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.centerRight,
-
-
-                                            child: IconButton(
-                                              onPressed: (){
-                                                showMenu(context: context, position: RelativeRect.fromLTRB(_width*0.5, _height*0.3, _width*0.1, _height*0.5), items: [
-                                                  PopupMenuItem(
-
-                                                    child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30),
-                                                    height: 30,),
-                                                  PopupMenuItem(
-
-                                                    child: DownloadButton(Color(0xffF40F02), "PDF",Icons.picture_as_pdf,_width*0.2,30),
-                                                    height: 30,),
-                                                  PopupMenuItem(
-
-                                                    child: DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30),
-                                                    height: 30,)
-                                                ],color: color5.withOpacity(0.9),);
-                                              },
-                                              icon: Row(
-                                                children: [Container(
-                                                  width: _height*0.005,
-                                                  height: _height*0.005,
-                                                  margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
-                                                  decoration: BoxDecoration(
-                                                    color: color5,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),Container(
-                                                  width: _height*0.005,
-                                                  height: _height*0.005,
-                                                  margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
-                                                  decoration: BoxDecoration(
-                                                    color: color5,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),Container(
-                                                  width: _height*0.005,
-                                                  height: _height*0.005,
-                                                  margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
-                                                  decoration: BoxDecoration(
-                                                    color: color5,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                  ),
-                                  IndexedStack(
-                                      index: _activeChart,
-                                      children: [LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
-                                      PieChartView( _width, _height*0.325, _dataLocation, _activeData),
-                                        BarChartView( _width, _height*0.325, _dataLocation, _activeData)],
-
-                                  ),
-
+                                  DateSeleccion(_selectedDate, color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
                                 ],
                               )
-                          ),Container(
+                          ),
+                          Container(
                               width: _width,
-                              height: _height*0.475,
-                              child: Column(
+                              height: _height*0.08,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  Container(
-                                      width: _width,
-                                      height: _height*0.12,
-                                      color: color8,
-                                      padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,bottom: _height*0.03),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ChangeGraphicButton(color5, Colors.green.withOpacity(0.7), Icons.chevron_left, _width*0.1, _height*0.04,0,false),
-                                        ],
-                                      )
-                                  ),
-                                  Container(
-                                      width: _width,
-                                      height: _height*0.03,
-                                      alignment: Alignment.bottomCenter,
-                                      child: AutoSizeText("Grafica de Prediccion",style:TextStyle(color: color5,fontSize: 20,fontWeight: FontWeight.w300))
-                                  ),
-                                  Container(
-                                    width: _width,
-                                    height: _height*0.325,
-                                    decoration: BoxDecoration(
-                                      color: color8,
-                                    ),
-                                    padding: EdgeInsets.only(right: _width*0.05,left: _width*0.01,bottom: _height*0.04),
-
-                                  ),
+                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.show_chart, _width*0.22, _height*0.04,0,_activeChart==0?true:false),
+                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.pie_chart, _width*0.22, _height*0.04,1,_activeChart==1?true:false),
+                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.insert_chart, _width*0.22, _height*0.04,2,_activeChart==2?true:false),
+                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.multiline_chart, _width*0.22, _height*0.04,3,_activeChart==3?true:false),
                                 ],
                               )
-                          )
+                          ),
+                          Container(
+                              width: _width,
+                              height: _height*0.03,
+                              alignment: Alignment.bottomCenter,
+                              decoration: BoxDecoration(
+                              ),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child:
+                                    AutoSizeText(_titleChart[_activeChart],style:TextStyle(color: color5.withOpacity(0.9),fontSize: 20,fontWeight: FontWeight.w300)),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.centerRight,
+                                    padding: EdgeInsets.only(right: _width*0.01),
+
+
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(0),
+                                      onPressed: (){
+                                        showMenu(context: context, position: RelativeRect.fromLTRB(_width*0.5, _height*0.32, _width*0.05, _height*0.5), items: [
+                                          PopupMenuItem(
+
+                                            child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30),
+                                            height: 30,),
+                                          PopupMenuItem(
+
+                                            child: DownloadButton(Color(0xffF40F02), "PDF",Icons.picture_as_pdf,_width*0.2,30),
+                                            height: 30,),
+                                          PopupMenuItem(
+
+                                            child: DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30),
+                                            height: 30,)
+                                        ],color: color5.withOpacity(0.9),);
+                                      },
+                                      icon: /*Row(
+                                        children: [Container(
+                                          width: _height*0.005,
+                                          height: _height*0.005,
+                                          margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
+                                          decoration: BoxDecoration(
+                                            color: color5,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),Container(
+                                          width: _height*0.005,
+                                          height: _height*0.005,
+                                          margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
+                                          decoration: BoxDecoration(
+                                            color: color5,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),Container(
+                                          width: _height*0.005,
+                                          height: _height*0.005,
+                                          margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
+                                          decoration: BoxDecoration(
+                                            color: color5,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),],
+                                      ),*/ Icon(Icons.file_download,color: color5,size: _height*0.025,)
+                                    ),
+                                  )
+                                ],
+                              )
+                          ),
+                          IndexedStack(
+                              index: _activeChart,
+                              children: [LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
+                              PieChartView( _width, _height*0.325, _dataLocation, _activeData),
+                                BarChartView( _width, _height*0.325, _dataLocation, _activeData),
+                                LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),],
+
+                          ),
+
                         ],
                       ),
                     ),

@@ -9,12 +9,16 @@ class NavButton extends StatelessWidget {
 
   NavButton({this.onTap, this.position, this.length, this.index, this.child});
 
+  var desiredPosition;
+  var difference;
+  var verticalAlignment;
+  var opacity;
   @override
   Widget build(BuildContext context) {
-    final desiredPosition = 1.0 / length * index;
-    final difference = (position - desiredPosition).abs();
-    final verticalAlignment = 1 - length * difference;
-    final opacity = length * difference;
+    desiredPosition = 1.0 / length * index;
+    difference = (position - desiredPosition).abs();
+    verticalAlignment = 1 - length * difference;
+    opacity = length * difference;
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,

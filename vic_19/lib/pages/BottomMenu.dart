@@ -39,9 +39,10 @@ class _BottomMenuState extends State<BottomMenu> {
 
     pages=[TablesPage(),MapPage(),NewsPage()];
   }
+  Size size;
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    size= MediaQuery.of(context).size;
     return Scaffold(
       body: MultiBlocProvider(
         providers: [

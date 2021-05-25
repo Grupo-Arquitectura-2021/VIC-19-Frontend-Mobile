@@ -27,7 +27,7 @@ class NewsSingleAlert extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(topRight: Radius.circular(_width*0.05),topLeft:  Radius.circular(_width*0.05)),
           image: DecorationImage(
-            image: NetworkImage(_news.urlImage),
+            image: NetworkImage(_news.newsImages),
             fit: BoxFit.cover
           )
         ),
@@ -44,7 +44,7 @@ class NewsSingleAlert extends StatelessWidget {
               SizedBox(height: 10,),
               Text(_news.content,style: TextStyle(color: color5),),
               SizedBox(height: 10,),
-              Text(_news.source,style: TextStyle(color: _color),),
+              Text(_news.newsUrl,style: TextStyle(color: _color),),
             ],
           ),
         )
