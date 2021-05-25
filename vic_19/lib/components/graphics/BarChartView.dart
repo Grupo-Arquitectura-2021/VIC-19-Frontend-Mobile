@@ -125,7 +125,7 @@ class BarChartView extends StatelessWidget {
                 leftTitles: SideTitles(
                   showTitles: true,
                   margin:1,
-                  interval: getTitlesDiv()*1.0,
+                  interval: getTitlesDiv()==0?1:getTitlesDiv()*1.0,
                   getTextStyles: (value) => const TextStyle(
                       color: color5, fontSize: 8),
                   getTitles: (value) {

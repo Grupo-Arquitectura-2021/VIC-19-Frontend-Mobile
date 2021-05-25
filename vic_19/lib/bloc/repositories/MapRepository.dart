@@ -545,6 +545,7 @@ tranformDataGraphic(List<LocationData> list)
 }
 
 Future<void> changeFilter(idFilter,context)async{
+    selectLocation=null;
     filters[idFilter]=!filters[idFilter];
     markers.clear();
     for(var i=0;i<filters.length;i++){

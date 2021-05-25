@@ -25,7 +25,7 @@ class GraphicsPage extends StatelessWidget {
   double _width;
   double _height;
   List<bool> _activeData=[false,false,false,false,false];
-  List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras","Gráfica de predicción"];
+  List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras","Gráfica de predicción",""];
   GraphicsPage(this._width,this._height,this.activePage);
   int _maxP=0;
   int _intP=0;
@@ -150,33 +150,7 @@ class GraphicsPage extends StatelessWidget {
                                             height: 30,)
                                         ],color: color5.withOpacity(0.9),);
                                       },
-                                      icon: /*Row(
-                                        children: [Container(
-                                          width: _height*0.005,
-                                          height: _height*0.005,
-                                          margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
-                                          decoration: BoxDecoration(
-                                            color: color5,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),Container(
-                                          width: _height*0.005,
-                                          height: _height*0.005,
-                                          margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
-                                          decoration: BoxDecoration(
-                                            color: color5,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),Container(
-                                          width: _height*0.005,
-                                          height: _height*0.005,
-                                          margin: EdgeInsets.symmetric(horizontal: _height*0.0015),
-                                          decoration: BoxDecoration(
-                                            color: color5,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),],
-                                      ),*/ Icon(Icons.file_download,color: color5,size: _height*0.025,)
+                                      icon:Icon(Icons.file_download,color: color5,size: _height*0.025,)
                                     ),
                                   )
                                 ],
@@ -184,10 +158,12 @@ class GraphicsPage extends StatelessWidget {
                           ),
                           IndexedStack(
                               index: _activeChart,
-                              children: [LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
-                              PieChartView( _width, _height*0.325, _dataLocation, _activeData),
+                              children: [
+                                LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
+                                PieChartView( _width, _height*0.325, _dataLocation, _activeData),
                                 BarChartView( _width, _height*0.325, _dataLocation, _activeData),
-                                LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),],
+                                LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
+                                Container(width: _width, height:_height*0.325,alignment:Alignment.center,child: Text("Sin gráficos",style: TextStyle(color: color5.withOpacity(0.7)),),)],
 
                           ),
 

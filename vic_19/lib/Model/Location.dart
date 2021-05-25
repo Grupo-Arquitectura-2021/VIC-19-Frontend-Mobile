@@ -39,6 +39,6 @@ abstract class Location{
     _longitude = value;
   }
 
-  String getUrl();
+  String getUrl(String date);
   String getTitle();
 }

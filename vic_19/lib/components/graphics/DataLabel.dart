@@ -73,7 +73,7 @@ class DataLabel extends StatelessWidget {
                 width: _width*0.35,
                 height: _height,
               alignment: Alignment.centerRight,
-              child:AutoSizeText(_data==null? "-":_data.toString(),textAlign: TextAlign.right,style: TextStyle(color: active?color5:color5.withOpacity(0.3),fontSize: 20,fontWeight: FontWeight.w300),maxLines: 1,minFontSize: 1,)
+              child:AutoSizeText(_data==null||_data==-1? "-":_data.toString(),textAlign: TextAlign.right,style: TextStyle(color: active?color5:color5.withOpacity(0.3),fontSize: 20,fontWeight: FontWeight.w300),maxLines: 1,minFontSize: 1,)
 
                )
           ],

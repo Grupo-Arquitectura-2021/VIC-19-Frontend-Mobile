@@ -22,7 +22,7 @@ class GraphicsRepository {
   int _maxP;
   int _intP;
   List<String> _xLabelGraphics;
-  int _idLocation;
+  Location _selectLocation;
   int _activeChart;
 
 
@@ -69,10 +69,11 @@ class GraphicsRepository {
     _maxP = value;
   }
 
-  int get idLocation => _idLocation;
 
-  set idLocation(int value) {
-    _idLocation = value;
+  Location get selectLocation => _selectLocation;
+
+  set selectLocation(Location value) {
+    _selectLocation = value;
   }
 
   List<bool> get activeDataGraphic => _activeDataGraphic;
@@ -84,7 +85,7 @@ class GraphicsRepository {
   Future<bool> getAllDataLocation(DateTime date)async{
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formattedDate = formatter.format(date);
-    var url=ApiUrl + "country/allInfo/$idLocation?date=$formattedDate";
+    var url=ApiUrl + selectLocation.getUrl(formattedDate);
     final response = await http.get(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
@@ -99,8 +100,11 @@ class GraphicsRepository {
         locations.add(newLocation);
       });
       listDataGraphic=locations;
-      locationData=locations.last;
-      if(verifyactiveData()) tranformDataGraphic(locations);
+      if(resJson.length>0){
+        locationData=locations.last;
+        if(verifyactiveData()) tranformDataGraphic(locations);
+        getChartIndex(0);
+      }
       return true;
     }
     else{
@@ -108,9 +112,26 @@ class GraphicsRepository {
     }
 
   }
+  getChartIndex(int index){
+   if(listDataGraphic.length!=0){
+     var c=listDataGraphic.last.confirmed;
+     var r=listDataGraphic.last.recovered;
+     var d=listDataGraphic.last.deceased;
+     var v=listDataGraphic.last.vaccinated;
+     if(c==null||c==-1||c==0||
+         r==null||r==-1||r==0||
+         d==null||d==-1||d==0||
+         v==null||v==-1||v==0){
+       activeChart=4;
+     }
+     else{
+       activeChart=index;
+     }
+   }
+  }
   changeActiveDataGraphic(int index){
     activeDataGraphic[index]=!activeDataGraphic[index];
-    if(verifyactiveData())
+    if(verifyactiveData()&&_listDataGraphic.length>0)
       tranformDataGraphic(_listDataGraphic);
     else
       activeDataGraphic[index]=!activeDataGraphic[index];
@@ -194,14 +215,14 @@ tranformDataGraphic(List<LocationData> list)
   print("termina1");
   for(var l in list) {
       x=9*(l.dateLocationCovid.millisecondsSinceEpoch-initDate)/(lastDate-initDate);
-      y1=l.confirmed==-1||l.confirmed==0?listPoints[0].length==0?0:listPoints[0].last.y:l.confirmed*1.0;
-      y2=l.recovered==-1||l.confirmed==0?listPoints[1].length==0?0:listPoints[1].last.y:l.recovered*1.0;
-      y3=l.deceased==-1||l.confirmed==0?listPoints[2].length==0?0:listPoints[2].last.y:l.deceased*1.0;
-      y4=l.vaccinated==-1||l.confirmed==0?listPoints[3].length==0?0:listPoints[3].last.y:l.vaccinated*1.0;
-      if(activeDataGraphic[0])listPoints[0].add(FlSpot(x,y1));
-      if(activeDataGraphic[1])listPoints[1].add(FlSpot(x,y2));
-      if(activeDataGraphic[2])listPoints[2].add(FlSpot(x,y3));
-      if(activeDataGraphic[3])listPoints[3].add(FlSpot(x,y4));
+      y1=l.confirmed==-1||l.confirmed==0?null:l.confirmed*1.0;
+      y2=l.recovered==-1||l.confirmed==0?null:l.recovered*1.0;
+      y3=l.deceased==-1||l.confirmed==0?null:l.deceased*1.0;
+      y4=l.vaccinated==-1||l.confirmed==0?null:l.vaccinated*1.0;
+      if(activeDataGraphic[0]&&y1!=null)listPoints[0].add(FlSpot(x,y1));
+      if(activeDataGraphic[1]&&y2!=null)listPoints[1].add(FlSpot(x,y2));
+      if(activeDataGraphic[2]&&y3!=null)listPoints[2].add(FlSpot(x,y3));
+      if(activeDataGraphic[3]&&y4!=null)listPoints[3].add(FlSpot(x,y4));
   }
   listPointGraphic=listPoints;
   xLabelGraphics=xLabels;

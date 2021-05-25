@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geojson/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:vic_19/Model/Location.dart';
@@ -13,13 +12,7 @@ import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/events/GraphicsEvent.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
-import 'package:vic_19/bloc/repositories/GraphicsRepository.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
-import 'package:vic_19/components/graphics/DateSelection.dart';
-import 'package:vic_19/components/graphics/DownloadButton.dart';
-import 'package:vic_19/components/general/Loading.dart';
-import 'package:vic_19/components/graphics/DataLabel.dart';
-import 'file:///C:/Users/Alvin/Documents/UniversidadProyectos/arquitectura/VIC-19-Frontend-Mobile/vic_19/lib/pages/ChartPage.dart';
 import 'package:vic_19/components/mapComponents/ExpandButton.dart';
 import 'package:vic_19/components/mapComponents/FilterButton.dart';
 import 'package:vic_19/components/mapComponents/GraphicsButton.dart';
@@ -96,6 +89,7 @@ class _MapPageState extends State<MapPage> {
             if(state is MapFilterOkState){
               markers=state.props[0];
               filters=state.props[1];
+              select=false;
             }
             if(state is MapSelectLocationState){
               _selectLocation=state.props[0];
@@ -104,7 +98,7 @@ class _MapPageState extends State<MapPage> {
             if(state is MapGraphicsOkState){
               _scrollController.animateTo(_scrollController.position.maxScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));
               graphics=true;
-              BlocProvider.of<GraphicsBloc>(context).add(GetDataGraphicEvent(DateTime.now(), _selectLocation.idLocation));
+              BlocProvider.of<GraphicsBloc>(context).add(GetDataGraphicEvent(DateTime.now(), _selectLocation));
             }
             if(state is MapMainMapOkState){
               _scrollController.animateTo(_scrollController.position.minScrollExtent,curve: Curves.decelerate,duration: Duration(milliseconds: 1000));

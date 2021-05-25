@@ -14,12 +14,12 @@ class ChangeActiveDataGraphicEvent extends GraphicsEvent{
 
 }
 class GetDataGraphicEvent extends GraphicsEvent{
-  final int _index;
+  final Location _location;
   final DateTime _dateTime;
 
-  GetDataGraphicEvent(this._dateTime,this._index);
+  GetDataGraphicEvent(this._dateTime,this._location);
   @override
-  List<Object> get props => [_dateTime,_index];
+  List<Object> get props => [_dateTime,_location];
 
 }
 class ChangeDateDataGraphicEvent extends GraphicsEvent{

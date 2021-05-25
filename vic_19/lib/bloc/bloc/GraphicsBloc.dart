@@ -26,7 +26,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
    else if(event is GetDataGraphicEvent){
      try{
        yield LoadingGraphicsState();
-       _graR.idLocation=event.props[1];
+       _graR.selectLocation=event.props[1];
        await _graR.getAllDataLocation(event.props[0]);
        yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.maxP,_graR.intP,_graR.xLabelGraphics);
      }
@@ -45,7 +45,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
    else if(event is ChangeActiveChartEvent){
      try{
        yield LoadingGraphicsState();
-       _graR.activeChart=event.props[0];
+       _graR.getChartIndex(event.props[0]);
        yield ChangeActiveChartState(_graR.activeChart);
      }
      catch(e){
