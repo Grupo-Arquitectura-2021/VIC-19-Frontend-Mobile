@@ -5,6 +5,7 @@ import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/bloc/states/MapState.dart';
+import 'package:vic_19/util/MyBehavior.dart';
 class TitleMap extends StatefulWidget {
   double _width;
   double _height;
@@ -18,9 +19,8 @@ class TitleMap extends StatefulWidget {
 class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixin {
   double _width;
   double _height;
-  String _subTitle="";
+  List<Location> _locHistory=List();
   Location _loc;
-  int _type=0;
   Color _backColor;
   Color _color;
   AnimationController controller;
@@ -38,33 +38,68 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
      controller.forward(from: -5.0);
    }
   }
-  getTitleType(int layer,int type){
-    String title="";
-    switch(type){
-      case 0:
-        switch(layer){
-          case 0:
-            title="Pais";
-            break;
-          case 1:
-            title="Departamento";
-            break;
-          case 2:
-            title="Municipio";
-            break;
-        }
-        break;
-      case 1:
-        title="Hospital";
-        break;
-      case 2:
-        title="Farmacias";
-        break;
-      case 3:
-        title="Albergues";
-        break;
+
+
+  getTitleWidgets(){
+    List<Widget> list=List();
+    list.addAll([
+
+      SizedBox(
+          height: _height*0.25,
+          width: _width,
+          child: AutoSizeText.rich(
+
+            TextSpan(
+
+              children: [
+                TextSpan(text:_loc!=null?"${_loc.getTitle()}: ":"",style: TextStyle(color: color8,fontSize: 50,fontWeight: FontWeight.w500))
+                ,
+                TextSpan(text:_loc!=null?"${_loc.locationName}":"",style: TextStyle(color: color8,fontSize: 50))
+              ],
+
+            ),
+            maxLines: 1,maxFontSize: 50,minFontSize: 1,
+            textAlign: TextAlign.start,
+          )
+      ),]);
+    for(var location in _locHistory){
+      list.add(
+          SizedBox(
+              height: _height*0.20,
+              width: _width,
+              child: AutoSizeText.rich(
+                TextSpan(
+
+                  children: [
+                    TextSpan(text:"${location.getTitle()}: ",style: TextStyle(color: _color,fontSize: 50,fontWeight: FontWeight.w500))
+                    ,
+                    TextSpan(text:location.locationName,style: TextStyle(color: _color,fontSize: 50))
+                  ],
+
+                ),
+                maxLines: 1,maxFontSize: 50,minFontSize: 1,
+                textAlign: TextAlign.start,
+              )
+          )
+      );
     }
-    return title;
+    list.add(
+      SizedBox(
+        height: _height*0.20,
+        width: _width,
+        child: AutoSizeText.rich(
+          TextSpan(
+              children: [
+                TextSpan(text:_loc!=null?"lat: ":"",style: TextStyle(fontWeight: FontWeight.w500),),
+                TextSpan(text:_loc!=null?"${_loc.latitude}":"",style: TextStyle(),),
+                TextSpan(text:_loc!=null?" lon:":"",style: TextStyle(fontWeight: FontWeight.w500),),
+                TextSpan(text:_loc!=null?"${_loc.longitude}":"",style: TextStyle(),)
+              ]
+          ),
+          maxLines: 1,maxFontSize: 50,minFontSize: 1,
+          textAlign: TextAlign.start,
+          style: TextStyle(fontSize: 50,color: _color.withOpacity(0.7)),),),);
+    return list;
   }
   Animation<double> offsetAnimation;
   @override
@@ -78,31 +113,19 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
       });
     return BlocBuilder<MapBloc,MapState>(
         builder:(context,state){
-          print("estadotitle");
-          print(_loc);
           if(state is MapSelectLocationState){
             Location loc=state.props[0];
             if(loc!=null){
               _loc=loc;
             }
             else _loc=null;
-            loc=state.props[1];
-            if(loc!=null){
-              _subTitle=loc.name;
-            }
-            else _subTitle="";
+            _locHistory=state.props[1];
             moveCard();
           }
           if(state is MaploadMarkersOkState){
-            print("entra");
-            _type=state.props[2];
-            Location loc=state.props[4];
+            var loc=state.props[4];
             _loc=null;
-            if(loc!=null){
-
-              _subTitle=loc.name;
-            }
-            else _subTitle="";
+           _locHistory=loc;
           }
           return AnimatedBuilder(
 
@@ -115,66 +138,19 @@ class _TitleMapState extends State<TitleMap>  with SingleTickerProviderStateMixi
 
                     width: _width,
                     height: _height,
-                    padding: EdgeInsets.symmetric(vertical: _height*0.1,horizontal: _width*0.05),
                     decoration: BoxDecoration(
                         color: _backColor.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(_height*0.1)
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-
-                        SizedBox(
-                          height: _height*0.3,
-                          width: _width,
-                          child: AutoSizeText.rich(
-
-                            TextSpan(
-
-                                children: [
-                                  TextSpan(text:_loc!=null?"${getTitleType(_type, _loc.type)}: ":"",style: TextStyle(color: color8,fontSize: 50,fontWeight: FontWeight.w500))
-                                  ,
-                                  TextSpan(text:_loc!=null?"${_loc.name}":"",style: TextStyle(color: color8,fontSize: 50))
-                            ],
-
-                            ),
-                            maxLines: 1,maxFontSize: 50,minFontSize: 1,
-                            textAlign: TextAlign.start,
-                          )
+                    child: Center(
+                      child: ScrollConfiguration(
+                        behavior: MyBehavior(),
+                        child: ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(vertical: _height*0.1,horizontal: _width*0.05),
+                          children: getTitleWidgets(),
                         ),
-                        _type!=0?SizedBox(
-                            height: _height*0.20,
-                            width: _width,
-                            child: AutoSizeText.rich(
-                              TextSpan(
-
-                                children: [
-                                  TextSpan(text:_loc!=null?"${getTitleType(_type-1,0)}: ":"",style: TextStyle(color: _color,fontSize: 50,fontWeight: FontWeight.w500))
-                                  ,
-                                  TextSpan(text:_loc!=null&&_subTitle!=""?_subTitle:"",style: TextStyle(color: _color,fontSize: 50))
-                                ],
-
-                              ),
-                              maxLines: 1,maxFontSize: 50,minFontSize: 1,
-                              textAlign: TextAlign.start,
-                            )
-                        ):Container(),
-                          SizedBox(
-                          height: _height*0.20,
-                          width: _width,
-                          child: AutoSizeText.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(text:_loc!=null?"lat: ":"",style: TextStyle(fontWeight: FontWeight.w500),),
-                                TextSpan(text:_loc!=null?"${_loc.lat}":"",style: TextStyle(),),
-                                TextSpan(text:_loc!=null?" lon:":"",style: TextStyle(fontWeight: FontWeight.w500),),
-                                TextSpan(text:_loc!=null?"${_loc.lon}":"",style: TextStyle(),)
-                              ]
-                            ),
-                            maxLines: 1,maxFontSize: 50,minFontSize: 1,
-                            textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 50,color: _color.withOpacity(0.7)),),)
-                      ],
+                      ),
                     )
                 ),
               );

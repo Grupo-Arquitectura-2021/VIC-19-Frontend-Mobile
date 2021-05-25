@@ -21,22 +21,22 @@ class MaploadMarkersOkState extends MapState{
   var _markers;
   int _type;
   LatLng _centerMap;
-  Location _lastLocation;
+  List<Location> _locationsHistory;
   Set<Polygon> _area;
-  MaploadMarkersOkState(this._zoom, this._markers,this._type,this._centerMap,this._lastLocation,this._area);
+  MaploadMarkersOkState(this._zoom, this._markers,this._type,this._centerMap,this._locationsHistory,this._area);
 
   @override
-  List<Object> get props=>[_zoom,_markers,_type,_centerMap,_lastLocation,_area];
+  List<Object> get props=>[_zoom,_markers,_type,_centerMap,_locationsHistory,_area];
 
 }
 class MapSelectLocationState extends MapState{
   Location _locations;
-  Location _lastLocations;
+  List<Location> _locationsHistory;
 
-  MapSelectLocationState(this._locations,this._lastLocations);
+  MapSelectLocationState(this._locations,this._locationsHistory);
 
   @override
-  List<Object> get props=>[_locations,_lastLocations];
+  List<Object> get props=>[_locations,_locationsHistory];
 }
 class MapFilterOkState extends MapState{
   Set<Marker> _markers;

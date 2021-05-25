@@ -6,8 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:vic_19/Model/City.dart';
+import 'package:vic_19/Model/Country.dart';
+import 'package:vic_19/Model/DrugStore.dart';
+import 'package:vic_19/Model/Hospital.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
+import 'package:vic_19/Model/Municipality.dart';
+import 'package:vic_19/Model/Shelter.dart';
+import 'package:vic_19/Model/Shelter.dart';
+import 'package:vic_19/Model/Shelter.dart';
+import 'package:vic_19/Model/Shelter.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/util/ApiUrl.dart';
@@ -19,15 +28,12 @@ class MapRepository {
   List<bool> _filters;
   String _title;
   Location _selectLocation;
-  Location _lastLocation;
-  Location _lastLastLocation;
   Set<Polygon> _area;
   List<Location> _locations;
   List<Location> _hospital;
   List<Location> _drugstores;
   List<Location> _shelters;
   Set<Marker> _markers;
-  int _type;
   LatLng _centerMap;
   double _size;
   LocationData _locationData;
@@ -36,7 +42,21 @@ class MapRepository {
   List<LocationData> _listDataGraphic;
   List<int> _yLabelGraphics;
   List<String> _xLabelGraphics;
+  List<Location> _locationHistory;
+  int _type;
 
+
+  int get type => _type;
+
+  set type(int value) {
+    _type = value;
+  }
+
+  List<Location> get locationHistory => _locationHistory;
+
+  set locationHistory(List<Location> value) {
+    _locationHistory = value;
+  }
 
   LocationData get locationData => _locationData;
 
@@ -50,23 +70,12 @@ class MapRepository {
     _size = value;
   }
 
-  int get type => _type;
-
-  set type(int value) {
-    _type = value;
-  }
 
 
   List<LocationData> get listDataGraphic => _listDataGraphic;
 
   set listDataGraphic(List<LocationData> value) {
     _listDataGraphic = value;
-  }
-
-  Location get lastLastLocation => _lastLastLocation;
-
-  set lastLastLocation(Location value) {
-    _lastLastLocation = value;
   }
 
   List<Location> get hospital => _hospital;
@@ -99,11 +108,12 @@ class MapRepository {
     zoom=7;
     filters=[true,false,false,false];
     title="";
-    type=0;
     _centerMap=LatLng(-16.2256651,-65.0455838);
     area=Set();
+    type=0;
     _locationData=LocationData.fromLocationData(1,"",null,0,0, 0, 0,0);
     _activeDataGraphic=[true,false,false,false];
+    _locationHistory=List();
   }
 
   double get zoom => _zoom;
@@ -150,12 +160,6 @@ class MapRepository {
   }
 
 
-  Location get lastLocation => _lastLocation;
-
-  set lastLocation(Location value) {
-    _lastLocation = value;
-  }
-
 
   List<bool> get activeDataGraphic => _activeDataGraphic;
 
@@ -165,24 +169,23 @@ class MapRepository {
 
   Future<void> getMunicipality(context)async {
     List<Location> municipality=List();
-    var url=ApiUrl + "municipality/location/${lastLocation.idLocation}";
+    var url=ApiUrl + "municipality/location/${_locationHistory.last.idLocation}";
     final response = await http.get(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         }
     );
     if(response.statusCode==200){
-
       List resJson = json.decode(utf8.decode(response.bodyBytes));
       resJson.forEach((element) {
-        Location newLocation=Location.fromJson(element, 0);
+        Location newLocation=Municipality.fromJson(element);
         municipality.add(newLocation);
       });
       if(response.statusCode==200){
         locations=municipality;
         zoom=6;
         type=2;
-        centerMap=LatLng(municipality[0].lat,municipality[0].lon);
+        centerMap=LatLng(municipality[0].latitude,municipality[0].longitude);
         markers=await addMarkers(locations, Icons.location_on, color4,size*0.035,context);
         return true;
       }
@@ -197,7 +200,7 @@ class MapRepository {
   }
   Future<void> getDrugstore(context)async {
     List<Location> drugstoreList=List();
-    var url = ApiUrl + "drugstore/location/city/${lastLocation.idLocation}";
+    var url = ApiUrl + "drugstore/locations?cityId=${_locationHistory.last.idLocation}";
     final response = await http.get(url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
@@ -205,10 +208,9 @@ class MapRepository {
     );
     List resJson = json.decode(utf8.decode(response.bodyBytes));
     resJson.forEach((element) {
-      Location newLocation=Location.fromJson(element, 0);
+      Location newLocation=DrugStore.fromJson(element);
       drugstoreList.add(newLocation);
     });
-    print("Drugstores");
     drugstores=drugstoreList;
     if(filters[2]) {
       markers.addAll(await addMarkers(
@@ -218,7 +220,6 @@ class MapRepository {
   changeActiveDataGraphic(int index){
     activeDataGraphic[index]=!activeDataGraphic[index];
     tranformDataGraphic(_listDataGraphic);
-    print("llega aqui por lo menos");
   }
   Future<void> getHospital(context)async {
     /*
@@ -262,30 +263,37 @@ class MapRepository {
     }
 
 */
-    List<Location> hospitalList=List();
-    var url=ApiUrl + "hospital/locationsByCity/${lastLocation.idLocation}";
-    final response = await http.get(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
+    try{
+      List<Location> hospitalList=List();
+      var url=ApiUrl + "hospital/locations?cityId${_locationHistory.last.idLocation}";
+      final response = await http.get(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          }
+      );
+      if(response.statusCode==200){
+        List resJson = json.decode(utf8.decode(response.bodyBytes));
+        resJson.forEach((element) {
+          Location newLocation=Hospital.fromJson(element);
+          hospitalList.add(newLocation);
+        });
+        hospital=hospitalList;
+        if(filters[1]){
+          markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,size*0.035,context));
         }
-    );
-    List resJson = json.decode(utf8.decode(response.bodyBytes));
-    resJson.forEach((element) {
-      Location newLocation=Location.fromJson(element, 0);
-      hospitalList.add(newLocation);
-    });
-    hospital=hospitalList;
-    if(filters[1]){
-    markers.addAll(await addMarkers(hospital, Icons.local_hospital, color6,size*0.035,context));
+      }
+    }
+    catch(e){
+      print("ERROR EN LOS HOSPITALES: "+e.toString());
     }
 
 
   }
   Future<void> getShelters(context)async {
-    List<Location> _shelterList=[Location(24,"Albergue Transitorio",-16.520983002910345, -68.19755751373685,3),
-      Location(25,"Remar Viacha",-16.49771294090049, -68.13778200949986,3),
-      Location(26,"Hogar Carlos de Villegas",-16.507836752632958, -68.13134040251619,3),
-      Location(27,"Hogar Virgen de Copacabana",-16.536528470964985, -68.18857531889586,3)];
+    List<Location> _shelterList=[Shelter(24,"Albergue Transitorio",-16.520983002910345, -68.19755751373685),
+      Shelter(25,"Remar Viacha",-16.49771294090049, -68.13778200949986),
+      Shelter(26,"Hogar Carlos de Villegas",-16.507836752632958, -68.13134040251619),
+      Shelter(27,"Hogar Virgen de Copacabana",-16.536528470964985, -68.18857531889586)];
     shelters=_shelterList;
     if(filters[3]){
       markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,size*0.035,context));}
@@ -301,12 +309,10 @@ class MapRepository {
     );
     List resJson = json.decode(utf8.decode(response.bodyBytes));
     resJson.forEach((element) {
-      Location newLocation=Location.fromJson(element, 0);
+      Location newLocation=City .fromJson(element);
       cities.add(newLocation);
     });
-    print("cities");
     if(response.statusCode==200){
-      print(cities);
       locations=cities;
       zoom=5.5;
       type=1;
@@ -329,8 +335,6 @@ class MapRepository {
         }
     );
     var resJson = json.decode(response.body);
-    print("data");
-    print(resJson);
     LocationData country=LocationData.fromJson(resJson);
     if(response.statusCode==200){
       locationData=country;
@@ -353,8 +357,6 @@ class MapRepository {
 
     if(response.statusCode==200){
       var resJson = json.decode(response.body);
-      print("data");
-      print(resJson);
       List<LocationData> locations=List();
       resJson.forEach((element) {
         LocationData newLocation=LocationData.fromJson(element);
@@ -380,10 +382,9 @@ class MapRepository {
     if(response.statusCode==200){
       List resJson = json.decode(utf8.decode(response.bodyBytes));
       resJson.forEach((element) {
-        Location newLocation=Location.fromJson(element, 0);
+        Location newLocation=Country.fromJson(element);
         paises.add(newLocation);
       });
-      print(paises[0]);
       locations=paises;
       zoom=3.5;
       type=0;
@@ -397,34 +398,7 @@ class MapRepository {
     }
 
   }
-  getTitleMarker(title,filter){
-    String tit="";
-    switch(type){
-      case 0:
-        tit="Pais\n";
-        break;
-      case 1:
-        tit="Departamento\n";
-        break;
-      case 2:
-        switch(filter){
-          case 0:
-            tit="Municipio\n";
-            break;
-          case 1:
-            tit="Hospital\n";
-            break;
-          case 2:
-            tit="Farmacia\n";
-            break;
-          case 3:
-            tit="Albergue\n";
-            break;
-        }
-    }
-    tit+=title;
-    return tit;
-  }
+
   Future<Set<Marker>> addMarkers(List<Location> list,icon,color,double size,context)async{
     Set<Marker> markerAux=Set();
     var id;
@@ -435,9 +409,9 @@ class MapRepository {
     for(var l in list) {
       i++;
       id=l.idLocation.toString();
-        name=l.name;
-        lat=l.lat;
-        lon=l.lon;
+        name=l.locationName;
+        lat=l.latitude;
+        lon=l.longitude;
 
       final marker = await MapUtils.createCustomMarkerBitmap1(
           name, color, icon,size);
@@ -456,48 +430,45 @@ class MapRepository {
     return markerAux;
   }
   Future<void> expandMap(context,t)async{
+    if((selectLocation!=null&&selectLocation.locationName=="Bolivia")||type!=0){
+      size=MediaQuery.of(context).size.height;
+      if(type<2||(type<3&&t==2&&type>=0)){
+        t==1?type++:type--;
+        switch(type){
+          case 0:
+            if(t==2){
+              selectLocation=locationHistory.last;
+              locationHistory.removeLast();
+            }
+            else{
+              locationHistory.add(selectLocation);
+              selectLocation=null;}
+            await getCountries(context);
+            break;
+          case 1:
+            if(t==2){
+              _locationHistory.removeLast();
+            }
+            else{
+              _locationHistory.add(selectLocation);
+              selectLocation=null;
 
-    size=MediaQuery.of(context).size.height;
-    if(type<2||(type<3&&t==2&&type>=0)){
-      t==1?type++:type--;
-      switch(type){
-        case 0:
-          if(t==2){
-            selectLocation=lastLocation;
-            print(lastLocation);
-            lastLocation=null;
-          }
-          else{
-            lastLocation=selectLocation;
-            selectLocation=null;}
-          await getCountries(context);
-          break;
-        case 1:
-          if(t==2){
-           lastLocation=lastLastLocation;
-          }
-          else{
-            lastLocation=selectLocation;
-            selectLocation=null;
+            }
+            await getCities(context);
+            break;
+          case 2:
+            if(t==2){
+            }
+            else{
+              _locationHistory.add(selectLocation);
+              await getMunicipality(context);
+              await getHospital(context);
+              await getDrugstore(context);
+              await getShelters(context);
 
-          }
-          await getCities(context);
-          break;
-        case 2:
-          if(t==2){
-            lastLastLocation=lastLocation;
-
-          }
-          else{
-            lastLastLocation=lastLocation;
-            lastLocation=selectLocation;
-            print(lastLocation);
-          }
-          await getMunicipality(context);
-          await getHospital(context);
-          await getDrugstore(context);
-          await getShelters(context);
-          break;
+            }
+            break;
+        }
       }
     }
 
@@ -522,24 +493,16 @@ getDateGraphic(month,day){
 }
 tranformDataGraphic(List<LocationData> list)
 {
-  print("transform");
   int initDate=list[0].dateLocationCovid.millisecondsSinceEpoch;
   int lastDate=list.last.dateLocationCovid.millisecondsSinceEpoch;
   int divDate=((lastDate-initDate)~/10);
-  print(divDate);
-  print("divDate");
   List<String> xLabels=List();
   lastDate=initDate+divDate*10;
   DateTime dateLabel;
   for(int i=0;i<10;i++){
     dateLabel=DateTime.fromMillisecondsSinceEpoch(initDate+i*divDate);
-    print(dateLabel);
     xLabels.add(getDateGraphic(dateLabel.month, dateLabel.day));
   }
-  print(initDate);
-  print(lastDate);
-  print(xLabels);
-  print("divDate");
   List<List<FlSpot>> listPoints=List();
     for(int i=0;i<4;i++){
       listPoints.add(List());
@@ -552,8 +515,6 @@ tranformDataGraphic(List<LocationData> list)
       maxData=maxD;
     }
   }
-  print("maxDta");
-  print(maxData);
   int divData=(maxData/5).truncate();
   maxData=divData*5;
   yLabels.add(0);
@@ -566,7 +527,6 @@ tranformDataGraphic(List<LocationData> list)
   double y2=0;
   double y3=0;
   double y4=0;
-  print("termina1");
   for(var l in list) {
       x=9*(l.dateLocationCovid.millisecondsSinceEpoch-initDate)/(lastDate-initDate);
       y1=l.confirmed==-1||l.confirmed==0?listPoints[0].length==0?0:listPoints[0].last.y:5*l.confirmed/maxData;
@@ -581,17 +541,12 @@ tranformDataGraphic(List<LocationData> list)
   listPointGraphic=listPoints;
   xLabelGraphics=xLabels;
   yLabelGraphics=yLabels;
-  print(activeDataGraphic);
-  print(listPointGraphic);
-  print("termina");
 
 }
 
 Future<void> changeFilter(idFilter,context)async{
-    print("filte");
     filters[idFilter]=!filters[idFilter];
     markers.clear();
-    print(filters);
     for(var i=0;i<filters.length;i++){
         if(filters[i]==true){
           switch(i){
