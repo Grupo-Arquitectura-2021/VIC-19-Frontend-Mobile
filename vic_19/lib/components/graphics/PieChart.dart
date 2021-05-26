@@ -16,13 +16,14 @@ class PieChartView extends StatelessWidget {
   final List<Color>lineColors=[color2,Colors.lightGreen,color4,Colors.cyan];
 
   List<PieChartSectionData> getSections(){
-    var total=_data.recovered+_data.confirmed+_data.deceased+_data.vaccinated;
-    var confirmed=double.parse((100*_data.confirmed/total).toStringAsFixed(2));
-    var recovered=double.parse((100*_data.recovered/total).toStringAsFixed(2));
-    var deceased=double.parse((100*_data.deceased/total).toStringAsFixed(2));
-    var vaccinated=double.parse((100*_data.vaccinated/total).toStringAsFixed(2));
     List<PieChartSectionData> list= List();
-    if(active[0]&&confirmed>0){
+    if(_data!=null){
+      var total=_data.recovered+_data.confirmed+_data.deceased+_data.vaccinated;
+      var confirmed=double.parse((100*_data.confirmed/total).toStringAsFixed(2));
+      var recovered=double.parse((100*_data.recovered/total).toStringAsFixed(2));
+      var deceased=double.parse((100*_data.deceased/total).toStringAsFixed(2));
+      var vaccinated=double.parse((100*_data.vaccinated/total).toStringAsFixed(2));
+      if(active[0]&&confirmed>0){
         list.add(
             PieChartSectionData(
               color: lineColors[0],
@@ -34,42 +35,43 @@ class PieChartView extends StatelessWidget {
             )
         );
       }
-    if(active[1]&&recovered>0){
-      list.add(
-        PieChartSectionData(
-        color: lineColors[1],
-        value: recovered,
-        title: '$recovered%',
-        radius: 50,
-        titleStyle: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.bold, color: color1),
-      )
+      if(active[1]&&recovered>0){
+        list.add(
+            PieChartSectionData(
+              color: lineColors[1],
+              value: recovered,
+              title: '$recovered%',
+              radius: 50,
+              titleStyle: TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.bold, color: color1),
+            )
 
-      );
-    }
-    if(active[2]&&deceased>=0){
-      list.add(
-          PieChartSectionData(
-            color: lineColors[2],
-            value: deceased,
-            title: '$deceased%',
-            radius: 50,
-            titleStyle: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: color1),
-          )
-      );
-    }
-    if(active[3]&&vaccinated>0){
-      list.add(
-          PieChartSectionData(
-            color: lineColors[3],
-            value: vaccinated,
-            title: '${vaccinated}%',
-            radius: 50,
-            titleStyle: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: color1),
-          )
-      );
+        );
+      }
+      if(active[2]&&deceased>=0){
+        list.add(
+            PieChartSectionData(
+              color: lineColors[2],
+              value: deceased,
+              title: '$deceased%',
+              radius: 50,
+              titleStyle: TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.bold, color: color1),
+            )
+        );
+      }
+      if(active[3]&&vaccinated>0){
+        list.add(
+            PieChartSectionData(
+              color: lineColors[3],
+              value: vaccinated,
+              title: '${vaccinated}%',
+              radius: 50,
+              titleStyle: TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.bold, color: color1),
+            )
+        );
+      }
     }
     return list;
   }

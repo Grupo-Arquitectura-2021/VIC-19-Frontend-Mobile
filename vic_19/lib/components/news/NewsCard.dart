@@ -6,6 +6,7 @@ import 'package:vic_19/Model/News.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/components/news/BottomSheet.dart';
 import 'package:vic_19/components/news/NewsSingleAlert.dart';
+import 'package:vic_19/util/Formatter.dart';
 
 class NewsCard extends StatelessWidget {
   double _width;
@@ -18,7 +19,7 @@ class NewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       padding: EdgeInsets.all(0),
-        color: color1,
+        color: color8,
 
         elevation: 0,
         onPressed: (){
@@ -29,19 +30,34 @@ class NewsCard extends StatelessWidget {
           width: _width,
           child: Row(
             children: [
+
+              Container(
+                width: _width*0.3,
+                height: _height*0.7,
+                padding: EdgeInsets.all(_width*0.03),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(_width*0.01),
+                      image: DecorationImage(
+                          image: NetworkImage(_news.newsImages),
+                          fit: BoxFit.cover
+                      )
+                  ),
+                ),
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: _width*0.6,
-                      height: _height*0.7,
+                      width: _width*0.7,
+                      height: _height*0.6,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                         SizedBox(
                           width: _width*0.6,
                           child:
-                          AutoSizeText(_news.title,textAlign: TextAlign.start,style: TextStyle(color: color5,fontSize: 50),maxLines: 3,minFontSize: 1,maxFontSize: 18),
+                          AutoSizeText(_news.title,textAlign: TextAlign.start,style: TextStyle(color: color5,fontSize: 50,fontWeight: FontWeight.w400),maxLines: 3,minFontSize: 1,maxFontSize: 18),
                         )
                         ],
                       )
@@ -50,38 +66,15 @@ class NewsCard extends StatelessWidget {
                       width: _width*0.6,
                       height: _height*0.1,
                       child:
-                            AutoSizeText("${_news.dateNews.day}-${_news.dateNews.month}-${_news.dateNews.year} ${_news.dateNews.hour}:${_news.dateNews.minute}",style: TextStyle(color: color3,fontSize: 50),maxLines: 1,minFontSize: 1,maxFontSize: 14)
+                            AutoSizeText(Formatter.formatDate(_news.dateNews),style: TextStyle(color: color5.withOpacity(0.5),fontSize: 50),maxLines: 1,minFontSize: 1,maxFontSize: 12)
 
                   ),
                 ],
-              ),
-
-              Container(
-                width: _width*0.4,
-                height: _height,
-                padding: EdgeInsets.all(_width*0.03),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(_width*0.01),
-                      image: DecorationImage(
-                          image: NetworkImage(_news.newsImages),
-                          fit: BoxFit.cover
-                      )
-                  ),
-                ),
               ),
             ],
           )
         ),
       );
-  }
-  Future<void> _showMyDialog(context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return NewsSingleAlert(_width, _height*2,color3, _news);
-      },
-    );
   }
    _showModalBottomSheet(context){
     var size=MediaQuery.of(context).size;
@@ -89,7 +82,7 @@ class NewsCard extends StatelessWidget {
         shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(size.width*0.05),topLeft: Radius.circular(size.width*0.05))),
         isScrollControlled: true,
         builder: (BuildContext context){
-          return CardBottomSheet(size.width*0.05, size.height*0.8, _news, color3,color1);
+          return CardBottomSheet(size.width, size.height, _news, color3,color8);
         }
     );
    }

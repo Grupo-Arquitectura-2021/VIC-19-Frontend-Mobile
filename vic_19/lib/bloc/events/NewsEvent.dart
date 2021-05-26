@@ -8,7 +8,6 @@ import 'package:vic_19/Model/News.dart';
 abstract class NewsEvent extends Equatable{
 }
 class NewsGetEvent extends NewsEvent{
-
   NewsGetEvent();
 
   @override

@@ -60,7 +60,7 @@ class DateSeleccion extends StatelessWidget {
     DateTime date;
     date=await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(2019), lastDate: DateTime.now(),helpText: "Seleccione una fecha",fieldLabelText: "Fecha",fieldHintText: "Mes/Dia/Año",errorInvalidText: "",errorFormatText: "",
     builder: (BuildContext context, Widget child){
-      return Theme(data: ThemeData.dark().copyWith(primaryColor: color5,accentColor: color5,textSelectionColor: color5,cursorColor: _color,backgroundColor: color1,colorScheme: ColorScheme.dark(primary: _color,background: color1,surface: color8,onBackground: color1,),), child: child);
+      return Theme(data: ThemeData.dark().copyWith(primaryColor: color5,accentColor: color5,textSelectionColor: color5,cursorColor: color5,backgroundColor: color1,colorScheme: ColorScheme.dark(primary: color5,background: color1,surface: color8,onBackground: color1,),), child: child);
     }
     );
     if(date!=null && date!=_selectedDate){

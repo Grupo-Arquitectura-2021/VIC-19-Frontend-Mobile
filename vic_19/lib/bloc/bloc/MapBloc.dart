@@ -20,7 +20,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
        yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap,_mapR.locationHistory,_mapR.area);
      }
      catch(e){
-       print(e);
+       print("Error al obtener paises$e");
      }
    }
    else if(event is SelectLocationEvent){
@@ -28,7 +28,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
        yield MapSelectLocationState(event.props[0],_mapR.locationHistory);
      }
      catch(e){
-       print(e);
+       print("ERROR AL SELECCIONAR: $e");
      }
    }
    else if(event is SelectFilterEvent){
@@ -39,7 +39,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
        yield MapFilterOkState(_mapR.markers, _mapR.filters);
      }
      catch(e){
-       print(e);
+       print("ERROR AL CAMBIAR EL FILTRO: $e");
      }
    }
    else if(event is MapGraphicsEvent){
@@ -47,7 +47,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
        yield MapGraphicsOkState();
      }
      catch(e){
-       print(e);
+       print("ERROR AL CAMBIAR A GRAFICOS: $e");
      }
    }
    else if(event is MapExpandEvent){
@@ -57,7 +57,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
        yield MaploadMarkersOkState( _mapR.zoom, _mapR.markers,_mapR.type,_mapR.centerMap,_mapR.locationHistory,_mapR.area);
      }
      catch(e){
-       print(e);
+       print("ERROR AL EXPANDIR EL MAPA: $e");
      }
    }
    else if (event is MapMainMapEvent){
@@ -65,7 +65,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
        yield MapMainMapOkState();
      }
      catch(e){
-
+       print("ERROR AL VOLVER AL MAPA: $e");
      }
    }
 

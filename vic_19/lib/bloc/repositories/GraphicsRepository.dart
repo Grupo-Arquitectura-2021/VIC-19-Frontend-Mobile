@@ -1,26 +1,28 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/PaletteColor.dart';
-import 'package:vic_19/bloc/bloc/MapBloc.dart';
 import 'package:vic_19/util/ApiUrl.dart';
-import 'package:vic_19/util/MapUtils.dart';
-import 'package:vic_19/bloc/events/MapEvent.dart';
 import 'package:http/http.dart' as http;
+import 'dart:ui' as ui;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 class GraphicsRepository {
   LocationData _locationData;
   List<bool> _activeDataGraphic;
   List<List<FlSpot>> _listPointGraphic;
   List<LocationData> _listDataGraphic;
-  int _maxP;
-  int _intP;
+  int _intY;
+  int _intX;
+  int _minY;
   List<String> _xLabelGraphics;
   Location _selectLocation;
   int _activeChart;
@@ -59,16 +61,15 @@ class GraphicsRepository {
 
   GraphicsRepository(){
     _locationData=LocationData.fromLocationData(1,"",null,0,0, 0, 0,0);
-    _activeDataGraphic=[true,false,false,false];
+    _activeDataGraphic=[true,true,true,true];
   }
 
 
-  int get maxP => _maxP;
+  int get intY => _intY;
 
-  set maxP(int value) {
-    _maxP = value;
+  set intY(int value) {
+    _intY = value;
   }
-
 
   Location get selectLocation => _selectLocation;
 
@@ -118,10 +119,10 @@ class GraphicsRepository {
      var r=listDataGraphic.last.recovered;
      var d=listDataGraphic.last.deceased;
      var v=listDataGraphic.last.vaccinated;
-     if(c==null||c==-1||c==0||
-         r==null||r==-1||r==0||
-         d==null||d==-1||d==0||
-         v==null||v==-1||v==0){
+     if((c==null||c==-1||c==0)&&(
+         r==null||r==-1||r==0)&&(
+         d==null||d==-1||d==0)&&(
+         v==null||v==-1||v==0)){
        activeChart=4;
      }
      else{
@@ -163,16 +164,55 @@ bool verifyactiveData(){
     }
     return false;
 }
+  Future<void> capturePng(RenderRepaintBoundary boundary) async {
+    try {
+      print('inside');
+      var imagePDF;
+      var pngBytes;
+      var im;
+      final pdf = pw.Document();
+      im=await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData =
+      await im.toByteData(format: ui.ImageByteFormat.png);
+      pngBytes = byteData.buffer.asUint8List();
+      print("bytes${pngBytes}");
+      imagePDF = pw.MemoryImage(pngBytes);
+      print("bytes${pngBytes}");
+      pdf.addPage(pw.Page(build: (pw.Context context) {
+        return pw.Center(
+          child: pw.Container(
+            color: PdfColors.black,
+            child: pw.Image.provider(imagePDF),
+          )
+        ); // Center
+      }));
+
+      print("bytes${pngBytes}");
+
+      final file = File(await getFilePath());
+      await file.writeAsBytes(await pdf.save());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> getFilePath() async {
+    Directory appDocumentsDirectory = await getExternalStorageDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path; // 2
+    String filePath = '$appDocumentsPath/demoPDF.pdf'; // 3
+
+    return filePath;
+  }
 tranformDataGraphic(List<LocationData> list)
 {
-  print("transform");
   int initDate=list[0].dateLocationCovid.millisecondsSinceEpoch;
+  minY=initDate;
   int lastDate=list.last.dateLocationCovid.millisecondsSinceEpoch;
-  int divDate=((lastDate-initDate)~/10);
+  int divDate=((lastDate-initDate)~/9);
   print(divDate);
-  print("divDate");
   List<String> xLabels=List();
-  lastDate=initDate+divDate*10;
+  lastDate=initDate+divDate*9;
+  intX=divDate==0?1:divDate;
   DateTime dateLabel;
   for(int i=0;i<10;i++){
     dateLabel=DateTime.fromMillisecondsSinceEpoch(initDate+i*divDate);
@@ -188,7 +228,6 @@ tranformDataGraphic(List<LocationData> list)
     }
   int maxData=0;
   List<int> yLabels=List();
-  print("divDate");
   print(activeDataGraphic);
   for(var l in list){
     int maxD=max(activeDataGraphic[0]?l.confirmed:0, max(max(activeDataGraphic[1]?l.recovered:0,activeDataGraphic[2]?l.deceased:0),activeDataGraphic[3]?l.vaccinated:0));
@@ -196,12 +235,10 @@ tranformDataGraphic(List<LocationData> list)
       maxData=maxD;
     }
   }
-  print("maxDta");
   print(maxData);
   int divData=(maxData/5).truncate();
   maxData=divData*5;
-  _maxP=maxData;
-  _intP=divData==0?1:divData;
+  _intY=divData==0?1:divData;
   yLabels.add(0);
   for(int i=0;i<7;i++){
     yLabels.add(yLabels[i]+divData);
@@ -212,13 +249,12 @@ tranformDataGraphic(List<LocationData> list)
   double y2=0;
   double y3=0;
   double y4=0;
-  print("termina1");
   for(var l in list) {
       x=9*(l.dateLocationCovid.millisecondsSinceEpoch-initDate)/(lastDate-initDate);
-      y1=l.confirmed==-1||l.confirmed==0?null:l.confirmed*1.0;
-      y2=l.recovered==-1||l.confirmed==0?null:l.recovered*1.0;
-      y3=l.deceased==-1||l.confirmed==0?null:l.deceased*1.0;
-      y4=l.vaccinated==-1||l.confirmed==0?null:l.vaccinated*1.0;
+      y1=l.confirmed==-1||l.confirmed==0?null:l.confirmed*5/maxData*1.0;
+      y2=l.recovered==-1||l.recovered==0?null:l.recovered*5/maxData*1.0;
+      y3=l.deceased==-1||l.deceased==0?null:l.deceased*5/maxData*1.0;
+      y4=l.vaccinated==-1||l.vaccinated==0?null:l.vaccinated*5/maxData*1.0;
       if(activeDataGraphic[0]&&y1!=null)listPoints[0].add(FlSpot(x,y1));
       if(activeDataGraphic[1]&&y2!=null)listPoints[1].add(FlSpot(x,y2));
       if(activeDataGraphic[2]&&y3!=null)listPoints[2].add(FlSpot(x,y3));
@@ -228,7 +264,6 @@ tranformDataGraphic(List<LocationData> list)
   xLabelGraphics=xLabels;
   print(activeDataGraphic);
   print(listPointGraphic);
-  print("termina");
 
 }
 
@@ -240,9 +275,17 @@ tranformDataGraphic(List<LocationData> list)
     _xLabelGraphics = value;
   }
 
-  int get intP => _intP;
 
-  set intP(int value) {
-    _intP = value;
+
+  int get intX => _intX;
+
+  set intX(int value) {
+    _intX = value;
+  }
+
+  int get minY => _minY;
+
+  set minY(int value) {
+    _minY = value;
   }
 }

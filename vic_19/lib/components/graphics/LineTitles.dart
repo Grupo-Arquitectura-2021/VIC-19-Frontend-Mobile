@@ -36,21 +36,15 @@ class LineTitles{
       leftTitles: SideTitles(
         showTitles: true,
           margin: 1,
-          interval: intP!=0?intP*1.0:1,
+
+          interval: 1,
           getTextStyles: (value)=> TextStyle(
               fontWeight: FontWeight.w300,
               color: color5.withOpacity(0.7),
               fontSize: size
           ),
           getTitles: (value){
-            if(intP==0){
-              return "";
-            }
-            else{
-
-              if(value%intP==0){return value.toInt()>999?"${(value~/1000)}k":value.toInt().toString();}
-              else return "";
-            }
+            return (value*intP).toInt()>999?"${((value*intP)~/1000)}k":(value*intP).toInt().toString();
           }
       ),
     );

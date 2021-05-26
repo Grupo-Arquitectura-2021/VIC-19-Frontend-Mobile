@@ -19,14 +19,12 @@ class TablesRepository {
 
 
   Future<void> getCities(DateTime dateCity)async{
-    String url=ApiUrl+"city/"+"${dateCity.year}-${dateCity.month}-${dateCity.day}";
+    String url=ApiUrl+"city?date="+"${dateCity.year}-${dateCity.month}-${dateCity.day}";
     var res = await http.get(url, //ip for virtualized devices
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         });
     var citiesList2 = json.decode(utf8.decode(res.bodyBytes));
-    // print("datos repsitorio");
-    // print(res.body);
     var citiesList3=List<LocationData>();
 
     for(var n in citiesList2){

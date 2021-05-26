@@ -17,33 +17,38 @@ class GetDataGraphicsOkState extends GraphicsState{
   final LocationData _locationData;
   final List<bool> _list;
   final List<List<FlSpot>> _listPoints;
-  final int _maxP;
-  final int _intP;
+  final int _intX;
+  final int _intY;
+  final int _minY;
   final List<String> _xlabels;
 
 
   GetDataGraphicsOkState(this._locationData,
-      this._list, this._listPoints, this._maxP,this._intP, this._xlabels);
+      this._list, this._listPoints,  this._intX,
+      this._intY, this._minY, this._xlabels);
 
   @override
   List<Object> get props=>[this._locationData,
-    this._list, this._listPoints, this._maxP,this._intP, this._xlabels];
+    this._list, this._listPoints, this._intX,
+    this._intY, this._minY, this._xlabels];
 
 }
 class ChangeActiveDataGraphicState extends GraphicsState{
   final List<bool> _list;
   final List<List<FlSpot>> _listPoints;
-  final int _maxP;
-  final int _intP;
+  final int _intX;
+  final int _intY;
+  final int _minY;
   final List<String> _xlabels;
 
 
-  ChangeActiveDataGraphicState(
-      this._list, this._listPoints, this._maxP,this._intP,this._xlabels);
+  ChangeActiveDataGraphicState(this._list, this._listPoints, this._intX,
+      this._intY, this._minY, this._xlabels);
 
   @override
   List<Object> get props=>[
-    this._list, this._listPoints, this._maxP,this._intP,this._xlabels];
+    this._list, this._listPoints, this._intX,
+  this._intY, this._minY, this._xlabels];
 
 }
 class LoadingGraphicsState extends GraphicsState{

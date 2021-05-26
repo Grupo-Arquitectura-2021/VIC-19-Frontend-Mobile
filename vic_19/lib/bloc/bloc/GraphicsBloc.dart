@@ -18,7 +18,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        yield LoadingGraphicsState();
        print(event.props);
        _graR.changeActiveDataGraphic(event.props[0]);
-       yield ChangeActiveDataGraphicState(_graR.activeDataGraphic,_graR.listPointGraphic,_graR.maxP,_graR.intP,_graR.xLabelGraphics);
+       yield ChangeActiveDataGraphicState(_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics);
      }
      catch(e){
        print("pasa lo otro");print(e);}
@@ -28,7 +28,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        yield LoadingGraphicsState();
        _graR.selectLocation=event.props[1];
        await _graR.getAllDataLocation(event.props[0]);
-       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.maxP,_graR.intP,_graR.xLabelGraphics);
+       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics);
      }
      catch(e){
        print("pasa lo otro");print(e);}
@@ -37,7 +37,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
      try{
        yield LoadingGraphicsState();
        await _graR.getAllDataLocation(event.props[0]);
-       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.maxP,_graR.intP,_graR.xLabelGraphics);
+       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics);
      }
      catch(e){
        print("pasa lo otro");print(e);}
@@ -50,6 +50,9 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
      }
      catch(e){
        print("pasa lo otro");print(e);}
+   }
+   else if (event is DownloadChartsEvent){
+     _graR.capturePng(event.props[0]);
    }
   }
 }

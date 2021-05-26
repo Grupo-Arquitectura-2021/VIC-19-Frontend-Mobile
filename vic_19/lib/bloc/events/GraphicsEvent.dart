@@ -1,6 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:vic_19/Model/Location.dart';
 
 abstract class GraphicsEvent extends Equatable{
@@ -37,5 +38,14 @@ class ChangeActiveChartEvent extends GraphicsEvent{
 
   @override
   List<Object> get props => [_index];
+
+}
+class DownloadChartsEvent extends GraphicsEvent{
+  final RenderRepaintBoundary _render;
+
+  DownloadChartsEvent(this._render);
+
+  @override
+  List<Object> get props => [_render];
 
 }

@@ -2,9 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
+import 'package:vic_19/bloc/events/GraphicsEvent.dart';
 import 'package:vic_19/bloc/states/GraphicsState.dart';
 import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/components/graphics/BarChartView.dart';
@@ -15,7 +17,6 @@ import 'package:vic_19/components/graphics/DownloadButton.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/graphics/PieChart.dart';
 import '../PaletteColor.dart';
-import '../components/graphics/LineTitles.dart';
 
 class GraphicsPage extends StatelessWidget {
   final activePage;
@@ -27,12 +28,23 @@ class GraphicsPage extends StatelessWidget {
   List<bool> _activeData=[false,false,false,false,false];
   List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras","Gráfica de predicción",""];
   GraphicsPage(this._width,this._height,this.activePage);
-  int _maxP=0;
-  int _intP=0;
+  int _intX=0;
+  int _intY=0;
+  int _minY=0;
   List<String> _titlesX=[];
   List<List<FlSpot>> _dataGraphics=[];
   int _activeChart=0;
+  List<Widget> _chartPages;
+  List<GlobalKey> _keyCharts = [GlobalKey(),GlobalKey(),GlobalKey(),GlobalKey()];
 
+  getCharts(){
+    return [
+      RepaintBoundary(key: _keyCharts[0],child: LinearChart(_intX,_intY,_minY, _titlesX, _width,_height*0.325, _dataGraphics)),
+      RepaintBoundary(key: _keyCharts[1],child: PieChartView( _width, _height*0.325, _dataLocation, _activeData)),
+      RepaintBoundary(key: _keyCharts[2],child: BarChartView( _width, _height*0.325, _dataLocation, _activeData)),
+      RepaintBoundary(key: _keyCharts[3],child: LinearChart(_intX,_intY,_minY, _titlesX, _width,_height*0.325, _dataGraphics)),
+      Container(width: _width, height:_height*0.325,alignment:Alignment.center,child: Text("Sin gráficos",style: TextStyle(color: color5.withOpacity(0.7)),),)];
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GraphicsBloc,GraphicsState>(
@@ -42,21 +54,21 @@ class GraphicsPage extends StatelessWidget {
             _selectedDate=_dataLocation.dateLocationCovid;
             _activeData=state.props[1];
             _dataGraphics=state.props[2];
-            _maxP=state.props[3];
-            _intP=state.props[4];
-            _titlesX=state.props[5];
-            print(_dataGraphics.length);
-            print("verenmos");
+            _intX=state.props[3];
+            _intY=state.props[4];
+            _minY=state.props[5];
+            _titlesX=state.props[6];
+            _chartPages=getCharts();
           }
           if(state is ChangeActiveDataGraphicState){
             print("llega graphic");
             _activeData=state.props[0];
             _dataGraphics=state.props[1];
-            _maxP=state.props[2];
-            _intP=state.props[3];
-            _titlesX=state.props[4];
-            print(_dataGraphics.length);
-            print("verenmos");
+            _intX=state.props[2];
+            _intY=state.props[3];
+            _minY=state.props[4];
+            _titlesX=state.props[5];
+            _chartPages=getCharts();
           }
           if(state is ChangeActiveChartState){
             _activeChart=state.props[0];
@@ -135,10 +147,13 @@ class GraphicsPage extends StatelessWidget {
                                     child: IconButton(
                                       padding: EdgeInsets.all(0),
                                       onPressed: (){
-                                        showMenu(context: context, position: RelativeRect.fromLTRB(_width*0.5, _height*0.32, _width*0.05, _height*0.5), items: [
-                                          PopupMenuItem(
+                                        showMenu(
+                                          context: context,
+                                          position: RelativeRect.fromLTRB(_width*0.5, _height*0.32, _width*0.05, _height*0.5),
 
-                                            child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30),
+                                          items: [
+                                          PopupMenuItem(
+                                            child: GestureDetector(onTap:(){},child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30)),
                                             height: 30,),
                                           PopupMenuItem(
 
@@ -146,9 +161,16 @@ class GraphicsPage extends StatelessWidget {
                                             height: 30,),
                                           PopupMenuItem(
 
-                                            child: DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30),
+                                            child: GestureDetector(
+                                                onTap:(){
+                                                  BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[_activeChart].currentContext.findRenderObject()));
+                                                },
+                                                child:DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30)
+                                            ),
+
                                             height: 30,)
-                                        ],color: color5.withOpacity(0.9),);
+                                        ],color: color5.withOpacity(0.9),
+                                        );
                                       },
                                       icon:Icon(Icons.file_download,color: color5,size: _height*0.025,)
                                     ),
@@ -158,12 +180,7 @@ class GraphicsPage extends StatelessWidget {
                           ),
                           IndexedStack(
                               index: _activeChart,
-                              children: [
-                                LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
-                                PieChartView( _width, _height*0.325, _dataLocation, _activeData),
-                                BarChartView( _width, _height*0.325, _dataLocation, _activeData),
-                                LinearChart(_maxP,_intP, _titlesX, _width,_height*0.325, _dataGraphics),
-                                Container(width: _width, height:_height*0.325,alignment:Alignment.center,child: Text("Sin gráficos",style: TextStyle(color: color5.withOpacity(0.7)),),)],
+                              children: _chartPages
 
                           ),
 
@@ -215,4 +232,5 @@ class GraphicsPage extends StatelessWidget {
         }
     );
   }
+
 }
