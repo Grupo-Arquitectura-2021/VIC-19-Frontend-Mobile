@@ -65,3 +65,12 @@ class ChangeActiveChartState extends GraphicsState{
   List<Object> get props => [_index];
 
 }
+class ChangeActiveGraphicState extends GraphicsState{
+  final int _index;
+
+  ChangeActiveGraphicState(this._index);
+
+  @override
+  List<Object> get props => [_index];
+
+}

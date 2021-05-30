@@ -26,7 +26,14 @@ class GraphicsRepository {
   List<String> _xLabelGraphics;
   Location _selectLocation;
   int _activeChart;
+  int _activeGraphic;
 
+
+  int get activeGraphic => _activeGraphic;
+
+  set activeGraphic(int value) {
+    _activeGraphic = value;
+  }
 
   LocationData get locationData => _locationData;
 
@@ -123,7 +130,7 @@ class GraphicsRepository {
          r==null||r==-1||r==0)&&(
          d==null||d==-1||d==0)&&(
          v==null||v==-1||v==0)){
-       activeChart=4;
+       activeChart=3;
      }
      else{
        activeChart=index;

@@ -26,7 +26,7 @@ class GraphicsPage extends StatelessWidget {
   double _width;
   double _height;
   List<bool> _activeData=[false,false,false,false,false];
-  List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras","Gráfica de predicción",""];
+  List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras",""];
   GraphicsPage(this._width,this._height,this.activePage);
   int _intX=0;
   int _intY=0;
@@ -36,13 +36,14 @@ class GraphicsPage extends StatelessWidget {
   int _activeChart=0;
   List<Widget> _chartPages;
   List<GlobalKey> _keyCharts = [GlobalKey(),GlobalKey(),GlobalKey(),GlobalKey()];
+  int _pageGraphic=0;
+  PageController _pageController=new PageController(initialPage: 0);
 
   getCharts(){
     return [
       RepaintBoundary(key: _keyCharts[0],child: LinearChart(_intX,_intY,_minY, _titlesX, _width,_height*0.325, _dataGraphics)),
       RepaintBoundary(key: _keyCharts[1],child: PieChartView( _width, _height*0.325, _dataLocation, _activeData)),
       RepaintBoundary(key: _keyCharts[2],child: BarChartView( _width, _height*0.325, _dataLocation, _activeData)),
-      RepaintBoundary(key: _keyCharts[3],child: LinearChart(_intX,_intY,_minY, _titlesX, _width,_height*0.325, _dataGraphics)),
       Container(width: _width, height:_height*0.325,alignment:Alignment.center,child: Text("Sin gráficos",style: TextStyle(color: color5.withOpacity(0.7)),),)];
   }
   @override
@@ -73,160 +74,290 @@ class GraphicsPage extends StatelessWidget {
           if(state is ChangeActiveChartState){
             _activeChart=state.props[0];
           }
+          if(state is ChangeActiveGraphicState){
+            _pageGraphic=state.props[0];
+          }
           if(state is LoadingGraphicsState||!activePage){
             return Container(
                 decoration: BoxDecoration(
                 color: color8,
             ),
-          width:    _width,
-          height: _height,
-          child:Loading("Cargando Gráficas", 0.3,1));
-          }
+            width:    _width,
+            height: _height,
+            child:Loading("Cargando Gráficas", 0.3,1));
+            }
           else{
             return Container(
-
-                decoration: BoxDecoration(
-                  color: color8,
-                ),
-                width:    _width,
-                height: _height,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height:
-                      MediaQuery.of(context).padding.top,
-                    ),
-                    SizedBox(height: _height*0.14,),
+              width:    _width,
+              height: _height,
+              color: color8,
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: _width,
+                    height: _height*0.165,
+                  ),
+                  Container(
+                    width: _width,
+                    height: _height*0.06,
+                    child: Row(
+                      children: [
+                        MaterialButton(
+                          minWidth: _width*0.5,
+                          height: _height*0.06,
+                          padding: EdgeInsets.all(0),
+                          elevation: 0,
+                          shape: Border(
+                            bottom: BorderSide(color:_pageGraphic==0?color5:Colors.transparent)
+                          ),
+                          onPressed: (){
+                            _pageController.jumpToPage(0);
+                            BlocProvider.of<GraphicsBloc>(context).add(ChangeActiveGraphicEvent(0));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(Icons.show_chart,color: color5,),
+                              Text("   General",style: TextStyle(color: color5),)
+                            ],
+                          ),
+                        ),
+                        MaterialButton(
+                          minWidth: _width*0.5,
+                          height: _height*0.06,
+                          shape: Border(
+                              bottom: BorderSide(color: _pageGraphic==1?color5:Colors.transparent)
+                          ),
+                          onPressed: (){
+                            _pageController.jumpToPage(1);
+                            BlocProvider.of<GraphicsBloc>(context).add(ChangeActiveGraphicEvent(1));
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.multiline_chart,color: color5,),
+                              Text("   Predicción",style: TextStyle(color: color5),)
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ),
+                  SizedBox(
+                    width:    _width,
+                    height: _height*0.775,
+                    child: PageView(
+                      controller: _pageController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
                     Container(
-                      width: _width,
-                      height: _height*0.475,
+
+                    decoration: BoxDecoration(
+                    color: color8,
+                    ),
                       child: Column(
                         children: [
                           Container(
-                              width: _width,
-                              height: _height*0.04,
-                              padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  DateSeleccion(_selectedDate, color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
-                                ],
-                              )
-                          ),
-                          Container(
-                              width: _width,
-                              height: _height*0.08,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.show_chart, _width*0.22, _height*0.04,0,_activeChart==0?true:false),
-                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.pie_chart, _width*0.22, _height*0.04,1,_activeChart==1?true:false),
-                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.insert_chart, _width*0.22, _height*0.04,2,_activeChart==2?true:false),
-                                  ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.multiline_chart, _width*0.22, _height*0.04,3,_activeChart==3?true:false),
-                                ],
-                              )
-                          ),
-                          Container(
-                              width: _width,
-                              height: _height*0.03,
-                              alignment: Alignment.bottomCenter,
-                              decoration: BoxDecoration(
-                              ),
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child:
-                                    AutoSizeText(_titleChart[_activeChart],style:TextStyle(color: color5.withOpacity(0.9),fontSize: 20,fontWeight: FontWeight.w300)),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    padding: EdgeInsets.only(right: _width*0.01),
-
-
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      onPressed: (){
-                                        showMenu(
-                                          context: context,
-                                          position: RelativeRect.fromLTRB(_width*0.5, _height*0.32, _width*0.05, _height*0.5),
-
-                                          items: [
-                                          PopupMenuItem(
-                                            child: GestureDetector(onTap:(){},child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30)),
-                                            height: 30,),
-                                          PopupMenuItem(
-
-                                            child: DownloadButton(Color(0xffF40F02), "PDF",Icons.picture_as_pdf,_width*0.2,30),
-                                            height: 30,),
-                                          PopupMenuItem(
-
-                                            child: GestureDetector(
-                                                onTap:(){
-                                                  BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[_activeChart].currentContext.findRenderObject()));
-                                                },
-                                                child:DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30)
-                                            ),
-
-                                            height: 30,)
-                                        ],color: color5.withOpacity(0.9),
-                                        );
-                                      },
-                                      icon:Icon(Icons.file_download,color: color5,size: _height*0.025,)
-                                    ),
-                                  )
-                                ],
-                              )
-                          ),
-                          IndexedStack(
-                              index: _activeChart,
-                              children: _chartPages
-
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    Container(
-                        height: _height*0.22,
-                        width: _width,
-                        decoration: BoxDecoration(
-                          color: color8,
-                        ),
-                        padding: EdgeInsets.only(top: _height*0),
-                        alignment: Alignment.topCenter,
-                        child:
-                        Container(
-                            height: _height*0.29,
                             width: _width,
-                            child:
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            height: _height*0.475,
+                            child: Column(
                               children: [
                                 Container(
-                                    width: _width*0.6,
-                                    height: _height*0.35,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-
-                                    ),
-                                    child:Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          DataLabel(_width*0.55, _height*0.04, "Confirmados",_dataLocation!=null?_dataLocation.confirmed:0,color2,active: _activeData[0],changeIndex: 0,),
-                                          DataLabel(_width*0.55, _height*0.04, "Recuperados", _dataLocation!=null?_dataLocation.recovered:0,Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
-                                          DataLabel(_width*0.55, _height*0.04, "Fallecidos",_dataLocation!=null?_dataLocation.deceased:0,color4,active: _activeData[2],changeIndex: 2,),
-                                          DataLabel(_width*0.55, _height*0.04, "Vacunados", _dataLocation!=null?_dataLocation.vaccinated:0,Colors.cyan,active: _activeData[3],changeIndex: 3,),
-                                          DataLabel(_width*0.55, _height*0.04, "Acumulado",_dataLocation!=null?_dataLocation.total:0,color3,active: true,),
-                                        ]
+                                    width: _width,
+                                    height: _height*0.04,
+                                    padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        DateSeleccion(_selectedDate, color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
+                                      ],
                                     )
+                                ),
+                                Container(
+                                    width: _width,
+                                    height: _height*0.08,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.show_chart, _width*0.3, _height*0.04,0,_activeChart==0?true:false),
+                                        ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.pie_chart, _width*0.3, _height*0.04,1,_activeChart==1?true:false),
+                                        ChangeGraphicButton(color5, color5.withOpacity(0.3), Icons.insert_chart, _width*0.3, _height*0.04,2,_activeChart==2?true:false),
+                                      ],
+                                    )
+                                ),
+                                Container(
+                                    width: _width,
+                                    height: _height*0.03,
+                                    alignment: Alignment.bottomCenter,
+                                    decoration: BoxDecoration(
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child:
+                                          AutoSizeText(_titleChart[_activeChart],style:TextStyle(color: color5.withOpacity(0.9),fontSize: 20,fontWeight: FontWeight.w300)),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.centerRight,
+                                          padding: EdgeInsets.only(right: _width*0.01),
+
+
+                                          child: IconButton(
+                                              padding: EdgeInsets.all(0),
+                                              onPressed: (){
+                                                showMenu(
+                                                  context: context,
+                                                  position: RelativeRect.fromLTRB(_width*0.5, _height*0.38, _width*0.05, _height*0.5),
+
+                                                  items: [
+                                                    PopupMenuItem(
+                                                      child: GestureDetector(onTap:(){},child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30)),
+                                                      height: 30,),
+                                                    PopupMenuItem(
+
+                                                      child: DownloadButton(Color(0xffF40F02), "PDF",Icons.picture_as_pdf,_width*0.2,30),
+                                                      height: 30,),
+                                                    PopupMenuItem(
+
+                                                      child: GestureDetector(
+                                                          onTap:(){
+                                                            BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[_activeChart].currentContext.findRenderObject()));
+                                                          },
+                                                          child:DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30)
+                                                      ),
+
+                                                      height: 30,)
+                                                  ],color: color5.withOpacity(0.9),
+                                                );
+                                              },
+                                              icon:Icon(Icons.file_download,color: color5,size: _height*0.025,)
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                ),
+                                IndexedStack(
+                                    index: _activeChart,
+                                    children: _chartPages
+
+                                ),
+
+                              ],
+                            ),
+                          ),
+                          Container(
+                              height: _height*0.17,
+                              width: _width,
+                              decoration: BoxDecoration(
+                                color: color8,
+                              ),
+                              padding: EdgeInsets.only(top: _height*0),
+                              alignment: Alignment.topCenter,
+                              child:
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                          width: _width*0.6,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+
+                                          ),
+                                          child:Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                DataLabel(_width*0.55, _height*0.032, "Confirmados",_dataLocation!=null?_dataLocation.confirmed:0,color2,active: _activeData[0],changeIndex: 0,),
+                                                DataLabel(_width*0.55, _height*0.032, "Recuperados", _dataLocation!=null?_dataLocation.recovered:0,Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
+                                                DataLabel(_width*0.55, _height*0.032, "Fallecidos",_dataLocation!=null?_dataLocation.deceased:0,color4,active: _activeData[2],changeIndex: 2,),
+                                                DataLabel(_width*0.55, _height*0.032, "Vacunados", _dataLocation!=null?_dataLocation.vaccinated:0,Colors.cyan,active: _activeData[3],changeIndex: 3,),
+                                                DataLabel(_width*0.55, _height*0.032, "Acumulado",_dataLocation!=null?_dataLocation.total:0,color3,active: true,),
+                                              ]
+                                          )
+                                      ),
+                                    ],
+                                  )
+                          )
+                        ],
+                      )
+                    ),
+                        Container(
+
+                            decoration: BoxDecoration(
+                              color: color8,
+                            ),
+                            width:    _width,
+                            height: _height*0.775,
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: _width,
+                                  height: _height*0.375,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: _height*0.01,
+                                      ),
+
+                                      Container(
+                                          width: _width,
+                                          height: _height*0.03,
+                                          alignment: Alignment.bottomCenter,
+                                          decoration: BoxDecoration(
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                child:
+                                                AutoSizeText("Gráfica de predicción",style:TextStyle(color: color5.withOpacity(0.9),fontSize: 20,fontWeight: FontWeight.w300)),
+                                              ),
+                                              Container(
+                                                alignment: Alignment.centerRight,
+                                                padding: EdgeInsets.only(right: _width*0.01),
+
+
+                                                child: IconButton(
+                                                    padding: EdgeInsets.all(0),
+                                                    onPressed: (){
+                                                      showMenu(
+                                                        context: context,
+                                                        position: RelativeRect.fromLTRB(_width*0.5, _height*0.27, _width*0.05, _height*0.5),
+
+                                                        items: [
+                                                          PopupMenuItem(
+
+                                                            child: GestureDetector(
+                                                                onTap:(){
+                                                                  BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[_activeChart].currentContext.findRenderObject()));
+                                                                },
+                                                                child:DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30)
+                                                            ),
+
+                                                            height: 30,)
+                                                        ],color: color5.withOpacity(0.9),
+                                                      );
+                                                    },
+                                                    icon:Icon(Icons.file_download,color: color5,size: _height*0.025,)
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                      ),
+
+                                      RepaintBoundary(key: _keyCharts[0],child: LinearChart(_intX,_intY,_minY, _titlesX, _width,_height*0.325, _dataGraphics)),
+
+                                    ],
+                                  ),
                                 ),
                               ],
                             )
-                        )
-                    )
-                  ],
-                )
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             );
           }
         }

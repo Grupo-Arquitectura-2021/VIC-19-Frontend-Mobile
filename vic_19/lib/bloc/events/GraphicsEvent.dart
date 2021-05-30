@@ -40,6 +40,15 @@ class ChangeActiveChartEvent extends GraphicsEvent{
   List<Object> get props => [_index];
 
 }
+class ChangeActiveGraphicEvent extends GraphicsEvent{
+  final int _index;
+
+  ChangeActiveGraphicEvent(this._index);
+
+  @override
+  List<Object> get props => [_index];
+
+}
 class DownloadChartsEvent extends GraphicsEvent{
   final RenderRepaintBoundary _render;
 

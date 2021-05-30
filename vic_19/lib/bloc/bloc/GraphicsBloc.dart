@@ -42,6 +42,15 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
      catch(e){
        print("pasa lo otro");print(e);}
    }
+   else if(event is ChangeActiveGraphicEvent){
+     try{
+       yield LoadingGraphicsState();
+       _graR.activeGraphic=event.props[0];
+       yield ChangeActiveGraphicState(_graR.activeGraphic);
+     }
+     catch(e){
+       print("pasa lo otro");print(e);}
+   }
    else if(event is ChangeActiveChartEvent){
      try{
        yield LoadingGraphicsState();

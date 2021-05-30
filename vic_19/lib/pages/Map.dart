@@ -40,8 +40,6 @@ class _MapPageState extends State<MapPage> {
   Set<Polygon> geo=Set();
   LocationData dataLocation;
   Location _selectLocation;
-
-  List<String> _data=['p','p1','p2','p3','p4','p5'];
   @override
   void initState() {
     super.initState();

@@ -9,7 +9,9 @@ class NewsRepository {
    List<News> _news;
    int page;
 
-   List<News> get news => _news;
+   List<News> get news{
+     return _news;
+   }
 
    set news(List<News> value) {
      _news = value;

@@ -6,7 +6,7 @@ import 'package:vic_19/Model/News.dart';
 abstract class NewsState extends Equatable{
 }
 class NewsListOkState extends NewsState{
-  List<News> _news;
+  final List<News> _news;
 
   NewsListOkState(this._news);
 

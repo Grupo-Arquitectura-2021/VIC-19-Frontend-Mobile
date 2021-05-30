@@ -20,12 +20,12 @@ class NewsBloc extends Bloc<NewsEvent,NewsState>{
      try{
        yield NewsLoadingState();
        await _newsR.getNews();
-       yield NewsListOkState(_newsR.news);
-       // yield NewsListOkState(_newsR.news);
+       var news=_newsR.news;
+       yield NewsListOkState(news);
      }
      catch(e){
-       print("entra");
        print(e);
+       yield NewsListOkState(_newsR.news);
      }
    }
 
