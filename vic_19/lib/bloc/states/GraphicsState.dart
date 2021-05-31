@@ -76,3 +76,18 @@ class ChangeActiveGraphicState extends GraphicsState{
   List<Object> get props => [_index];
 
 }
+class SaveFileOkState extends GraphicsState{
+
+  @override
+  List<Object> get props => [];
+
+}
+class GetPredictDataOkState extends GraphicsState{
+  final LocationDataStatistics _locationDataStatistics;
+
+  GetPredictDataOkState(this._locationDataStatistics);
+
+  @override
+  List<Object> get props => [_locationDataStatistics];
+
+}

@@ -11,7 +11,18 @@ class City extends Location{
     return "city/statistics/${this.idLocation}?date=$date";
   }
   City.fromJson(json):super.fromJson(json);
-
+  @override
+  getUrlPredictLS(String date) {
+    return "city/leastSquaresAllInfo/${this.idLocation}/$date";
+  }
+  @override
+  getUrlPredictAI(String date) {
+    return "city/absoluteIncreaseAllInfo/${this.idLocation}/$date";
+  }
+  @override
+  getUrlPredictPI(String date) {
+    return "city/percentageIncreaseAllInfo/${this.idLocation}/$date";
+  }
   @override
   getTitle() {
     return "Ciudad";

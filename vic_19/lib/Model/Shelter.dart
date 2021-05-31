@@ -12,7 +12,18 @@ class Shelter extends Location{
   }
 
   Shelter.fromJson(json):super.fromJson(json);
-
+  @override
+  getUrlPredictLS(String date) {
+    return "country/leastSquaresAllInfo/${this.idLocation}/$date";
+  }
+  @override
+  getUrlPredictAI(String date) {
+    return "country/absoluteIncreaseAllInfo/${this.idLocation}/$date";
+  }
+  @override
+  getUrlPredictPI(String date) {
+    return "country/percentageIncreaseAllInfo/${this.idLocation}/$date";
+  }
   @override
   getTitle() {
     return "Albergue";

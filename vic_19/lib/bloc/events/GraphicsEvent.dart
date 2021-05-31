@@ -58,3 +58,16 @@ class DownloadChartsEvent extends GraphicsEvent{
   List<Object> get props => [_render];
 
 }
+class DownloadExcelEvent extends GraphicsEvent{
+  @override
+  List<Object> get props => [];
+
+}
+class GetPredictDataEvent extends GraphicsEvent{
+  final DateTime _dateTime;
+
+  GetPredictDataEvent(this._dateTime);
+  @override
+  List<Object> get props => [_dateTime];
+
+}

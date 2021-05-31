@@ -29,6 +29,10 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        _graR.selectLocation=event.props[1];
        await _graR.getAllDataLocation(event.props[0]);
        await _graR.getStatistics(event.props[0]);
+       await _graR.getPredictPI(DateTime.now());
+       await _graR.getPredictAI(DateTime.now());
+       await _graR.getPredictLS(DateTime.now());
+       _graR.locationDataStatistics.selectedDate=DateTime.now();
        yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics,_graR.locationDataStatistics);
      }
      catch(e){
@@ -39,6 +43,10 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        yield LoadingGraphicsState();
        await _graR.getAllDataLocation(event.props[0]);
        await _graR.getStatistics(event.props[0]);
+       await _graR.getPredictPI(DateTime.now());
+       await _graR.getPredictAI(DateTime.now());
+       await _graR.getPredictLS(DateTime.now());
+       _graR.locationDataStatistics.selectedDate=DateTime.now();
        yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics,_graR.locationDataStatistics);
      }
      catch(e){
@@ -63,7 +71,22 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        print("pasa lo otro");print(e);}
    }
    else if (event is DownloadChartsEvent){
+     yield LoadingGraphicsState();
      _graR.capturePng(event.props[0]);
+     yield SaveFileOkState();
+   }
+   else if (event is DownloadExcelEvent){
+     yield LoadingGraphicsState();
+     _graR.saveExcel();
+     yield SaveFileOkState();
+   }
+   else if(event is GetPredictDataEvent){
+     yield LoadingGraphicsState();
+     await _graR.getPredictPI(event.props[0]);
+     await _graR.getPredictAI(event.props[0]);
+     await _graR.getPredictLS(event.props[0]);
+     _graR.locationDataStatistics.selectedDate=event.props[0];
+     yield GetPredictDataOkState(_graR.locationDataStatistics);
    }
   }
 }

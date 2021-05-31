@@ -3,10 +3,13 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:excel/excel.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/Model/LocationDataStatistics.dart';
@@ -17,6 +20,7 @@ import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:vic_19/util/ToastAlert.dart';
 class GraphicsRepository {
   LocationData _locationData;
   List<bool> _activeDataGraphic;
@@ -143,6 +147,69 @@ class GraphicsRepository {
     catch(e){
       print("error");
       print(e);
+    }
+  }
+  getPredictLS(date)async{
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(date);
+    var url=ApiUrl + selectLocation.getUrlPredictLS(formattedDate);
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    if(response.statusCode==200){
+      var resJson = json.decode(response.body);
+      locationDataStatistics.confirmedPredict.leastSquares=resJson["confForecast"].toString();
+      locationDataStatistics.recoveredPredict.leastSquares=resJson["recForecast"].toString();
+      locationDataStatistics.deathPredict.leastSquares=resJson["deathForecast"].toString();
+      locationDataStatistics.vaccinatedPredict.leastSquares=resJson["vacForecast"].toString();
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  getPredictAI(date)async{
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(date);
+    var url=ApiUrl + selectLocation.getUrlPredictAI(formattedDate);
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    if(response.statusCode==200){
+      var resJson = json.decode(response.body);
+      locationDataStatistics.confirmedPredict.absolute=resJson["confForecast"].toString();
+      locationDataStatistics.recoveredPredict.absolute=resJson["recForecast"].toString();
+      locationDataStatistics.deathPredict.absolute=resJson["deathForecast"].toString();
+      locationDataStatistics.vaccinatedPredict.absolute=resJson["vacForecast"].toString();
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  getPredictPI(date)async{
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(date);
+    var url=ApiUrl + selectLocation.getUrlPredictPI(formattedDate);
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    if(response.statusCode==200){
+      var resJson = json.decode(response.body);
+      locationDataStatistics.confirmedPredict.percentage=resJson["confForecast"].toString();
+      locationDataStatistics.recoveredPredict.percentage=resJson["recForecast"].toString();
+      locationDataStatistics.deathPredict.percentage=resJson["deathForecast"].toString();
+      locationDataStatistics.vaccinatedPredict.percentage=resJson["vacForecast"].toString();
+      return true;
+    }
+    else{
+      return false;
     }
   }
   getStatistics(DateTime date)async {
@@ -278,17 +345,45 @@ bool verifyactiveData(){
 
       print("bytes${pngBytes}");
 
-      final file = File(await getFilePath());
-      await file.writeAsBytes(await pdf.save());
+      if (await Permission.storage.request().isGranted) {
+        final file = File(await getFilePath(DateTime.now().millisecondsSinceEpoch.toString()+"graphic.pdf"));
+        await file.writeAsBytes(pdf.save());
+        ToastAlert.simpleToast("Gráfico guardado en: ${file.path}");
+      }
+      else{
+        print("no permiso");
+      }
     } catch (e) {
       print(e);
     }
   }
+  saveExcel()async{
+    var excel = Excel.createExcel();
+    Sheet sheetObject = excel['Data'];
+    excel.setDefaultSheet("Data");
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    sheetObject.appendRow(["fecha","nombre","confirmados","recuperados","fallecidos","vacunados","acumulado"]);
 
-  Future<String> getFilePath() async {
-    Directory appDocumentsDirectory = await getExternalStorageDirectory(); // 1
+    for(var data in listDataGraphic){
+      sheetObject.appendRow([formatter.format(data.dateLocationCovid),data.name,data.confirmed,data.recovered,data.deceased,data.vaccinated,data.total]);
+    }
+    if (await Permission.storage.request().isGranted) {
+      var exc=await excel.encode();
+
+      final file = File(await getFilePath(DateTime.now().millisecondsSinceEpoch.toString()+selectLocation.getTitle()+"-"+selectLocation.locationName)+".xlsx");
+      await file.writeAsBytes(exc);
+      ToastAlert.simpleToast("Gráfico guardado en: ${file.path}");
+    }
+    else{
+      print("no permiso");
+    }
+  }
+
+  Future<String> getFilePath(nombre) async {
+    Directory appDocumentsDirectory = await DownloadsPathProvider.downloadsDirectory; // 1
     String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath = '$appDocumentsPath/demoPDF.pdf'; // 3
+    String filePath = '$appDocumentsPath/$nombre'; // 3
+    print(filePath);
 
     return filePath;
   }

@@ -42,4 +42,7 @@ abstract class Location{
   String getUrl(String date);
   String getUrlStatistics(String date);
   String getTitle();
+  String getUrlPredictLS(String date);
+  String getUrlPredictAI(String date);
+  String getUrlPredictPI(String date);
 }

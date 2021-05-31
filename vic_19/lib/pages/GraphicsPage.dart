@@ -15,6 +15,7 @@ import 'package:vic_19/components/graphics/ChangeGraphicButton.dart';
 import 'package:vic_19/components/graphics/DataLabel.dart';
 import 'package:vic_19/components/graphics/DataLabelStatistics.dart';
 import 'package:vic_19/components/graphics/DateSelection.dart';
+import 'package:vic_19/components/graphics/DateSelectionPredict.dart';
 import 'package:vic_19/components/graphics/DownloadButton.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
 import 'package:vic_19/components/graphics/PieChart.dart';
@@ -31,6 +32,7 @@ class GraphicsPage extends StatelessWidget {
   List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras",""];
   GraphicsPage(this._width,this._height,this.activePage){
     _pageController=new PageController(initialPage: 0);
+    _chartPages=getCharts();
   }
   int _intX=0;
   int _intY=0;
@@ -38,7 +40,7 @@ class GraphicsPage extends StatelessWidget {
   List<String> _titlesX=[];
   List<List<FlSpot>> _dataGraphics=[];
   int _activeChart=0;
-  List<Widget> _chartPages;
+  List<Widget> _chartPages=List();
   List<GlobalKey> _keyCharts = [GlobalKey(),GlobalKey(),GlobalKey(),GlobalKey()];
   int _pageGraphic=0;
   PageController _pageController;
@@ -56,6 +58,7 @@ class GraphicsPage extends StatelessWidget {
     return BlocBuilder<GraphicsBloc,GraphicsState>(
         builder: (context, state) {
           if(state is GetDataGraphicsOkState){
+            print("llega Aqui");
             _dataLocation=state.props[0];
             _selectedDate=_dataLocation.dateLocationCovid;
             _activeData=state.props[1];
@@ -83,6 +86,9 @@ class GraphicsPage extends StatelessWidget {
           if(state is ChangeActiveGraphicState){
             _pageGraphic=state.props[0];
           }
+          if(state is GetPredictDataOkState){
+            _locationDataStatistics=state.props[0];
+          }
           if(state is LoadingGraphicsState||!activePage){
             return Container(
                 decoration: BoxDecoration(
@@ -92,6 +98,15 @@ class GraphicsPage extends StatelessWidget {
             height: _height,
             child:Loading("Cargando Gráficas", 0.3,1));
             }
+          if(state is LoadingGraphicsState||!activePage){
+            return Container(
+                decoration: BoxDecoration(
+                  color: color8,
+                ),
+                width:    _width,
+                height: _height,
+                child:Loading("Cargando Gráficas", 0.3,1));
+          }
           else{
             return Container(
               width:    _width,
@@ -217,18 +232,18 @@ class GraphicsPage extends StatelessWidget {
 
                                                   items: [
                                                     PopupMenuItem(
-                                                      child: GestureDetector(onTap:(){},child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30)),
-                                                      height: 30,),
-                                                    PopupMenuItem(
-
-                                                      child: DownloadButton(Color(0xffF40F02), "PDF",Icons.picture_as_pdf,_width*0.2,30),
+                                                      child: GestureDetector(onTap:(){
+                                                        BlocProvider.of<GraphicsBloc>(context).add(DownloadExcelEvent());
+                                                        Navigator.pop(context);
+                                                      },child: DownloadButton(Color(0xff1d6f42), "Excel",Icons.table_chart,_width*0.2,30)),
                                                       height: 30,),
                                                     PopupMenuItem(
 
                                                       child: GestureDetector(
                                                           onTap:(){
                                                             BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[_activeChart].currentContext.findRenderObject()));
-                                                          },
+                                                            Navigator.pop(context);
+                                                            },
                                                           child:DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30)
                                                       ),
 
@@ -300,17 +315,6 @@ class GraphicsPage extends StatelessWidget {
                                 ),
 
                                 Container(
-                                    width: _width,
-                                    height: _height*0.04,
-                                    padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        DateSeleccion(_selectedDate, color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
-                                      ],
-                                    )
-                                ),
-                                Container(
                                   width: _width,
                                   height: _height*0.375,
                                   child: Column(
@@ -349,8 +353,9 @@ class GraphicsPage extends StatelessWidget {
 
                                                             child: GestureDetector(
                                                                 onTap:(){
-                                                                  BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[_activeChart].currentContext.findRenderObject()));
-                                                                },
+                                                                  BlocProvider.of<GraphicsBloc>(context).add(DownloadChartsEvent(_keyCharts[3].currentContext.findRenderObject()));
+                                                                  Navigator.pop(context);
+                                                                  },
                                                                 child:DownloadButton(Colors.indigo, "Graficos",Icons.pie_chart,_width*0.2,30)
                                                             ),
 
@@ -365,8 +370,7 @@ class GraphicsPage extends StatelessWidget {
                                           )
                                       ),
 
-                                      RepaintBoundary(key: _keyCharts[0],child: LinearChart(_locationDataStatistics.intX,_locationDataStatistics.intY,_locationDataStatistics.minX,_locationDataStatistics.labelX, _width,_height*0.325, _locationDataStatistics.dataPoints)),
-
+                                      RepaintBoundary(key: _keyCharts[3],child: LinearChart(_locationDataStatistics.intX,_locationDataStatistics.intY,_locationDataStatistics.minX,_locationDataStatistics.labelX, _width,_height*0.325, _locationDataStatistics.dataPoints)),
                                     ],
                                   ),
                                 ),
@@ -374,52 +378,120 @@ class GraphicsPage extends StatelessWidget {
                                   height: _height*0.01,
                                 ),
                                 Container(
-                                    height: _height*0.2,
-                                    width: _width,
-                                    decoration: BoxDecoration(
-                                      color: color8,
-                                    ),
-                                    padding: EdgeInsets.only(top: _height*0),
-                                    alignment: Alignment.topCenter,
-                                    child:
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                            width: _width,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5),
+                                  height: _height*0.2,
+                                  width: _width,
+                                  child: PageView(
+                                    children: [
+                                      Container(
+                                          height: _height*0.2,
+                                          width: _width,
+                                          decoration: BoxDecoration(
+                                            color: color8,
+                                          ),
+                                          padding: EdgeInsets.only(top: _height*0),
+                                          alignment: Alignment.topCenter,
+                                          child:
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                  width: _width,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
 
-                                            ),
-                                            child:Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  DataLabelStatistics(_width*0.9, _height*0.032, "","Media","Varianza","Confianza",color5,active: false,),
-                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Confirmados",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.media}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.variance}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.confidenceInterval}":"-",
-                                                    color2,active: _activeData[0],changeIndex: 0,),
-                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Recuperados",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.media}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.variance}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.confidenceInterval}":"-",
-                                                    Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
-                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Fallecidos",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.media}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.variance}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.confidenceInterval}":"-",
-                                                    color4,active: _activeData[2],changeIndex: 2,),
-                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Vacunados",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.media}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.variance}":"-",
-                                                    _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.confidenceInterval}":"-",
-                                                    Colors.cyan,active: _activeData[3]),
-                                                ]
-                                            )
-                                        ),
-                                      ],
-                                    )
+                                                  ),
+                                                  child:Column(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: [
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "","Media","Varianza","Confianza",color5,active: false,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Confirmados",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.media}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.variance}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.confidenceInterval}":"-",
+                                                          color2,active: _activeData[0],changeIndex: 0,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Recuperados",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.media}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.variance}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.confidenceInterval}":"-",
+                                                          Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Fallecidos",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.media}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.variance}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.confidenceInterval}":"-",
+                                                          color4,active: _activeData[2],changeIndex: 2,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Vacunados",
+                                                            _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.media}":"-",
+                                                            _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.variance}":"-",
+                                                            _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.confidenceInterval}":"-",
+                                                            Colors.cyan,active: _activeData[3]),
+                                                      ]
+                                                  )
+                                              ),
+                                            ],
+                                          )
+                                      ),
+                                      Container(
+                                          height: _height*0.2,
+                                          width: _width,
+                                          decoration: BoxDecoration(
+                                            color: color8,
+                                          ),
+                                          padding: EdgeInsets.only(top: _height*0),
+                                          alignment: Alignment.topCenter,
+                                          child:
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                  width: _width,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+
+                                                  ),
+                                                  child:Column(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: [
+
+                                                        Container(
+                                                            width: _width,
+                                                            height: _height*0.04,
+                                                            padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                DateSeleccionPredict(_locationDataStatistics!=null?_locationDataStatistics.selectedDate:DateTime.now(), color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
+                                                              ],
+                                                            )
+                                                        ),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "","LS","PI","AI",color5,active: false,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Confirmados",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.leastSquares}":"-",
+                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.percentage}":*/"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.absolute}":"-",
+                                                          color2,active: _activeData[0],changeIndex: 0,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Recuperados",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.leastSquares}":"-",
+                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.percentage}":*/"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.absolute}":"-",
+                                                          Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Fallecidos",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.leastSquares}":"-",
+                                                         /* _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.percentage}":*/"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.absolute}":"-",
+                                                          color4,active: _activeData[2],changeIndex: 2,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "Vacunados",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.leastSquares}":"-",
+                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.percentage}":*/"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.absolute}":"-",
+                                                          Colors.cyan,active: _activeData[3]),
+                                                      ]
+                                                  )
+                                              ),
+                                            ],
+                                          )
+                                      ),
+                                    ],
+                                  ),
                                 )
                               ],
                             )
