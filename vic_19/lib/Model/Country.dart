@@ -6,6 +6,10 @@ class Country extends Location{
   getUrl(String date) {
     return "country/allInfo/${this.idLocation}?date=$date";
   }
+  @override
+  getUrlStatistics(String date) {
+    return "country/statistics/${this.idLocation}?date=$date";
+  }
   Country.fromJson(json):super.fromJson(json);
 
   @override

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
+import 'package:vic_19/bloc/bloc/TablesBloc.dart';
 import 'package:vic_19/bloc/events/GraphicsEvent.dart';
 import 'package:vic_19/bloc/events/MapEvent.dart';
+import 'package:vic_19/bloc/events/TablesEvent.dart';
 
 import '../../PaletteColor.dart';
 
@@ -64,7 +66,11 @@ class DateSeleccion extends StatelessWidget {
     }
     );
     if(date!=null && date!=_selectedDate){
-      BlocProvider.of<GraphicsBloc>(context).add((ChangeDateDataGraphicEvent(date)));
+      if(_outlined)
+        BlocProvider.of<GraphicsBloc>(context).add((ChangeDateDataGraphicEvent(date)));
+      else
+        BlocProvider.of<TablesBloc>(context).add((TablesGetCitiesEvent(date)));
+
     }
   }
 }

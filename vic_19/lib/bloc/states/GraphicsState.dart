@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
+import 'package:vic_19/Model/LocationDataStatistics.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
 
 abstract class GraphicsState extends Equatable{
@@ -20,17 +21,18 @@ class GetDataGraphicsOkState extends GraphicsState{
   final int _intX;
   final int _intY;
   final int _minY;
-  final List<String> _xlabels;
+  final List<String> _xLabels;
+  final LocationDataStatistics _locationDataStatistics;
 
 
   GetDataGraphicsOkState(this._locationData,
       this._list, this._listPoints,  this._intX,
-      this._intY, this._minY, this._xlabels);
+      this._intY, this._minY, this._xLabels,this._locationDataStatistics);
 
   @override
   List<Object> get props=>[this._locationData,
     this._list, this._listPoints, this._intX,
-    this._intY, this._minY, this._xlabels];
+    this._intY, this._minY, this._xLabels,this._locationDataStatistics];
 
 }
 class ChangeActiveDataGraphicState extends GraphicsState{

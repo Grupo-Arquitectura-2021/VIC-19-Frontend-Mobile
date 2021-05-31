@@ -28,7 +28,8 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        yield LoadingGraphicsState();
        _graR.selectLocation=event.props[1];
        await _graR.getAllDataLocation(event.props[0]);
-       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics);
+       await _graR.getStatistics(event.props[0]);
+       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics,_graR.locationDataStatistics);
      }
      catch(e){
        print("pasa lo otro");print(e);}
@@ -37,7 +38,8 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
      try{
        yield LoadingGraphicsState();
        await _graR.getAllDataLocation(event.props[0]);
-       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics);
+       await _graR.getStatistics(event.props[0]);
+       yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics,_graR.locationDataStatistics);
      }
      catch(e){
        print("pasa lo otro");print(e);}

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vic_19/Model/LocationData.dart';
+import 'package:vic_19/Model/LocationDataStatistics.dart';
 import 'package:vic_19/bloc/bloc/GraphicsBloc.dart';
 import 'package:vic_19/bloc/events/GraphicsEvent.dart';
 import 'package:vic_19/bloc/states/GraphicsState.dart';
@@ -12,6 +13,7 @@ import 'package:vic_19/components/general/Loading.dart';
 import 'package:vic_19/components/graphics/BarChartView.dart';
 import 'package:vic_19/components/graphics/ChangeGraphicButton.dart';
 import 'package:vic_19/components/graphics/DataLabel.dart';
+import 'package:vic_19/components/graphics/DataLabelStatistics.dart';
 import 'package:vic_19/components/graphics/DateSelection.dart';
 import 'package:vic_19/components/graphics/DownloadButton.dart';
 import 'package:vic_19/components/graphics/LinearChart.dart';
@@ -27,7 +29,9 @@ class GraphicsPage extends StatelessWidget {
   double _height;
   List<bool> _activeData=[false,false,false,false,false];
   List<String> _titleChart=["Gráfica General","Gráfica de Torta","Gráfica de Barras",""];
-  GraphicsPage(this._width,this._height,this.activePage);
+  GraphicsPage(this._width,this._height,this.activePage){
+    _pageController=new PageController(initialPage: 0);
+  }
   int _intX=0;
   int _intY=0;
   int _minY=0;
@@ -37,7 +41,8 @@ class GraphicsPage extends StatelessWidget {
   List<Widget> _chartPages;
   List<GlobalKey> _keyCharts = [GlobalKey(),GlobalKey(),GlobalKey(),GlobalKey()];
   int _pageGraphic=0;
-  PageController _pageController=new PageController(initialPage: 0);
+  PageController _pageController;
+  LocationDataStatistics _locationDataStatistics;
 
   getCharts(){
     return [
@@ -59,6 +64,7 @@ class GraphicsPage extends StatelessWidget {
             _intY=state.props[4];
             _minY=state.props[5];
             _titlesX=state.props[6];
+            _locationDataStatistics=state.props[7];
             _chartPages=getCharts();
           }
           if(state is ChangeActiveDataGraphicState){
@@ -95,7 +101,7 @@ class GraphicsPage extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: _width,
-                    height: _height*0.165,
+                    height: _height*0.14,
                   ),
                   Container(
                     width: _width,
@@ -135,7 +141,7 @@ class GraphicsPage extends StatelessWidget {
                           child: Row(
                             children: [
                               Icon(Icons.multiline_chart,color: color5,),
-                              Text("   Predicción",style: TextStyle(color: color5),)
+                              Text("   Estadistica",style: TextStyle(color: color5),)
                             ],
                           ),
                         )
@@ -246,7 +252,7 @@ class GraphicsPage extends StatelessWidget {
                             ),
                           ),
                           Container(
-                              height: _height*0.17,
+                              height: _height*0.2,
                               width: _width,
                               decoration: BoxDecoration(
                                 color: color8,
@@ -289,6 +295,21 @@ class GraphicsPage extends StatelessWidget {
                             height: _height*0.775,
                             child: Column(
                               children: [
+                                SizedBox(
+                                  height: _height*0.03  ,
+                                ),
+
+                                Container(
+                                    width: _width,
+                                    height: _height*0.04,
+                                    padding: EdgeInsets.only(right: _width*0.02,left: _width*0.02,top: _height*0.01),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        DateSeleccion(_selectedDate, color5,color5.withOpacity(0.5),_width*0.4,_height*0.03,true),
+                                      ],
+                                    )
+                                ),
                                 Container(
                                   width: _width,
                                   height: _height*0.375,
@@ -344,11 +365,62 @@ class GraphicsPage extends StatelessWidget {
                                           )
                                       ),
 
-                                      RepaintBoundary(key: _keyCharts[0],child: LinearChart(_intX,_intY,_minY, _titlesX, _width,_height*0.325, _dataGraphics)),
+                                      RepaintBoundary(key: _keyCharts[0],child: LinearChart(_locationDataStatistics.intX,_locationDataStatistics.intY,_locationDataStatistics.minX,_locationDataStatistics.labelX, _width,_height*0.325, _locationDataStatistics.dataPoints)),
 
                                     ],
                                   ),
                                 ),
+                                SizedBox(
+                                  height: _height*0.01,
+                                ),
+                                Container(
+                                    height: _height*0.2,
+                                    width: _width,
+                                    decoration: BoxDecoration(
+                                      color: color8,
+                                    ),
+                                    padding: EdgeInsets.only(top: _height*0),
+                                    alignment: Alignment.topCenter,
+                                    child:
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                            width: _width,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(5),
+
+                                            ),
+                                            child:Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  DataLabelStatistics(_width*0.9, _height*0.032, "","Media","Varianza","Confianza",color5,active: false,),
+                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Confirmados",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.media}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.variance}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.confirmedStatistics.confidenceInterval}":"-",
+                                                    color2,active: _activeData[0],changeIndex: 0,),
+                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Recuperados",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.media}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.variance}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.recoveredStatistics.confidenceInterval}":"-",
+                                                    Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
+                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Fallecidos",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.media}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.variance}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.deathStatistics.confidenceInterval}":"-",
+                                                    color4,active: _activeData[2],changeIndex: 2,),
+                                                  DataLabelStatistics(_width*0.9, _height*0.032, "Vacunados",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.media}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.variance}":"-",
+                                                    _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedStatistics.confidenceInterval}":"-",
+                                                    Colors.cyan,active: _activeData[3]),
+                                                ]
+                                            )
+                                        ),
+                                      ],
+                                    )
+                                )
                               ],
                             )
                         ),

@@ -6,6 +6,10 @@ class DrugStore extends Location{
   getUrl(String date) {
     return "/country/";
   }
+  @override
+  getUrlStatistics(String date) {
+    return "country/statistics/${this.idLocation}?date=$date";
+  }
   DrugStore.fromJson(json):super.fromJson(json);
 
   @override

@@ -169,7 +169,7 @@ class MapRepository {
 
   Future<void> getMunicipality(context)async {
     List<Location> municipality=List();
-    var url=ApiUrl + "municipality/location/${_locationHistory.last.idLocation}";
+    var url=ApiUrl + "municipality/locations?cityId=${_locationHistory.last.idLocation}";
     final response = await http.get(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
@@ -265,12 +265,14 @@ class MapRepository {
 */
     try{
       List<Location> hospitalList=List();
-      var url=ApiUrl + "hospital/locations?cityId${_locationHistory.last.idLocation}";
+      var url=ApiUrl + "hospital/locations?cityId=${_locationHistory.last.idLocation}";
       final response = await http.get(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           }
       );
+      print("hospital");
+      print(response.body);
       if(response.statusCode==200){
         List resJson = json.decode(utf8.decode(response.bodyBytes));
         resJson.forEach((element) {
@@ -290,13 +292,31 @@ class MapRepository {
 
   }
   Future<void> getShelters(context)async {
-    List<Location> _shelterList=[Shelter(24,"Albergue Transitorio",-16.520983002910345, -68.19755751373685),
-      Shelter(25,"Remar Viacha",-16.49771294090049, -68.13778200949986),
-      Shelter(26,"Hogar Carlos de Villegas",-16.507836752632958, -68.13134040251619),
-      Shelter(27,"Hogar Virgen de Copacabana",-16.536528470964985, -68.18857531889586)];
-    shelters=_shelterList;
-    if(filters[3]){
-      markers.addAll(await addMarkers(shelters, Icons.local_hotel, color2,size*0.035,context));}
+    try{
+      List<Location> shelterList=List();
+      var url=ApiUrl + "shelter/locations?cityId=${_locationHistory.last.idLocation}";
+      final response = await http.get(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          }
+      );
+      print("shelter");
+      print(response.body);
+      if(response.statusCode==200){
+        List resJson = json.decode(utf8.decode(response.bodyBytes));
+        resJson.forEach((element) {
+          Location newLocation=Shelter.fromJson(element);
+          shelterList.add(newLocation);
+        });
+        shelters=shelterList;
+        if(filters[1]){
+          markers.addAll(await addMarkers(shelters, Icons.hotel, color2,size*0.035,context));
+        }
+      }
+    }
+    catch(e){
+      print("ERROR EN LOS ALBERGUES: "+e.toString());
+    }
 
   }
   Future<void> getCities(context)async {
@@ -400,6 +420,9 @@ class MapRepository {
   }
 
   Future<Set<Marker>> addMarkers(List<Location> list,icon,color,double size,context)async{
+
+    print("markers");
+    print(list);
     Set<Marker> markerAux=Set();
     var id;
     var name;
@@ -461,8 +484,11 @@ class MapRepository {
             }
             else{
               _locationHistory.add(selectLocation);
+              print("obtiene1");
               await getMunicipality(context);
+              print("obtiene2");
               await getHospital(context);
+              print("obtiene3");
               await getDrugstore(context);
               await getShelters(context);
 
@@ -545,6 +571,8 @@ tranformDataGraphic(List<LocationData> list)
 }
 
 Future<void> changeFilter(idFilter,context)async{
+  print("filtros");
+    print(filters);
     selectLocation=null;
     filters[idFilter]=!filters[idFilter];
     markers.clear();

@@ -40,5 +40,6 @@ abstract class Location{
   }
 
   String getUrl(String date);
+  String getUrlStatistics(String date);
   String getTitle();
 }

@@ -22,34 +22,38 @@ class TableCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ExpansionTile(
-                title: Text(_locationData.name,style: TextStyle(color: _color,fontSize: _height*0.029),),
-                children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                    Text("Confirmados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
-                    SizedBox(width: _width*0.01,),
-                    Text(_locationData.confirmed>0?_locationData.confirmed.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
-                  ],),
-                  SizedBox(height: _height*0.007,),
-                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                    Text("Recuperados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
-                    SizedBox(width: _width*0.01,),
-                    Text(_locationData.recovered>0?_locationData.recovered.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
-                  ],),
-                  SizedBox(height: _height*0.007,),
-                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                    Text("Fallecidos:",style: TextStyle(color: _color,fontSize: _height*0.025),),
-                    SizedBox(width: _width*0.01,),
-                    Text(_locationData.deceased>0?_locationData.deceased.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
-                  ],),
-                  SizedBox(height: _height*0.007,),
-                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                    Text("Acumulados:",style: TextStyle(color: _color,fontSize: _height*0.025),),
-                    SizedBox(width: _width*0.01,),
-                    Text(_locationData.total>0?_locationData.total.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
-                  ],),
-                  SizedBox(height: _height*0.015,),
-                ],
+              Theme(
+                data: Theme.of(context).copyWith(accentColor: color3,unselectedWidgetColor: color5),
+                child: ExpansionTile(
+
+                  title: Text(_locationData.name,style: TextStyle(color: _color,fontSize: _height*0.029),),
+                  children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                      Text("Confirmados:",style: TextStyle(color: _color.withOpacity(0.5),fontSize: _height*0.025),),
+                      SizedBox(width: _width*0.01,),
+                      Text(_locationData.confirmed>0?_locationData.confirmed.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    ],),
+                    SizedBox(height: _height*0.007,),
+                    Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                      Text("Recuperados:",style: TextStyle(color: _color.withOpacity(0.5),fontSize: _height*0.025),),
+                      SizedBox(width: _width*0.01,),
+                      Text(_locationData.recovered>0?_locationData.recovered.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    ],),
+                    SizedBox(height: _height*0.007,),
+                    Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                      Text("Fallecidos:",style: TextStyle(color: _color.withOpacity(0.5),fontSize: _height*0.025),),
+                      SizedBox(width: _width*0.01,),
+                      Text(_locationData.deceased>0?_locationData.deceased.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    ],),
+                    SizedBox(height: _height*0.007,),
+                    Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                      Text("Acumulados:",style: TextStyle(color: _color.withOpacity(0.5),fontSize: _height*0.025),),
+                      SizedBox(width: _width*0.01,),
+                      Text(_locationData.total>0?_locationData.total.toString():"-",style: TextStyle(color: _color2,fontSize: _height*0.025),),
+                    ],),
+                    SizedBox(height: _height*0.015,),
+                  ],
+                ),
               ),
             ],
           ),

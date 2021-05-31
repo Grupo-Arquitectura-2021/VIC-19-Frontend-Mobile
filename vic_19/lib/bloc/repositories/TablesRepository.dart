@@ -19,7 +19,7 @@ class TablesRepository {
 
 
   Future<void> getCities(DateTime dateCity)async{
-    String url=ApiUrl+"city?date="+"${dateCity.year}-${dateCity.month}-${dateCity.day}";
+    String url=ApiUrl+"city/data?date="+"${dateCity.year}-${dateCity.month}-${dateCity.day}";
     var res = await http.get(url, //ip for virtualized devices
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -37,8 +37,8 @@ class TablesRepository {
     }
   }
 
-  Future<void> getMunicipality(DateTime dateMunicipality, String cityName) async{
-    String url=ApiUrl+"city/name/"+cityName+"/municipality/${dateMunicipality.year}-${dateMunicipality.month}-${dateMunicipality.day}";
+  Future<void> getMunicipality(DateTime dateMunicipality, int cityId) async{
+    String url=ApiUrl+"municipality?cityId=$cityId&dateCovid=${dateMunicipality.year}-${dateMunicipality.month}-${dateMunicipality.day}";
     var res = await http.get(url, //ip for virtualized devices
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

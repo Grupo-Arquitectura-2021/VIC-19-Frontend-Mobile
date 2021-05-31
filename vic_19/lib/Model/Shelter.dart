@@ -6,6 +6,11 @@ class Shelter extends Location{
   getUrl(String date) {
     return "/country/";
   }
+  @override
+  getUrlStatistics(String date) {
+    return "country/statistics/${this.idLocation}?date=$date";
+  }
+
   Shelter.fromJson(json):super.fromJson(json);
 
   @override

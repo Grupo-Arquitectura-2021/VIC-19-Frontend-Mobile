@@ -75,7 +75,7 @@ _showModalBottomSheet(context,String cityName,String date,List<LocationData> dat
         shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(size.width*0.05),topLeft: Radius.circular(size.width*0.05))),
         isScrollControlled: true,
         builder: (BuildContext context){
-          return TableBottomSheet(20,cityName,date,size.height*0.8, dataList, color3,color1);
+          return TableBottomSheet(20,cityName,date,size.height*0.8, dataList, color3,color8);
         }
     );
   });

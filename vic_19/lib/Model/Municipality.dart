@@ -6,6 +6,11 @@ class Municipality extends Location{
   getUrl(String date) {
     return "municipality/allInfo/${this.idLocation}?date=$date";
   }
+
+  @override
+  getUrlStatistics(String date) {
+    return "municipality/statistics/${this.idLocation}?date=$date";
+  }
   Municipality.fromJson(json):super.fromJson(json);
 
   @override

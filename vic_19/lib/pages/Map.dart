@@ -225,7 +225,7 @@ class _MapPageState extends State<MapPage> {
 
                   AnimatedPositioned(
                     duration: Duration(milliseconds: 1000),
-                      top: MediaQuery.of(context).padding.top+(!graphics?size.height*0.1:size.height*0.035),
+                      top: MediaQuery.of(context).padding.top+(!graphics?size.height*0.1:size.height*0.015),
                       child: AnimatedOpacity(
                           opacity: select?1:0,
 

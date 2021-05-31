@@ -40,6 +40,7 @@ class MapBloc extends Bloc<MapEvent,MapState>{
      }
      catch(e){
        print("ERROR AL CAMBIAR EL FILTRO: $e");
+       yield MapFilterOkState(_mapR.markers, _mapR.filters);
      }
    }
    else if(event is MapGraphicsEvent){

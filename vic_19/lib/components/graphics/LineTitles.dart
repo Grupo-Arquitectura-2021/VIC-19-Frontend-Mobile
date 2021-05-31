@@ -44,7 +44,7 @@ class LineTitles{
               fontSize: size
           ),
           getTitles: (value){
-            return (value*intP).toInt()>999?"${((value*intP)~/1000)}k":(value*intP).toInt().toString();
+            return (value*intP).toInt()>999?"${((value*intP)/1000).toStringAsFixed(1)}k":(value*intP).toInt().toString();
           }
       ),
     );

@@ -6,6 +6,10 @@ class Hospital extends Location{
   getUrl(String date) {
     return "/country/";
   }
+  @override
+  getUrlStatistics(String date) {
+    return "";
+  }
   Hospital.fromJson(json):super.fromJson(json);
 
   @override

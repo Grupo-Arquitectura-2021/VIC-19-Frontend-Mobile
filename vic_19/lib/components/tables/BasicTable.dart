@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vic_19/Model/City.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
 import 'package:vic_19/bloc/bloc/MapBloc.dart';
@@ -54,7 +55,8 @@ class BasicTableWidget extends StatelessWidget {
                             // print("Id seleccionada de ciudad");
                             // print(data.name);
                             // print(data.idLocation);
-                            BlocProvider.of<TablesBloc>(context).add(TablesGetMunicipalityEvent(data.dateLocationCovid, data.name));},
+                            City city=City(data.idLocation,data.name,3,4);
+                            BlocProvider.of<TablesBloc>(context).add(TablesGetMunicipalityEvent(data.dateLocationCovid, city));},
                             // _showModalBottomSheet(context,data.idLocation,"${data.dateLocationCovid.year}-${data.dateLocationCovid.month}-${data.dateLocationCovid.day}");},
                               child: Text(data.name,style: TextStyle(color: color5,fontSize: 12),))),
                           DataCell(Text(data.confirmed>0?data.confirmed.toString():"-",style: TextStyle(color: color5,fontSize: 12),)),

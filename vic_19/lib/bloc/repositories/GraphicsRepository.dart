@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
+import 'package:vic_19/Model/LocationDataStatistics.dart';
+import 'package:vic_19/Model/Statistics.dart';
 import 'package:vic_19/PaletteColor.dart';
 import 'package:vic_19/util/ApiUrl.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +29,14 @@ class GraphicsRepository {
   Location _selectLocation;
   int _activeChart;
   int _activeGraphic;
+  LocationDataStatistics _locationDataStatistics;
 
+
+  LocationDataStatistics get locationDataStatistics => _locationDataStatistics;
+
+  set locationDataStatistics(LocationDataStatistics value) {
+    _locationDataStatistics = value;
+  }
 
   int get activeGraphic => _activeGraphic;
 
@@ -69,6 +78,7 @@ class GraphicsRepository {
   GraphicsRepository(){
     _locationData=LocationData.fromLocationData(1,"",null,0,0, 0, 0,0);
     _activeDataGraphic=[true,true,true,true];
+    locationDataStatistics=new LocationDataStatistics();
   }
 
 
@@ -89,6 +99,76 @@ class GraphicsRepository {
   set activeDataGraphic(List<bool> value) {
     _activeDataGraphic = value;
   }
+  double functionPredict(x,b,r,k){
+    return (r*k*k*exp(r*(x-b))-r*k*exp(r*(x-b)))/pow(k+exp(r*(x-b))-1,2);
+  }
+  getPredictGraphic(body,min)async{
+    try{
+      final response = await http.post(apiUrlPython+"gompertz",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body:body
+      );
+      print("alvin");
+      print(response.body);
+      if(response.statusCode==200){
+        var resJson = json.decode(response.body);
+        List<LocationData> list=List();
+        var dateN=DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd');
+        formatter.format(dateN);
+        var dateNow=DateTime.parse(formatter.format(dateN));
+        int dateInt=((dateNow.millisecondsSinceEpoch-min)~/86400000);
+        print(DateTime.now().millisecondsSinceEpoch);
+        print(functionPredict(dateInt, resJson["deathCases"]["b"],resJson["deathCases"]["r"], resJson["deathCases"]["k"]));
+        for(int i=1;i<=300;i++){
+          list.add(LocationData.fromLocationData(1, "_name", DateTime.fromMillisecondsSinceEpoch(dateNow.millisecondsSinceEpoch+86400000*i),
+              _listPointGraphic[2].length>0?functionPredict(dateInt+i, resJson["deathCases"]["b"],resJson["deathCases"]["r"], resJson["deathCases"]["k"]).toInt():-1,
+              _listPointGraphic[0].length>0?functionPredict(dateInt+i, resJson["confirmedCases"]["b"],resJson["confirmedCases"]["r"], resJson["confirmedCases"]["k"]).toInt():-1,
+              _listPointGraphic[3].length>0?functionPredict(dateInt+i, resJson["vaccinated"]["b"],resJson["vaccinated"]["r"], resJson["vaccinated"]["k"]).toInt():-1,
+              1,
+              _listPointGraphic[1].length>0?functionPredict(dateInt+i, resJson["recuperated"]["b"],resJson["recuperated"]["r"], resJson["recuperated"]["k"]).toInt():-1));
+        }
+        print("list");
+        print(list.toString());
+        locationDataStatistics.dataList=list;
+        transformDataPredict(list);
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    catch(e){
+      print("error");
+      print(e);
+    }
+  }
+  getStatistics(DateTime date)async {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(date);
+    var url=ApiUrl + selectLocation.getUrlStatistics(formattedDate);
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    if(response.statusCode==200){
+      var resJson = json.decode(response.body);
+      locationDataStatistics.confirmedStatistics=new Statistics.fromJson(resJson["confirmedStatistics"]);
+      locationDataStatistics.recoveredStatistics=new Statistics.fromJson(resJson["recuperatedStatistics"]);
+      locationDataStatistics.deathStatistics=new Statistics.fromJson(resJson["deathStatistics"]);
+      locationDataStatistics.vaccinatedStatistics=new Statistics.fromJson(resJson["vaccinatedStatistics"]);
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
+
 
   Future<bool> getAllDataLocation(DateTime date)async{
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -111,6 +191,7 @@ class GraphicsRepository {
       if(resJson.length>0){
         locationData=locations.last;
         if(verifyactiveData()) tranformDataGraphic(locations);
+        await getPredictGraphic(response.body,locations[0].dateLocationCovid.millisecondsSinceEpoch);
         getChartIndex(0);
       }
       return true;
@@ -140,7 +221,8 @@ class GraphicsRepository {
   changeActiveDataGraphic(int index){
     activeDataGraphic[index]=!activeDataGraphic[index];
     if(verifyactiveData()&&_listDataGraphic.length>0)
-      tranformDataGraphic(_listDataGraphic);
+      {tranformDataGraphic(_listDataGraphic);
+    transformDataPredict(locationDataStatistics.dataList);}
     else
       activeDataGraphic[index]=!activeDataGraphic[index];
 
@@ -209,6 +291,68 @@ bool verifyactiveData(){
     String filePath = '$appDocumentsPath/demoPDF.pdf'; // 3
 
     return filePath;
+  }
+
+  transformDataPredict(List<LocationData> list)
+  {
+    int initDate=list[0].dateLocationCovid.millisecondsSinceEpoch;
+    locationDataStatistics.minX=initDate;
+    int lastDate=list.last.dateLocationCovid.millisecondsSinceEpoch;
+    int divDate=((lastDate-initDate)~/9);
+    List<String> xLabels=List();
+    lastDate=initDate+divDate*9;
+    locationDataStatistics.intX=divDate==0?1:divDate;
+    DateTime dateLabel;
+    for(int i=0;i<10;i++){
+      dateLabel=DateTime.fromMillisecondsSinceEpoch(initDate+i*divDate);
+      print(dateLabel);
+      xLabels.add(getDateGraphic(dateLabel.month, dateLabel.day));
+    }
+    List<List<FlSpot>> listPoints=List();
+    for(int i=0;i<4;i++){
+      listPoints.add(List());
+    }
+    int maxData=0;
+    List<int> yLabels=List();
+    print(activeDataGraphic);
+    for(var l in list){
+      int maxD=max(activeDataGraphic[0]?l.confirmed:0, max(max(activeDataGraphic[1]?l.recovered:0,activeDataGraphic[2]?l.deceased:0),activeDataGraphic[3]?l.vaccinated:0));
+      if(maxD>maxData){
+        maxData=maxD;
+      }
+    }
+    print(maxData);
+    int divData=(maxData/5).truncate();
+    maxData=divData*5;
+    locationDataStatistics.intY=divData==0?1:divData;
+    yLabels.add(0);
+    for(int i=0;i<7;i++){
+      yLabels.add(yLabels[i]+divData);
+    }
+
+    double x=0;
+    double y1=0;
+    double y2=0;
+    double y3=0;
+    double y4=0;
+    for(var l in list) {
+      x=9*(l.dateLocationCovid.millisecondsSinceEpoch-initDate)/(lastDate-initDate);
+      y1=l.confirmed==-1||l.confirmed==0?null:l.confirmed*5/maxData*1.0;
+      y2=l.recovered==-1||l.recovered==0?null:l.recovered*5/maxData*1.0;
+      y3=l.deceased==-1||l.deceased==0?null:l.deceased*5/maxData*1.0;
+      y4=l.vaccinated==-1||l.vaccinated==0?null:l.vaccinated*5/maxData*1.0;
+      if(activeDataGraphic[0]&&y1!=null)listPoints[0].add(FlSpot(x,y1));
+      if(activeDataGraphic[1]&&y2!=null)listPoints[1].add(FlSpot(x,y2));
+      if(activeDataGraphic[2]&&y3!=null)listPoints[2].add(FlSpot(x,y3));
+      if(activeDataGraphic[3]&&y4!=null)listPoints[3].add(FlSpot(x,y4));
+    }
+    locationDataStatistics.dataPoints=listPoints;
+
+
+    for(var l in locationDataStatistics.dataPoints){
+    }
+    locationDataStatistics.labelX=xLabels;
+
   }
 tranformDataGraphic(List<LocationData> list)
 {

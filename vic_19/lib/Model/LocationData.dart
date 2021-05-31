@@ -68,10 +68,26 @@ class LocationData{
     _dateLocationCovid=DateTime.parse(json["dateLocationCovid"]);
 
   }
+  Map toJson(date){
+    Map<String,dynamic> map={
+      "deathCases":deceased,
+      "confirmedCases":confirmed,
+      "vaccinated":vaccinated,
+      "recuperated":recovered,
+      "dateLocationCovid":date,
+    };
+    return map;
+
+  }
 
   DateTime get dateLocationCovid => _dateLocationCovid;
 
   set dateLocationCovid(DateTime value) {
     _dateLocationCovid = value;
+  }
+
+  @override
+  String toString() {
+    return 'LocationData{_idLocation: $_idLocation, _name: $_name, _dateLocationCovid: $_dateLocationCovid, _deceased: $_deceased, _confirmed: $_confirmed, _vaccinated: $_vaccinated, _total: $_total, _recovered: $_recovered}';
   }
 }

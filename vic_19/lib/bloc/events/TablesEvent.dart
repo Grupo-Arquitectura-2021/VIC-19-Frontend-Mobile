@@ -1,6 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:vic_19/Model/City.dart';
 import 'package:vic_19/Model/Location.dart';
 import 'package:vic_19/Model/LocationData.dart';
 
@@ -18,11 +19,11 @@ class TablesGetCitiesEvent extends TablesEvent{
 class TablesGetMunicipalityEvent extends TablesEvent{
   // LocationData _location;
   // int _locationId;
-  String _name;
+  City _city;
   DateTime _dateTime;
   // TablesGetMunicipalityEvent(this._location);
-  TablesGetMunicipalityEvent(this._dateTime,this._name);
+  TablesGetMunicipalityEvent(this._dateTime,this._city);
   @override
-  List<Object> get props => [_dateTime,_name];
+  List<Object> get props => [_dateTime,_city];
 
 }
