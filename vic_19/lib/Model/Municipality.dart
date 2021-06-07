@@ -21,6 +21,10 @@ class Municipality extends Location{
     return "municipality/absoluteIncreaseAllInfo/${this.idLocation}/$date";
   }
   @override
+  getUrlPredictBrown(String date) {
+    return "municipality/brownModelAllInfo/${this.idLocation}/$date";
+  }
+  @override
   getUrlPredictPI(String date) {
     return "municipality/percentageIncreaseAllInfo/${this.idLocation}/$date";
   }

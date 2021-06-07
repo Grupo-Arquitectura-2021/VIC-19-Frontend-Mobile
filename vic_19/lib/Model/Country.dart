@@ -10,7 +10,10 @@ class Country extends Location{
   getUrlStatistics(String date) {
     return "country/statistics/${this.idLocation}?date=$date";
   }
-
+  @override
+  getUrlPredictBrown(String date) {
+    return "country/brownModelAllInfo/${this.idLocation}/$date";
+  }
   @override
   getUrlPredictLS(String date) {
     return "country/leastSquaresAllInfo/${this.idLocation}/$date";

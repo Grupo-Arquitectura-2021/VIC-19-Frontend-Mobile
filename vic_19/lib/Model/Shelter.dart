@@ -10,7 +10,10 @@ class Shelter extends Location{
   getUrlStatistics(String date) {
     return "country/statistics/${this.idLocation}?date=$date";
   }
-
+  @override
+  getUrlPredictBrown(String date) {
+    return "shelter/brownModelAllInfo/${this.idLocation}/$date";
+  }
   Shelter.fromJson(json):super.fromJson(json);
   @override
   getUrlPredictLS(String date) {

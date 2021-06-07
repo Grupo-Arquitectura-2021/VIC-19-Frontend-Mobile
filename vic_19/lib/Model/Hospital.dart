@@ -16,6 +16,10 @@ class Hospital extends Location{
     return "country/leastSquaresAllInfo/${this.idLocation}/$date";
   }
   @override
+  getUrlPredictBrown(String date) {
+    return "country/brownModelAllInfo/${this.idLocation}/$date";
+  }
+  @override
   getUrlPredictAI(String date) {
     return "country/absoluteIncreaseAllInfo/${this.idLocation}/$date";
   }

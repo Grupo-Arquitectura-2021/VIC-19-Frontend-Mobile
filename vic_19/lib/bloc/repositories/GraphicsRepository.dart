@@ -212,6 +212,27 @@ class GraphicsRepository {
       return false;
     }
   }
+  getPredictBrown(date)async{
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(date);
+    var url=ApiUrl + selectLocation.getUrlPredictBrown(formattedDate);
+    final response = await http.get(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        }
+    );
+    if(response.statusCode==200){
+      var resJson = json.decode(response.body);
+      locationDataStatistics.confirmedPredict.brown=resJson["confForecast"].toString();
+      locationDataStatistics.recoveredPredict.brown=resJson["recForecast"].toString();
+      locationDataStatistics.deathPredict.brown=resJson["deathForecast"].toString();
+      locationDataStatistics.vaccinatedPredict.brown=resJson["vacForecast"].toString();
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   getStatistics(DateTime date)async {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formattedDate = formatter.format(date);

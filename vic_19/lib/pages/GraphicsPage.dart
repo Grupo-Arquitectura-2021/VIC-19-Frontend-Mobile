@@ -463,26 +463,30 @@ class GraphicsPage extends StatelessWidget {
                                                               ],
                                                             )
                                                         ),
-                                                        DataLabelStatistics(_width*0.9, _height*0.032, "","LS","PI","AI",color5,active: false,),
+                                                        DataLabelStatistics(_width*0.9, _height*0.032, "","LS","AI","Brown",color5,active: false,),
                                                         DataLabelStatistics(_width*0.9, _height*0.032, "Confirmados",
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.leastSquares}":"-",
-                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.percentage}":*/"-",
+                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.percentage}":*/
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.absolute}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.confirmedPredict.brown}":"-",
                                                           color2,active: _activeData[0],changeIndex: 0,),
                                                         DataLabelStatistics(_width*0.9, _height*0.032, "Recuperados",
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.leastSquares}":"-",
-                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.percentage}":*/"-",
+                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.percentage}":*/
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.absolute}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.recoveredPredict.brown}":"-",
                                                           Colors.lightGreen,active: _activeData[1],changeIndex: 1,),
                                                         DataLabelStatistics(_width*0.9, _height*0.032, "Fallecidos",
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.leastSquares}":"-",
-                                                         /* _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.percentage}":*/"-",
+                                                         /* _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.percentage}":*/
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.absolute}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.deathPredict.brown}":"-",
                                                           color4,active: _activeData[2],changeIndex: 2,),
                                                         DataLabelStatistics(_width*0.9, _height*0.032, "Vacunados",
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.leastSquares}":"-",
-                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.percentage}":*/"-",
+                                                          /*_locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.percentage}":*/
                                                           _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.absolute}":"-",
+                                                          _locationDataStatistics!=null?"${_locationDataStatistics.vaccinatedPredict.brown}":"-",
                                                           Colors.cyan,active: _activeData[3]),
                                                       ]
                                                   )

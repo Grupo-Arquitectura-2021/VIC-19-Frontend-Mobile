@@ -45,4 +45,5 @@ abstract class Location{
   String getUrlPredictLS(String date);
   String getUrlPredictAI(String date);
   String getUrlPredictPI(String date);
+  String getUrlPredictBrown(String date);
 }

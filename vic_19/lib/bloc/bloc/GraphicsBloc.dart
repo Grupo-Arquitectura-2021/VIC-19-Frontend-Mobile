@@ -32,6 +32,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        await _graR.getPredictPI(DateTime.now());
        await _graR.getPredictAI(DateTime.now());
        await _graR.getPredictLS(DateTime.now());
+       await _graR.getPredictBrown(DateTime.now());
        _graR.locationDataStatistics.selectedDate=DateTime.now();
        yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics,_graR.locationDataStatistics);
      }
@@ -46,6 +47,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
        await _graR.getPredictPI(DateTime.now());
        await _graR.getPredictAI(DateTime.now());
        await _graR.getPredictLS(DateTime.now());
+       await _graR.getPredictBrown(DateTime.now());
        _graR.locationDataStatistics.selectedDate=DateTime.now();
        yield GetDataGraphicsOkState(_graR.locationData,_graR.activeDataGraphic,_graR.listPointGraphic,_graR.intX,_graR.intY,_graR.minY,_graR.xLabelGraphics,_graR.locationDataStatistics);
      }
@@ -85,6 +87,7 @@ class GraphicsBloc extends Bloc<GraphicsEvent,GraphicsState>{
      await _graR.getPredictPI(event.props[0]);
      await _graR.getPredictAI(event.props[0]);
      await _graR.getPredictLS(event.props[0]);
+     await _graR.getPredictBrown(event.props[0]);
      _graR.locationDataStatistics.selectedDate=event.props[0];
      yield GetPredictDataOkState(_graR.locationDataStatistics);
    }

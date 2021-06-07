@@ -16,6 +16,10 @@ class City extends Location{
     return "city/leastSquaresAllInfo/${this.idLocation}/$date";
   }
   @override
+  getUrlPredictBrown(String date) {
+    return "city/brownModelAllInfo/${this.idLocation}/$date";
+  }
+  @override
   getUrlPredictAI(String date) {
     return "city/absoluteIncreaseAllInfo/${this.idLocation}/$date";
   }
