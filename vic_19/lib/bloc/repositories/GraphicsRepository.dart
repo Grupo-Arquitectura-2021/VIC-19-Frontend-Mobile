@@ -279,7 +279,7 @@ class GraphicsRepository {
       if(resJson.length>0){
         locationData=locations.last;
         if(verifyactiveData()) tranformDataGraphic(locations);
-        await getPredictGraphic(response.body,locations[0].dateLocationCovid.millisecondsSinceEpoch);
+        //await getPredictGraphic(response.body,locations[0].dateLocationCovid.millisecondsSinceEpoch);
         getChartIndex(0);
       }
       return true;
@@ -309,8 +309,8 @@ class GraphicsRepository {
   changeActiveDataGraphic(int index){
     activeDataGraphic[index]=!activeDataGraphic[index];
     if(verifyactiveData()&&_listDataGraphic.length>0)
-      {tranformDataGraphic(_listDataGraphic);
-    transformDataPredict(locationDataStatistics.dataList);}
+      {tranformDataGraphic(_listDataGraphic);}
+    //transformDataPredict(locationDataStatistics.dataList);}
     else
       activeDataGraphic[index]=!activeDataGraphic[index];
 
